@@ -1,12 +1,11 @@
 /* @nikhil_supertramp */
-
 import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
 
 
-public class CF
+public class Word
 {
     public static void main(String[] args)throws Exception
     {
@@ -22,11 +21,33 @@ class Solver {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-//javac -d ../../classes 
+//javac -d ../../classes
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
+            char[] s = hp.next().toCharArray();
+            int u = 0, l = 0;
+            for(int i = 0; i < s.length; i++)
+            {
+                if(s[i] > 'Z')l++;
+                else u++;
+            }
+            StringBuilder sb = new StringBuilder();
+            for(int i = 0; i < s.length; i++)
+            {
+                if(u > l)
+                {
+                    if(s[i] > 'Z')s[i] -= 32;
+                }
+                else
+                {
+                    if(s[i] < 'a')s[i] += 32;
+                }
+                sb.append(s[i]);
+
+            }
+            hp.println(sb.toString());
 
         }
         hp.flush();

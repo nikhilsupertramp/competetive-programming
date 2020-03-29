@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class CF
+class CP
 {
     public static void main(String[] args)throws Exception
     {
@@ -22,7 +22,7 @@ class Solver {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-//javac -d ../../classes 
+
     void solve() throws Exception
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)

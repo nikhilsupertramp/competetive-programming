@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class CF
+public class Infy
 {
     public static void main(String[] args)throws Exception
     {
@@ -22,15 +22,83 @@ class Solver {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-//javac -d ../../classes 
+//javac -d ../../classes
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-
+            int n = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
+            int[]  sum = new int[32];
+            //getXORBruteforce(arr, n);
+            getXor(arr);
         }
         hp.flush();
     }
+
+    void getXORBruteforce(int[] arr, int n)throws Exception
+    {
+        int k = 0;
+        int[] brr = new int[n * (n - 1) / 2];
+        for(int i = 0; i < n - 1; i++)
+        {
+            for(int j = i + 1; j < n; j++)
+            {
+                brr[k++] = arr[i] ^ arr[j];
+            }
+        }
+        hp.println(Arrays.toString(brr));
+        for(int p : arr)
+        {
+            hp.println(Arrays.toString(getBinaryStirng(p)));
+        }
+        getXor(brr);
+    }
+
+
+    int[] getBinaryStirng(int n)
+    {
+        int i = 0;
+        int[] arr = new int[32];
+        while(n > 0)
+        {
+            arr[i++] = n & 1;
+            n >>= 1;
+        }
+        return arr;
+    }
+
+    void getValue(int[] arr)throws Exception
+    {
+        int sum = 0;
+        StringBuilder sb = new StringBuilder();
+        for(int i = 31; i >= 0; i++)
+        {
+            sb.append((arr[i] % 2));
+
+        }
+        int sum = Integer.parseInt(sb.toString(), 2);
+        hp.println(sum);
+    }
+
+    void getXor(int[] arr)throws Exception
+    {
+        int[] sum = new int[32];
+        for(int i : arr)
+        {
+            getSum(sum, getBinaryStirng(i));
+        }
+        getValue(sum);
+    }
+
+    void getSum(int[] a, int[] b)
+    {
+        for(int i = 0; i < 32; i++)
+        {
+            a[i] += b[i];
+        }
+    }
+
 }
 
 class Helper {

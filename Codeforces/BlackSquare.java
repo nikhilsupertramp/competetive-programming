@@ -1,12 +1,11 @@
 /* @nikhil_supertramp */
-
 import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
 
 
-public class CF
+public class BlackSquare
 {
     public static void main(String[] args)throws Exception
     {
@@ -22,12 +21,20 @@ class Solver {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-//javac -d ../../classes 
+//javac -d ../../classes
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-
+            int n = 4;//hp.nextInt();
+            int arr[] = hp.getIntArray(n);
+            char[] s = hp.next().toCharArray();
+            int sum = 0;
+            for(int i = 0; i < s.length; i++)
+            {
+                sum += arr[s[i] - '0' - 1];
+            }
+            hp.println(sum);
         }
         hp.flush();
     }

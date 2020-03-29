@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class CF
+public class WordCapitalization
 {
     public static void main(String[] args)throws Exception
     {
@@ -22,12 +22,16 @@ class Solver {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-//javac -d ../../classes 
+//javac -d ../../classes
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-
+            char[] s = hp.next().toCharArray();
+            if(s[0] > 'Z')s[0] -= 32;
+            StringBuilder sb = new StringBuilder();
+            for(char ch : s)sb.append(ch + "");
+            hp.println(sb.toString());
         }
         hp.flush();
     }

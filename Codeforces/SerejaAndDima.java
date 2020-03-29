@@ -1,12 +1,11 @@
 /* @nikhil_supertramp */
-
 import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
 
 
-public class CF
+public class SerejaAndDima
 {
     public static void main(String[] args)throws Exception
     {
@@ -22,12 +21,33 @@ class Solver {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-//javac -d ../../classes 
+//javac -d ../../classes
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-
+            int n = hp.nextInt();
+            int arr[] = hp.getIntArray(n);
+            int ser = 0, dim = 0;
+            int i = 0, j = n - 1, k = 0;
+            while(i <= j)
+            {
+                if((k++) % 2 == 0)
+                {
+                    if(arr[i] > arr[j])
+                        ser += arr[i++];
+                    else
+                        ser += arr[j--];
+                }
+                else
+                {
+                    if(arr[i] > arr[j])
+                        dim += arr[i++];
+                    else
+                        dim += arr[j--];
+                }
+            }
+            hp.println(ser + " " + dim);
         }
         hp.flush();
     }

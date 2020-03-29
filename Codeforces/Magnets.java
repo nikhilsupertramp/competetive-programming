@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class CF
+public class Magnets
 {
     public static void main(String[] args)throws Exception
     {
@@ -22,12 +22,22 @@ class Solver {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-//javac -d ../../classes 
+//javac -d ../../classes
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-
+            int n = hp.nextInt();
+            String prev = hp.next();
+            int count = 1;
+            for(int i = 1; i < n; i++)
+            {
+                String curr = hp.next();
+                if(!curr.equals(prev))
+                    count++;
+                prev = curr;
+            }
+            hp.println(count);
         }
         hp.flush();
     }

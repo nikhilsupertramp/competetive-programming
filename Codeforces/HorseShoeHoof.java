@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class CF
+public class HorseShoeHoof
 {
     public static void main(String[] args)throws Exception
     {
@@ -22,12 +22,17 @@ class Solver {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-//javac -d ../../classes 
+
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-
+            HashSet<Integer> hs = new HashSet<>();
+            for(int i = 0; i < 4; i++)
+            {
+                hs.add(hp.nextInt());
+            }
+            hp.println(4 - hs.size());
         }
         hp.flush();
     }

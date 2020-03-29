@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class CF
+public class VanyaAndFence
 {
     public static void main(String[] args)throws Exception
     {
@@ -22,12 +22,25 @@ class Solver {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-//javac -d ../../classes 
+
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-
+            int n = hp.nextInt();
+            int sum = 0;
+            int[] arr = new int[n];
+            int h = hp.nextInt();
+            for(int i = 0; i < n; i++)
+            {
+                arr[i] = hp.nextInt();
+                if(arr[i] > h)
+                {
+                    sum ++;
+                }
+                sum++;
+            }
+            hp.println(sum);
         }
         hp.flush();
     }

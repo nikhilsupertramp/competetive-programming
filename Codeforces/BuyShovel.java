@@ -1,12 +1,10 @@
 /* @nikhil_supertramp */
-
 import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
 
-
-public class CF
+public class BuyShovel
 {
     public static void main(String[] args)throws Exception
     {
@@ -22,12 +20,22 @@ class Solver {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-//javac -d ../../classes 
+//javac -d ../../classes
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-
+            char[] s = hp.next().toCharArray();
+            int sum = 0;
+            char prev = 'a';
+            for(int i = 0; i < s.length; i++)
+            {
+                int diff = Math.abs((int) (s[i] - prev));
+                //hp.println(diff  + " " + (26 - diff));
+                sum += Math.min(diff, 26 - diff);
+                prev = s[i];
+            }
+            hp.println(sum);
         }
         hp.flush();
     }

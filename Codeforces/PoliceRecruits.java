@@ -1,12 +1,11 @@
 /* @nikhil_supertramp */
-
 import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
 
 
-public class CF
+public class PoliceRecruits
 {
     public static void main(String[] args)throws Exception
     {
@@ -22,11 +21,34 @@ class Solver {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-//javac -d ../../classes 
+//javac -d ../../classes
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
+            int n = hp.nextInt();
+            int arr[] = hp.getIntArray(n);
+            int recruits = 0;
+            int crimes = 0;
+            int total = 0;
+            for(int i = 0; i < n; i++)
+            {
+                if(arr[i] != -1)
+                {
+                    //crimes = 0
+                    recruits += arr[i];
+                }
+                else if(arr[i] == -1)
+                {
+                    if(recruits > 0)
+                    {
+                        recruits--;
+                    }
+                    else
+                    total++;
+                }
+            }
+            hp.println(total);
 
         }
         hp.flush();

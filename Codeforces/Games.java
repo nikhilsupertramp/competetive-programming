@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class CF
+public class Games
 {
     public static void main(String[] args)throws Exception
     {
@@ -22,11 +22,28 @@ class Solver {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-//javac -d ../../classes 
+//javac -d ../../classes
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
+            int n = hp.nextInt();
+            int[] home = new int[n];
+            int[] guest = new int[n];
+            for(int i = 0; i < n; i++)
+            {
+                home[i] = hp.nextInt();
+                guest[i] = hp.nextInt();
+            }
+            int sum = 0;
+            for(int i = 0; i < n; i++)
+            {
+                for(int j = 0; j < n; j++)
+                {
+                    if(home[i] == guest[j])sum++;
+                }
+            }
+            hp.println(sum);
 
         }
         hp.flush();

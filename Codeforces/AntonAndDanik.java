@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class CF
+public class AntonAndDanik
 {
     public static void main(String[] args)throws Exception
     {
@@ -22,12 +22,22 @@ class Solver {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-//javac -d ../../classes 
+
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-
+            int n = hp.nextInt();
+            char[] s = hp.next().toCharArray();
+            int a = 0, d = 0;
+            for(char ch : s)
+            {
+                if(ch == 'A')a++;
+                else d++;
+            }
+            if(a == d)hp.println("Friendship");
+            else if(a > d)hp.println("Anton");
+            else hp.println("Danik");
         }
         hp.flush();
     }

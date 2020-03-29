@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class CF
+public class StonesOnTable
 {
     public static void main(String[] args)throws Exception
     {
@@ -22,12 +22,22 @@ class Solver {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-//javac -d ../../classes 
+//javac -d ../../classes
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-
+            int n = hp.nextInt();
+            char[] arr = hp.next().toCharArray();
+            int count = 0;
+            for(int i = 1; i < n; i++)
+            {
+                if(arr[i] == arr[i - 1])
+                {
+                    count++;
+                }
+            }
+            hp.println(count);
         }
         hp.flush();
     }

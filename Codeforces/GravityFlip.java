@@ -1,12 +1,11 @@
 /* @nikhil_supertramp */
-
 import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
 
 
-public class CF
+public class GravityFlip
 {
     public static void main(String[] args)throws Exception
     {
@@ -22,11 +21,18 @@ class Solver {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-//javac -d ../../classes 
+//javac -d ../../classes
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
+            int n = hp.nextInt();
+            int arr[] = hp.getIntArray(n);
+            Arrays.sort(arr);
+            for(int i = 0; i < n; i++)
+            {
+                hp.println(arr[i]);
+            }
 
         }
         hp.flush();
