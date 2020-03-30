@@ -4,7 +4,7 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
-public class BuyShovel
+public class GoodNumbers
 {
     public static void main(String[] args)throws Exception
     {
@@ -25,19 +25,31 @@ class Solver {
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
+            int n = hp.nextInt();
             int k = hp.nextInt();
-            int r = hp.nextInt();
-            int i = 0;
-            for(i = 1; i <= 10; i++)
+            int count = 0;
+            for(int i = 0; i < n; i++)
             {
-                if((k * i) % 10 == 0 || ((k * i) - r) % 10 == 0)
-                {
-                    break;
-                }
+                if(check(hp.next().toCharArray(), k))count++;
             }
-            hp.println(i);
+            hp.println(count);
         }
         hp.flush();
+    }
+
+    boolean check(char[] arr, int k)
+    {
+        Arrays.sort(arr);
+        HashSet<Integer> hs = new HashSet<>();
+        for(int i = 0; i < arr.length; i++)
+        {
+            hs.add(arr[i] - '0');
+        }
+        for(int i = 0; i <= k; i++)
+        {
+            if(!hs.contains(i))return false;
+        }
+        return true;
     }
 }
 

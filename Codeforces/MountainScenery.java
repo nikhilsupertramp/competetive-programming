@@ -4,7 +4,7 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
-public class BuyShovel
+public class MountainScenery
 {
     public static void main(String[] args)throws Exception
     {
@@ -21,22 +21,30 @@ class Solver {
         hp.initIO(System.in, System.out);
     }
 //javac -d ../../classes
+
     void solve() throws Exception
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
+            int n = hp.nextInt();
             int k = hp.nextInt();
-            int r = hp.nextInt();
-            int i = 0;
-            for(i = 1; i <= 10; i++)
+            int[] arr = hp.getIntArray(2 * n + 1);
+            for(int i = 1; i < 2 * n + 1; i += 2)
             {
-                if((k * i) % 10 == 0 || ((k * i) - r) % 10 == 0)
+                if(k > 0 && arr[i] > (arr[i - 1] + 1) && (arr[i] > arr[i + 1] + 1))
                 {
-                    break;
+                    arr[i]--;
+                    k--;
                 }
             }
-            hp.println(i);
+            for(int i = 0; i < 2 * n + 1; i++)
+            {
+                hp.print(arr[i] + " ");
+            }
+
         }
+
+
         hp.flush();
     }
 }

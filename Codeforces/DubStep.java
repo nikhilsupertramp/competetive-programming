@@ -4,7 +4,7 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
-public class BuyShovel
+public class DubStep
 {
     public static void main(String[] args)throws Exception
     {
@@ -25,17 +25,29 @@ class Solver {
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int k = hp.nextInt();
-            int r = hp.nextInt();
-            int i = 0;
-            for(i = 1; i <= 10; i++)
+            char[] s = hp.next().toCharArray();
+            StringBuilder sb = new StringBuilder();
+            int n = s.length;
+            for(int i = 0; i < n - 2; i++)
             {
-                if((k * i) % 10 == 0 || ((k * i) - r) % 10 == 0)
+                if(s[i] == 'W' && s[i + 1] == 'U' && s[i + 2] == 'B')
                 {
-                    break;
+                    s[i] = ' ';s[i + 1] = ' ';s[i + 2] = ' ';
                 }
             }
-            hp.println(i);
+            for(int i = 0;i < n - 1; i++)
+            {
+                if(s[i] == ' ' && s[i + 1] != ' ')
+                {
+                    sb.append(s[i] + "");
+                }
+                else if(s[i] != ' ')
+                    sb.append(s[i] + "");
+            }
+            if(s[n - 1] != ' ')sb.append(s[n - 1] + "");
+            if(sb.charAt(0) == ' ')
+                sb.deleteCharAt(0);
+            hp.println(sb.toString());
         }
         hp.flush();
     }

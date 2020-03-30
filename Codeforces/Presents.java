@@ -4,7 +4,7 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
-public class BuyShovel
+public class Presents
 {
     public static void main(String[] args)throws Exception
     {
@@ -25,17 +25,17 @@ class Solver {
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int k = hp.nextInt();
-            int r = hp.nextInt();
-            int i = 0;
-            for(i = 1; i <= 10; i++)
+            int n = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
+            int[] ans = new int[n];
+            for(int i = 0; i < n; i++)
             {
-                if((k * i) % 10 == 0 || ((k * i) - r) % 10 == 0)
-                {
-                    break;
-                }
+                ans[arr[i] - 1] =i + 1;
             }
-            hp.println(i);
+            for(int i = 0; i < n; i++)
+            {
+                hp.print(ans[i] + " ");
+            }
         }
         hp.flush();
     }
