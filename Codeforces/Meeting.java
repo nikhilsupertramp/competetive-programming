@@ -5,7 +5,7 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
-public class PanoramixPrediction
+public class Meeting
 {
     public static void main(String[] args)throws Exception
     {
@@ -17,40 +17,83 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
-//javac -d ../../classes OlesyaAndRodion
+//javac -d ../../classes PanoramixPrediction.java
     void solve() throws Exception
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n = hp.nextInt();
+            int x1 = hp.nextInt();
+            int y1 = hp.nextInt();
+            int x2 = hp.nextInt();
+            int y2 = hp.nextInt();
+            Pair[] arr = getPairs(x1, y1, x2, y2);
+            boolean[] flag = new boolean[arr.length];
+
             int m = hp.nextInt();
-            int k = getNextPrime(n);
-            String ans = (m == k) ? "YES": "NO";
-            hp.println(ans);
+            Radiator[] rds = new Radiator[m];
+            for(int i = 0; i < m; i++)
+            {
+                int x = hp.nextInt();
+                int y = hp.nextInt();
+                int r = hp.nextInt();
+                rds[i] = new  Radiator(x, y, r);
+            }
+
+            for(int j = 0; j < arr.length; j++)
+            {
+                Pair p = arr[j];
+                for(int i = 0; i < m; i++)
+                {
+                    if(findDistance(p, rds[i]))
+                    {
+                        flag[j] = true;
+                        break;
+                    }
+                }
+            }
+
+            int count = 0;
+            for(int i = 0; i < arr.length; i++)
+            {
+                if(!flag[i])count++;
+            }
+            hp.println(count);
         }
         hp.flush();
     }
-    int getNextPrime(int n)
+
+    boolean findDistance(Pair p, Radiator rad)
     {
-        int i = n + 1;
-        while(!isPrime(i))
-        {
-            i++;
-        }
-        return i;
+        int x = p.x - rad.x;
+        int y = p.y - rad.y;
+        if(x*x + y*y <= (rad.r * rad.r))return true;
+        return false;
     }
-    boolean isPrime(int n)
+
+    Pair[] getPairs(int x1, int y1, int x2, int y2)throws Exception
     {
-        int count = 0;
-        for(int i = 1; i < n; i++)
+        int size = 2 * ((Math.abs(x1 - x2) + 1) + (Math.abs(y2 - y1) - 1));
+        Pair[] arr = new Pair[size];
+        int pointer = 0;
+        //hp.println(size);
+        for(int i = Math.min(x1, x2); i <= Math.max(x1, x2); i++)
         {
-            if(n % i == 0)
-            {
-                count++;
-            }
+            arr[pointer++] = new Pair(i, y1);
+            //hp.println(arr[pointer - 1].toString());
+            arr[pointer++] = new Pair(i, y2);
+            //hp.println(arr[pointer - 1].toString());
         }
-        return count == 1;
+        for(int i = (Math.min(y1, y2) + 1); i < Math.max(y1, y2); i++)
+        {
+
+            arr[pointer++] = new Pair(x1, i);
+            //hp.println(arr[pointer - 1].toString());
+            arr[pointer++] = new Pair(x2, i);
+            //hp.println(arr[pointer - 1].toString());
+        }
+        return arr;
     }
+
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
@@ -307,5 +350,34 @@ class Helper {
 
     public void flush() throws Exception {
         bw.flush();
+    }
+}
+class Pair implements Comparable<Pair>{
+    int x, y;
+    public Pair(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(x + " " + y);
+        return sb.toString();
+    }
+    @Override
+    public int compareTo(Pair p)
+    {
+        return x - p.x;
+    }
+}
+class Radiator
+{
+    int x, y, r;
+    Radiator(int x, int y, int r)
+    {
+        this.r = r;
+        this.x = x;
+        this.y = y;
     }
 }

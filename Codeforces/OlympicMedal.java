@@ -4,8 +4,10 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.text.*;
 
-public class PanoramixPrediction
+
+public class OlympicMedal
 {
     public static void main(String[] args)throws Exception
     {
@@ -17,40 +19,44 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
-//javac -d ../../classes OlesyaAndRodion
+//javac -d ../../classes
+//problem link : https://codeforces.com/contest/215/problem/B
     void solve() throws Exception
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            int m = hp.nextInt();
-            int k = getNextPrime(n);
-            String ans = (m == k) ? "YES": "NO";
-            hp.println(ans);
+            int t1 = hp.nextInt();
+            int t2 = hp.nextInt();
+            int k = hp.nextInt();
+            Pair[] arr = new Pair[n];
+            for(int i = 0; i < n; i++)
+            {
+                int u = hp.nextInt();
+                int v = hp.nextInt();
+                double max = getMax(u, v, t1, t2, k);
+                arr[i] = new Pair(i + 1, max);
+            }
+            Arrays.sort(arr);
+            for(Pair p : arr)
+            {
+                //String s = (new DecimalFormat("##.##").format(p.y));
+                //hp.println(p.x + " " + p.y);
+                System.out.printf("%d %.2f\n", p.x, p.y);
+            }
         }
         hp.flush();
     }
-    int getNextPrime(int n)
+
+    double getMax(int u, int v, int  t1, int t2, int k)
     {
-        int i = n + 1;
-        while(!isPrime(i))
-        {
-            i++;
-        }
-        return i;
+        double l = ((double)((u * t1) * (100 - k)) / 100) + (double)(v * t2);
+        double r = ((double)((v * t1) * (100 - k)) / 100) + (double)(u * t2);
+        double ans = (double)Math.round(Math.max(l, r) * 100) / 100;
+        return ans;
+
     }
-    boolean isPrime(int n)
-    {
-        int count = 0;
-        for(int i = 1; i < n; i++)
-        {
-            if(n % i == 0)
-            {
-                count++;
-            }
-        }
-        return count == 1;
-    }
+
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
@@ -307,5 +313,22 @@ class Helper {
 
     public void flush() throws Exception {
         bw.flush();
+    }
+}
+
+class Pair implements Comparable<Pair>{
+    int x;
+    Double y;
+    public Pair(int x, Double y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+    @Override
+    public int compareTo(Pair p)
+    {
+        if(p.y == y)
+        return x - p.x;
+        return (p.y).compareTo(y);
     }
 }

@@ -5,7 +5,7 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
-public class PanoramixPrediction
+public class SumOfDigits
 {
     public static void main(String[] args)throws Exception
     {
@@ -17,39 +17,40 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
-//javac -d ../../classes OlesyaAndRodion
+//javac -d ../../classes PanoramixPrediction.java
     void solve() throws Exception
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n = hp.nextInt();
-            int m = hp.nextInt();
-            int k = getNextPrime(n);
-            String ans = (m == k) ? "YES": "NO";
-            hp.println(ans);
+             char[] s = hp.next().toCharArray();
+             long sum = 0;
+             int count = 0;
+             if(s.length != 1)
+                count = 1;
+             for(char ch : s)
+             {
+                 sum += (ch - '0');
+             }
+             while(sum >= 10)
+             {
+                 //hp.print(sum + "->");
+                 sum = getSum(sum);
+                 count++;
+             }
+             hp.println(count);
         }
         hp.flush();
     }
-    int getNextPrime(int n)
+
+    long getSum(long n)
     {
-        int i = n + 1;
-        while(!isPrime(i))
+        long sum = 0;
+        while(n > 0)
         {
-            i++;
+            sum += (n % 10);
+            n /= 10;
         }
-        return i;
-    }
-    boolean isPrime(int n)
-    {
-        int count = 0;
-        for(int i = 1; i < n; i++)
-        {
-            if(n % i == 0)
-            {
-                count++;
-            }
-        }
-        return count == 1;
+        return sum;
     }
     Solver() {
         hp = new Helper(MOD, MAXN);

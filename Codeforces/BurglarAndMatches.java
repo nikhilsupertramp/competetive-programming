@@ -5,7 +5,7 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
-public class PanoramixPrediction
+public class BurglarAndMatches
 {
     public static void main(String[] args)throws Exception
     {
@@ -17,40 +17,38 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
-//javac -d ../../classes OlesyaAndRodion
+//javac -d ../../classes PanoramixPrediction.java
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        int n = hp.nextInt();
+        int m = hp.nextInt();
+        Pair[] arr = new Pair[m];
+        for(int i = 0; i< m; i++)
         {
-            int n = hp.nextInt();
-            int m = hp.nextInt();
-            int k = getNextPrime(n);
-            String ans = (m == k) ? "YES": "NO";
-            hp.println(ans);
+            int x = hp.nextInt();
+            int y = hp.nextInt();
+            arr[i] = new Pair(x, y);
         }
-        hp.flush();
-    }
-    int getNextPrime(int n)
-    {
-        int i = n + 1;
-        while(!isPrime(i))
+        Arrays.sort(arr);
+        long profit = 0;
+        int i = 0;
+        while(n > 0 && i < m)
         {
+            if(n > arr[i].x){
+                n = n - arr[i].x;
+                profit += (arr[i].x *arr[i].y);
+            }
+            else if(n <= arr[i].x)
+            {
+                profit += (n * arr[i].y);
+                n = 0;
+            }
             i++;
         }
-        return i;
+        hp.println(profit);
+        hp.flush();
     }
-    boolean isPrime(int n)
-    {
-        int count = 0;
-        for(int i = 1; i < n; i++)
-        {
-            if(n % i == 0)
-            {
-                count++;
-            }
-        }
-        return count == 1;
-    }
+
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
@@ -307,5 +305,18 @@ class Helper {
 
     public void flush() throws Exception {
         bw.flush();
+    }
+}
+class Pair implements Comparable<Pair>{
+    int x, y;
+    public Pair(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+    @Override
+    public int compareTo(Pair p)
+    {
+        return p.y - y;
     }
 }

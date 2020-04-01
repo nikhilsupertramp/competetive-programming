@@ -5,7 +5,7 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
-public class PanoramixPrediction
+public class PresidentOffice
 {
     public static void main(String[] args)throws Exception
     {
@@ -17,40 +17,31 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
-//javac -d ../../classes OlesyaAndRodion
+//javac -d ../../classes PanoramixPrediction.java
     void solve() throws Exception
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n = hp.nextInt();
-            int m = hp.nextInt();
-            int k = getNextPrime(n);
-            String ans = (m == k) ? "YES": "NO";
-            hp.println(ans);
+             int m = hp.nextInt();
+             int n = hp.nextInt();
+             char c = hp.next().charAt(0);
+             char[][] s = new char[m][n];
+             for(int i = 0; i < m; i++)
+             {
+                 s[i] = hp.next().toCharArray();
+                 HashSet<Character> hs = new HashSet<>();
+             }
+             for(int i = 0; i < m; i++)
+             {
+                 for(int j = 0; j < n; j++)
+                 {
+                     if()
+                 }
+             }
         }
         hp.flush();
     }
-    int getNextPrime(int n)
-    {
-        int i = n + 1;
-        while(!isPrime(i))
-        {
-            i++;
-        }
-        return i;
-    }
-    boolean isPrime(int n)
-    {
-        int count = 0;
-        for(int i = 1; i < n; i++)
-        {
-            if(n % i == 0)
-            {
-                count++;
-            }
-        }
-        return count == 1;
-    }
+
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
