@@ -1,13 +1,11 @@
 /* @nikhil_supertramp */
-
 import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
 //import java.text.*;
 
-
-public class OlympicMedal
+public class JeffAndPeriods
 {
     public static void main(String[] args)throws Exception
     {
@@ -20,48 +18,54 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
 
 //javac -d ../../classes
-//problem link : https://codeforces.com/contest/215/problem/B
-/*
-obserbations :
-mass of ouuter ring = (total mass - mass of inner ring)
-=>  (((p1 * r1 * r1) - (p2 * r2 * r2)) / (p2 * r2 * r2)) = A / B
-=>  (B * (p1 * r1 * r1)  -  B * (p1 * r2 * r2)) = A * (p2 * r2 * r2)
-=>  B * (p1 * r1 * r1) = (r2 * r2) ((A * p2) + (B * p1))
-
-=>> Math.sqrt(B * (p1 * r1 * r1)/((A * p2) + (B * p1)) = r2
-*/
+//problem link : https://codeforces.com/contest/352/problem/B
 
     void solve() throws Exception
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        ArrayList<Integer> x = new ArrayList<>();
+        int n = hp.nextInt();
+        HashMap<Integer, ArrayList<Integer>> hm = new HashMap<>();
+        TreeSet<Integer> ts = new TreeSet<>();
+        int[] arr = new int[n];
         for(int i = 0; i < n; i++)
-            x.add(sc.nextInt());
-        n = sc.nextInt();
-        ArrayList<Integer> y = new ArrayList<>();
-        for(int i = 0; i < n; i++)
-            y.add(sc.nextInt());
-        n = sc.nextInt();
-        ArrayList<Integer> z = new ArrayList<>();
-        for(int i = 0; i < n; i++)
-            z.add(sc.nextInt());
-
-        int r1 = Collections.max(x);
-        int p1 = Collections.max(y);
-        int p2 = Collections.min(z);
-
-        int A = sc.nextInt();
-        int B = sc.nextInt();
-        double ans = calcR2(r1, p1, p2, A, B);
-        System.out.printf("%.13f", ans);
+        {
+            arr[i] = hp.nextInt();
+            if(!hm.containsKey(arr[i]))hm.put(arr[i], new ArrayList<>());
+            hm.get(arr[i]).add(i + 1);
+            ts.add(arr[i]);
+        }
+        int count = 0;
+        StringBuilder sb = new StringBuilder();
+        for(int key : ts)
+        {
+            ArrayList<Integer> li = hm.get(key);
+            //int size = li.size();
+            int value = checkArrayListA(li);
+            if(value != -1){
+                sb.append(key + " " + value + "\n");
+                count++;
+            }
+        }
+        sb.insert(0, count + "\n");
+        hp.println(sb);
+        hp.flush();
     }
-    public double calcR2(int r1 ,int p1 , int p2,int a , int b)
+
+    int checkArrayListA(ArrayList<Integer> li)
     {
-
-        return Math.sqrt((b*p1*Math.pow(r1, 2))/((a*p2)+(b*p1))) ;
+        if(li.size() == 1)return 0;
+        int n = li.size();
+        int start = 0, end = n - 1;
+        int diff = li.get(end) - li.get(start);
+        diff = diff / (end);
+        for(int i = 0; i < n - 1; i++)
+        {
+            if(li.get(i + 1) - li.get(i) != diff)
+                return -1;
+        }
+        return diff;
     }
+
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);

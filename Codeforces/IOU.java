@@ -1,13 +1,11 @@
 /* @nikhil_supertramp */
-
 import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
 //import java.text.*;
 
-
-public class OlympicMedal
+public class IOU
 {
     public static void main(String[] args)throws Exception
     {
@@ -20,48 +18,33 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
 
 //javac -d ../../classes
-//problem link : https://codeforces.com/contest/215/problem/B
-/*
-obserbations :
-mass of ouuter ring = (total mass - mass of inner ring)
-=>  (((p1 * r1 * r1) - (p2 * r2 * r2)) / (p2 * r2 * r2)) = A / B
-=>  (B * (p1 * r1 * r1)  -  B * (p1 * r2 * r2)) = A * (p2 * r2 * r2)
-=>  B * (p1 * r1 * r1) = (r2 * r2) ((A * p2) + (B * p1))
-
-=>> Math.sqrt(B * (p1 * r1 * r1)/((A * p2) + (B * p1)) = r2
-*/
+//problem link : https://codeforces.com/contest/352/problem/B
 
     void solve() throws Exception
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        ArrayList<Integer> x = new ArrayList<>();
-        for(int i = 0; i < n; i++)
-            x.add(sc.nextInt());
-        n = sc.nextInt();
-        ArrayList<Integer> y = new ArrayList<>();
-        for(int i = 0; i < n; i++)
-            y.add(sc.nextInt());
-        n = sc.nextInt();
-        ArrayList<Integer> z = new ArrayList<>();
-        for(int i = 0; i < n; i++)
-            z.add(sc.nextInt());
-
-        int r1 = Collections.max(x);
-        int p1 = Collections.max(y);
-        int p2 = Collections.min(z);
-
-        int A = sc.nextInt();
-        int B = sc.nextInt();
-        double ans = calcR2(r1, p1, p2, A, B);
-        System.out.printf("%.13f", ans);
+        int n = hp.nextInt();
+        int m = hp.nextInt();
+        int[] owe = new int[n + 1];
+        for(int i = 0; i < m; i++)
+        {
+            int a = hp.nextInt();
+            int b = hp.nextInt();
+            int c = hp.nextInt();
+            owe[a] += c;
+            owe[b] -= c;
+        }
+        int sum = 0;
+        for(int i = 0; i <= n; i++)
+        {
+            if(owe[i] > 0)
+                sum += owe[i];
+        }
+        //hp.println(Arrays.toString(owe));
+        hp.println(sum);
+        hp.flush();
     }
-    public double calcR2(int r1 ,int p1 , int p2,int a , int b)
-    {
 
-        return Math.sqrt((b*p1*Math.pow(r1, 2))/((a*p2)+(b*p1))) ;
-    }
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);

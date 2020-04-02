@@ -7,7 +7,7 @@ import java.util.*;
 //import java.text.*;
 
 
-public class OlympicMedal
+public class RomaAndChangingSigns
 {
     public static void main(String[] args)throws Exception
     {
@@ -20,48 +20,42 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
 
 //javac -d ../../classes
-//problem link : https://codeforces.com/contest/215/problem/B
-/*
-obserbations :
-mass of ouuter ring = (total mass - mass of inner ring)
-=>  (((p1 * r1 * r1) - (p2 * r2 * r2)) / (p2 * r2 * r2)) = A / B
-=>  (B * (p1 * r1 * r1)  -  B * (p1 * r2 * r2)) = A * (p2 * r2 * r2)
-=>  B * (p1 * r1 * r1) = (r2 * r2) ((A * p2) + (B * p1))
-
-=>> Math.sqrt(B * (p1 * r1 * r1)/((A * p2) + (B * p1)) = r2
-*/
+//problem link : https://codeforces.com/contest/262/problem/B
 
     void solve() throws Exception
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        ArrayList<Integer> x = new ArrayList<>();
+        int n = hp.nextInt();
+        int k = hp.nextInt();
+        int[] arr = new int[n];
+        int neg = 0;
+        int min = Integer.MAX_VALUE;
         for(int i = 0; i < n; i++)
-            x.add(sc.nextInt());
-        n = sc.nextInt();
-        ArrayList<Integer> y = new ArrayList<>();
+        {
+            arr[i] = hp.nextInt();
+            if(arr[i] < 0)neg++;
+            if(Math.abs(arr[i]) < min)min = Math.abs(arr[i]);
+        }
+        Arrays.sort(arr);
         for(int i = 0; i < n; i++)
-            y.add(sc.nextInt());
-        n = sc.nextInt();
-        ArrayList<Integer> z = new ArrayList<>();
-        for(int i = 0; i < n; i++)
-            z.add(sc.nextInt());
-
-        int r1 = Collections.max(x);
-        int p1 = Collections.max(y);
-        int p2 = Collections.min(z);
-
-        int A = sc.nextInt();
-        int B = sc.nextInt();
-        double ans = calcR2(r1, p1, p2, A, B);
-        System.out.printf("%.13f", ans);
+        {
+            if(arr[i] < 0)
+            {
+                arr[i] = -1 * arr[i];
+                k--;
+            }
+            if(k == 0)break;
+        }
+        if(k > 0)
+        {
+            Arrays.sort(arr);
+            arr[0] = (k % 2 == 0) ? arr[0] : (-1 * arr[0]);
+        }
+        long sum = hp.sum(arr);
+        hp.println(sum);
+        hp.flush();
     }
-    public double calcR2(int r1 ,int p1 , int p2,int a , int b)
-    {
 
-        return Math.sqrt((b*p1*Math.pow(r1, 2))/((a*p2)+(b*p1))) ;
-    }
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
