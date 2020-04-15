@@ -1,11 +1,11 @@
 /* @nikhil_supertramp */
-import java.awt.*;
+
 import java.io.*;
 import java.math.*;
 import java.util.*;
-//import java.text.*;
+import java.math.*;
 
-public class DZYlovesChemistry
+class FactreeApr20
 {
     public static void main(String[] args)throws Exception
     {
@@ -17,18 +17,155 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
-//javac -d ../../classes
-//problem link : https://codeforces.com/contest/445/problem/B
-    void solve() throws Exception
-    {
-        
-        hp.flush();
-    }
-
-
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
+    }
+
+    int[] depth, parent;
+    void solve() throws Exception
+    {
+        long startTime = System.nanoTime();
+        for(int tc = hp.nextInt(); tc > 0; tc--)
+        {
+            int n = hp.nextInt();
+            HashMap<Integer, ArrayList<Integer>> adj = new HashMap<>();
+            //if(n < 100 * 100)
+            {
+                depth = new int[n + 1];
+                parent = new int[n + 1];
+                createAdjList(n, adj);
+                int[] arr = new int[n + 1];
+                HashMap<Integer, Integer>[] hm_arr = new HashMap[n + 1];
+                for(int i = 1; i <= n; i++)
+                {
+                    arr[i] = hp.nextInt();
+                    hm_arr[i] = new HashMap<Integer, Integer>();
+                }
+                dfs(1, -1, 1, adj);
+                int q = hp.nextInt();
+                for(int i = 0; i < q; i++)
+                {
+                    int u = hp.nextInt();
+                    int v = hp.nextInt();
+                    ArrayList<Integer> li = getPath(u, v);
+                    //hp.println(li);
+                    int ans = getNoOfFactors(li, arr);
+                    hp.println(ans);
+                }
+
+            }
+        }
+        long endTime = System.nanoTime();
+        hp.println((endTime - startTime) / 1e6);
+        hp.flush();
+    }
+
+    int getNoOfFactors(ArrayList<Integer> li, int[] arr)throws Exception
+    {
+        HashMap<Integer, Integer> hm = new HashMap<>();
+        for(int i : li)
+        {
+            reduce(arr[i], hm);
+            //hp.println(Arrays.toString(freq));
+        }
+        int ans = mul(hm);
+        return ans;
+    }
+
+    int mul(HashMap<Integer, Integer> hm)
+    {
+        long ans = 1;
+        for(int key : hm.keySet())
+        {
+            ans = (ans * (hm.get(key) + 1) ) % MOD;
+        }
+        return (int)ans;
+    }
+
+    void reduce(int n, HashMap<Integer, Integer> hm)
+    {
+        while(n % 2 == 0)
+        {
+            hm.put(2, hm.getOrDefault(2, 0) + 1);
+            n /= 2;
+        }
+        for(int i = 3; i * i <= n; i += 2)
+        {
+            while(n % i == 0)
+            {
+                //hs.add(i);
+                hm.put(i, hm.getOrDefault(i, 0) + 1);
+                n /= i;
+            }
+        }
+        if(n > 2)
+            hm.put(n, hm.getOrDefault(n, 0) + 1);
+    }
+
+    void dfs(int v, int p, int d, HashMap<Integer, ArrayList<Integer>> adj)
+    {
+        depth[v] = d;
+        parent[v] = p;
+        for(int c : adj.get(v))
+        {
+            if(c  != p)
+            {
+                dfs(c, v, d + 1, adj);
+            }
+        }
+    }
+
+    ArrayList<Integer> getPath(int u, int v)throws Exception
+    {
+        ArrayList<Integer> li = new ArrayList<>();
+        ArrayList<Integer> path1 = new ArrayList<>();
+        ArrayList<Integer> path2 = new ArrayList<>();
+        path1.add(u);
+        path2.add(v);
+        while(u != v)
+        {
+            if(depth[u] < depth[v])
+            {
+                path2.add(v = parent[v]);
+            }
+            else if(depth[u] > depth[v])
+            {
+                path1.add(u = parent[u]);
+            }
+            else if(depth[u] == depth[v])
+            {
+                path1.add(u = parent[u]);
+                path2.add(v = parent[v]);
+            }
+        }
+        //hp.println(path1 + " " + path2);
+        path2.remove(path2.size() - 1);
+        Collections.reverse(path2);
+        for(int i : path2)
+        {
+            path1.add(i);
+        }
+        return path1;
+    }
+
+    void createAdjList(int n, HashMap<Integer, ArrayList<Integer>> hm)throws Exception
+    {
+        for(int i = 0; i < n - 1;i++)
+        {
+            int p = hp.nextInt();
+            int q = hp.nextInt();
+            if(!hm.containsKey(p))
+            {
+                hm.put(p, new ArrayList<Integer>());
+            }
+            if(!hm.containsKey(q))
+            {
+                hm.put(q, new ArrayList<Integer>());
+            }
+            hm.get(p).add(q);
+            hm.get(q).add(p);
+        }
     }
 }
 
@@ -282,22 +419,5 @@ class Helper {
 
     public void flush() throws Exception {
         bw.flush();
-    }
-}
-
-class Pair implements Comparable<Pair>{
-    int x;
-    Double y;
-    public Pair(int x, Double y)
-    {
-        this.x = x;
-        this.y = y;
-    }
-    @Override
-    public int compareTo(Pair p)
-    {
-        if(p.y == y)
-        return x - p.x;
-        return (p.y).compareTo(y);
     }
 }

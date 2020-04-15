@@ -1,11 +1,11 @@
 /* @nikhil_supertramp */
+
 import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
-//import java.text.*;
 
-public class DZYlovesChemistry
+class UnitGCDApr20
 {
     public static void main(String[] args)throws Exception
     {
@@ -17,18 +17,49 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
-//javac -d ../../classes
-//problem link : https://codeforces.com/contest/445/problem/B
-    void solve() throws Exception
-    {
-        
-        hp.flush();
-    }
-
-
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
+    }
+
+    void solve() throws Exception
+    {
+        for(int tc = hp.nextInt(); tc > 0; tc--)
+        {
+            int n = hp.nextInt();
+            if(n <= 3)
+            {
+                hp.println(1);
+                hp.print(n + " ");
+                for(int i = 1; i <= n; i++)
+                    hp.print(i + " ");
+                hp.println();
+            }
+            else
+            {
+                if(n % 2 == 0)
+                {
+                    hp.println((n/2));
+                    hp.println("2 1 2");
+                    int i = 3;
+                    while(i <= n)
+                    {
+                        hp.println(2 + " " + i++ + " " + i++);
+                    }
+                }
+                else
+                {
+                    hp.println((n - 1) / 2);
+                    hp.println("3 1 2 3");
+                    int i = 4;
+                    while(i <= n)
+                    {
+                        hp.println(2 + " " + i++ + " " + i++);
+                    }
+                }
+            }
+        }
+        hp.flush();
     }
 }
 
@@ -282,22 +313,5 @@ class Helper {
 
     public void flush() throws Exception {
         bw.flush();
-    }
-}
-
-class Pair implements Comparable<Pair>{
-    int x;
-    Double y;
-    public Pair(int x, Double y)
-    {
-        this.x = x;
-        this.y = y;
-    }
-    @Override
-    public int compareTo(Pair p)
-    {
-        if(p.y == y)
-        return x - p.x;
-        return (p.y).compareTo(y);
     }
 }

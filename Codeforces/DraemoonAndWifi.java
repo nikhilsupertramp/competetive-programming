@@ -5,7 +5,7 @@ import java.math.*;
 import java.util.*;
 //import java.text.*;
 
-public class DZYlovesChemistry
+public class DraemoonAndWifi
 {
     public static void main(String[] args)throws Exception
     {
@@ -21,15 +21,67 @@ class Solver {
 //problem link : https://codeforces.com/contest/445/problem/B
     void solve() throws Exception
     {
-        
+        char[] s1 = hp.next().toCharArray();
+        char[] s2 = hp.next().toCharArray();
+        int ans = 0;
+        for(int i = 0; i < s1.length; i++)
+        {
+            if(s1[i] == '+')ans++;
+            else
+                ans--;
+        }
+        findProb(s2, ans, s2.length);
         hp.flush();
     }
+    int numerator = 0;
+    void findProb(char[] arr, int ans, int n)throws Exception
+    {
+        findProbUtil(arr, 0,  0, ans, n);
+        int count = 0;
+        for(char ch : arr)
+            if( ch == '?')count++;
+        int denominator = 1<<count;
+        double op = (double)numerator / denominator;
+        hp.println(op);
 
+    }
+
+    void findProbUtil(char[] arr, int pos, int curr, int ans , int n)throws Exception
+    {
+        //hp.println(curr + " " + ans);
+        if(pos == n)
+        {
+            //hp.println(curr);
+            if(ans == curr)numerator++;
+            return;
+        }
+
+        if(arr[pos] == '+')
+        {
+            curr++;
+            pos++;
+            findProbUtil(arr, pos, curr, ans, n);
+        }
+        else if(arr[pos] == '-')
+        {
+            curr--;
+            pos++;
+            findProbUtil(arr, pos, curr, ans, n);
+        }
+        else
+        {
+            pos++;
+            findProbUtil(arr, pos, curr + 1, ans, n);
+            findProbUtil(arr, pos, curr - 1, ans, n);
+        }
+
+    }
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
+
 }
 
 class Helper {

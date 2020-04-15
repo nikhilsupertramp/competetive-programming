@@ -1,11 +1,12 @@
 /* @nikhil_supertramp */
+
 import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
-//import java.text.*;
 
-public class DZYlovesChemistry
+
+class SquaredSubsequencesApr20
 {
     public static void main(String[] args)throws Exception
     {
@@ -17,19 +18,105 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
-//javac -d ../../classes
-//problem link : https://codeforces.com/contest/445/problem/B
-    void solve() throws Exception
-    {
-        
-        hp.flush();
-    }
-
-
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
+
+    void solve() throws Exception
+    {
+        for(int tc = hp.nextInt(); tc > 0; tc--)
+        {
+            int n = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
+            //int bruteforce = bruteForce(arr, n);
+            long opt = optimized(arr, n);
+            hp.println(opt);
+            //hp.println();
+        }
+        hp.flush();
+    }
+
+    long optimized(int[] arr, int n)throws Exception
+    {
+        int[] seq = new int[n + 1];
+        int last_even = n;
+        for(int i = n - 1; i >= 0; i--)
+        {
+            if(arr[i] % 4 == 0)
+            {
+                seq[i] = n - i;
+                last_even = i;
+            }
+            else if(arr[i] % 2 == 0)
+            {
+                seq[i] = n - last_even;
+                last_even = i;
+            }
+            else
+            {
+                seq[i] = (last_even - i) + seq[last_even];
+            }
+        }
+        //hp.println(Arrays.toString(seq));
+        long sum = 0;
+        for(int i : seq)
+        {
+            sum += i;
+        }
+        return sum;
+    }
+    int bruteForce(int[] arr, int n)throws Exception
+    {
+        int count = 0;
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < n; i++)
+        {
+            int sum = 0;
+            for(int j = i; j < n; j++)
+            {
+                if(check(arr, i, j))
+                {
+                    count++;
+                    sum++;
+                }
+                //hp.println(i + " to " + j + check(arr, i, j));
+            }
+            sb.append(sum + ", ");
+        }
+        hp.println(sb);
+        return count;
+    }
+
+    boolean check(int[] arr, int l, int r)
+    {
+        int count = 0;
+        for(int i = l; i <= r; i++)
+        {
+            if(arr[i] % 4 == 0)return true;
+            if(arr[i] % 2 == 0)count++;
+        }
+        if(count == 0)return true;
+        return (count > 1);
+    }
+
+/*
+3
+40
+78 77 19 46 39 75 26 44 7 79 21 10 45 64 60 23 4 13 54 17 43 57 34 58 71 48 9 73 33 62 25 5 29 80 12 51 8 37 18 66
+26
+1 49 21 56 12 74 37 67 61 40 14 55 48 2 28 58 32 6 31 69 35 3 66 20 60 50
+14
+11 2 8 24 12 19 17 13 23 15 18 6 25 1
+ans :-
+764
+332
+94
+
+*/
+
+
+
 }
 
 class Helper {
@@ -282,22 +369,5 @@ class Helper {
 
     public void flush() throws Exception {
         bw.flush();
-    }
-}
-
-class Pair implements Comparable<Pair>{
-    int x;
-    Double y;
-    public Pair(int x, Double y)
-    {
-        this.x = x;
-        this.y = y;
-    }
-    @Override
-    public int compareTo(Pair p)
-    {
-        if(p.y == y)
-        return x - p.x;
-        return (p.y).compareTo(y);
     }
 }

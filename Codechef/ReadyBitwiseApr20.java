@@ -1,11 +1,12 @@
 /* @nikhil_supertramp */
+
 import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
-//import java.text.*;
 
-public class DZYlovesChemistry
+
+class ReadyBitwiseApr20
 {
     public static void main(String[] args)throws Exception
     {
@@ -15,23 +16,108 @@ public class DZYlovesChemistry
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
-
-//javac -d ../../classes
-//problem link : https://codeforces.com/contest/445/problem/B
-    void solve() throws Exception
-    {
-        
-        hp.flush();
-    }
-
+    final long MOD = 998244353L;
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
+
+    void solve() throws Exception
+    {
+        for(int tc = hp.nextInt(); tc > 0; tc--)
+        {
+            String s = hp.next();
+            process(s);
+
+        }
+        hp.flush();
+    }
+
+    void process(String s)throws Exception
+    {
+        Stack<Character> operands = new Stack<>();
+        Stack<Probability> p = new Stack<>();
+        for(int i = 0; i < s.length(); i++)
+        {
+            char ch = s.charAt(i);
+            if(ch == ')')
+            {
+                Probability p1 = p.pop();
+                Probability p2 = p.pop();
+                char ch1 = operands.pop();
+                p.push(getNextProbability(p1, p2, ch1));
+            }
+            else if(ch == '#')
+            {
+                p.push(new Probability(748683265L, 748683265L, 748683265L, 748683265L));
+            }
+            else if(ch == '&' || ch == '|' || ch == '^')
+            {
+                operands.push(ch);
+            }
+        }
+        hp.println(p.pop().toString());
+    }
+
+    Probability getNextProbability(Probability a, Probability b, char ch)
+    {
+        long p0, p1, p2, p3;
+        if(ch == '&')
+        {
+            p1 = mul(a.p1, b.p1);
+            p0 = (mul(a.p0, b.p1) + mul(a.p0, b.p0) + mul(a.p0, b.p2) + mul(a.p0, b.p3) +
+                  mul(a.p1, b.p0) +
+                  mul(a.p2, b.p0) + mul(a.p2, b.p3) +
+                  mul(a.p3, b.p0) + mul(a.p3, b.p2))% MOD;
+            p2 = (mul(a.p1, b.p2) + mul(a.p2, b.p1) + mul(a.p2, b.p2)) % MOD;
+            p3 = (mul(a.p1, b.p3) + mul(a.p3, b.p1) + mul(a.p3, b.p3)) % MOD;
+        }
+
+        else if(ch == '|')
+        {
+            p0 = mul(a.p0, b.p0);
+            p1 = (mul(a.p0, b.p1) +
+                  mul(a.p1, b.p0) + mul(a.p1, b.p1) + mul(a.p1, b.p2) + mul(a.p1, b.p3) +
+                  mul(a.p2, b.p1) + mul(a.p2, b.p3) +
+                  mul(a.p3, b.p1) + mul(a.p3, b.p2)) % MOD;
+            p2 = (mul(a.p0, b.p2) + mul(a.p2, b.p0) + mul(a.p2, b.p2)) % MOD;
+            p3 = (mul(a.p0, b.p3) + mul(a.p3, b.p0) + mul(a.p3, b.p3)) % MOD;
+        }
+
+        else
+        {
+            p0 = (mul(a.p0, b.p0) + mul(a.p1, b.p1) + mul(a.p2, b.p2) + mul(a.p3, b.p3)) % MOD;
+            p1 = (mul(a.p0, b.p1) + mul(a.p1, b.p0) + mul(a.p2, b.p3) + mul(a.p3, b.p2)) % MOD;
+            p2 = (mul(a.p0, b.p2) + mul(a.p1, b.p3) + mul(a.p2, b.p0) + mul(a.p3, b.p1)) % MOD;
+            p3 = (mul(a.p0, b.p3) + mul(a.p1, b.p2) + mul(a.p2, b.p1) + mul(a.p3, b.p0)) % MOD;
+        }
+
+        return (new Probability(p0, p1, p2, p3));
+    }
+    long mul(long a, long b)
+    {
+        return ((a % MOD) * (b % MOD) % MOD);
+    }
+
 }
 
+class Probability
+{
+    long p0, p1, p2, p3;
+    Probability(long p0, long p1, long p2, long p3)
+    {
+        this.p0 = p0;
+        this.p1 = p1;
+        this.p2 = p2;
+        this.p3 = p3;
+    }
+    public String toString()
+    {
+        String ans = p0 + " " + p1 + " " + p2 + " "+ p3;
+        return ans;
+    }
+}
 class Helper {
     final long MOD;
     final int MAXN;
@@ -282,22 +368,5 @@ class Helper {
 
     public void flush() throws Exception {
         bw.flush();
-    }
-}
-
-class Pair implements Comparable<Pair>{
-    int x;
-    Double y;
-    public Pair(int x, Double y)
-    {
-        this.x = x;
-        this.y = y;
-    }
-    @Override
-    public int compareTo(Pair p)
-    {
-        if(p.y == y)
-        return x - p.x;
-        return (p.y).compareTo(y);
     }
 }

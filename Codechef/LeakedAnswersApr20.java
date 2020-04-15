@@ -1,11 +1,12 @@
 /* @nikhil_supertramp */
+
 import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
-//import java.text.*;
 
-public class DZYlovesChemistry
+
+class LeakedAnswersApr20
 {
     public static void main(String[] args)throws Exception
     {
@@ -16,19 +17,45 @@ class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
-
-//javac -d ../../classes
-//problem link : https://codeforces.com/contest/445/problem/B
-    void solve() throws Exception
-    {
-        
-        hp.flush();
-    }
-
-
+    final Random random = new Random();
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
+    }
+
+    void solve() throws Exception
+    {
+        for(int tc = hp.nextInt(); tc > 0; tc--)
+        {
+            int n = hp.nextInt();
+            int m = hp.nextInt();
+            int k = hp.nextInt();
+            ArrayList<Integer>[] anss = new ArrayList[];
+
+            for(int i = 0; i < n; i++)
+            {
+                anss[i] = new ArrayList<Integer>();
+                int[] ans = new int[m];
+                for(int j = 0; j < k; j++)
+                {
+                    int c = hp.nextInt();
+                    ans[c - 1]++;
+                }
+                Pair[] pairs = new Pairs[m];
+                for(int i = 0; i < m; i++)
+                {
+                    pairs[i] = new Pair(i + 1, ans[i]);
+                }
+
+            }
+
+            for(int i = 0; i < n; i++)
+            {
+                //int rand = random.nextInt(5000);
+                hp.print((anss[i] + 1) + " ");
+            }
+        }
+        hp.flush();
     }
 }
 
@@ -287,8 +314,8 @@ class Helper {
 
 class Pair implements Comparable<Pair>{
     int x;
-    Double y;
-    public Pair(int x, Double y)
+    int y;
+    public Pair(int x, int y)
     {
         this.x = x;
         this.y = y;
@@ -296,8 +323,8 @@ class Pair implements Comparable<Pair>{
     @Override
     public int compareTo(Pair p)
     {
-        if(p.y == y)
-        return x - p.x;
+        //if(p.y == y)
+        ///return x - p.x;
         return (p.y).compareTo(y);
     }
 }

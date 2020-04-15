@@ -1,11 +1,12 @@
 /* @nikhil_supertramp */
+
 import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
-//import java.text.*;
 
-public class DZYlovesChemistry
+
+class StrangeNumberApr20
 {
     public static void main(String[] args)throws Exception
     {
@@ -17,18 +18,47 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
-//javac -d ../../classes
-//problem link : https://codeforces.com/contest/445/problem/B
-    void solve() throws Exception
-    {
-        
-        hp.flush();
-    }
-
-
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
+    }
+
+    void solve() throws Exception
+    {
+        for(int tc = hp.nextInt(); tc > 0; tc--)
+        {
+            int x = hp.nextInt();
+            int k = hp.nextInt();
+            int n = countPrimesFactors(x);
+            String ans = (n >= k) ? "1" : "0";
+            hp.println(ans);
+        }
+        hp.flush();
+    }
+
+    int countPrimesFactors(int n)
+    {
+        int count = 0;
+        while(n % 2 == 0)
+        {
+            //hs.add(2);
+            n /= 2;
+            count++;
+        }
+        for(int i = 3; i * i <= n; i += 2)
+        {
+            while(n % i == 0)
+            {
+                //hs.add(i);
+                n /= i;
+                count++;
+            }
+        }
+        if(n > 2){
+            //hs.add(n);
+            count++;
+        }
+        return count;
     }
 }
 
@@ -282,22 +312,5 @@ class Helper {
 
     public void flush() throws Exception {
         bw.flush();
-    }
-}
-
-class Pair implements Comparable<Pair>{
-    int x;
-    Double y;
-    public Pair(int x, Double y)
-    {
-        this.x = x;
-        this.y = y;
-    }
-    @Override
-    public int compareTo(Pair p)
-    {
-        if(p.y == y)
-        return x - p.x;
-        return (p.y).compareTo(y);
     }
 }

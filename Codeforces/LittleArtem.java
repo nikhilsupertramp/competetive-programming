@@ -1,11 +1,12 @@
 /* @nikhil_supertramp */
+
 import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
-//import java.text.*;
 
-public class DZYlovesChemistry
+
+public class CF
 {
     public static void main(String[] args)throws Exception
     {
@@ -18,13 +19,33 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
 
 //javac -d ../../classes
-//problem link : https://codeforces.com/contest/445/problem/B
     void solve() throws Exception
     {
-        
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        {
+            int n = hp.nextInt();
+            int t1 = hp.nextInt();
+            int t2 = hp.nextInt();
+            int k = hp.nextInt();
+            for(int i = 0; i < n; i++)
+            {
+                int u = hp.nextInt();
+                int v = hp.nextInt();
+                double max = getMax(u, v, t1, t2, k);
+                hp.println(max + " " + i);
+            }
+        }
         hp.flush();
     }
 
+    double getMax(int u, int v, int  t1, int t2, int k)
+    {
+        double l = ((double)((u * t1) * (100 - k)) / 100) + (double)(v * t2);
+        double r = ((double)((v * t1) * (100 - k)) / 100) + (double)(u * t2);
+        double ans = (double)Math.round(Math.max(l, r) * 100) / 100;
+        return ans;
+
+    }
 
     Solver() {
         hp = new Helper(MOD, MAXN);
@@ -282,22 +303,5 @@ class Helper {
 
     public void flush() throws Exception {
         bw.flush();
-    }
-}
-
-class Pair implements Comparable<Pair>{
-    int x;
-    Double y;
-    public Pair(int x, Double y)
-    {
-        this.x = x;
-        this.y = y;
-    }
-    @Override
-    public int compareTo(Pair p)
-    {
-        if(p.y == y)
-        return x - p.x;
-        return (p.y).compareTo(y);
     }
 }
