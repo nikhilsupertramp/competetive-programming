@@ -1,12 +1,12 @@
 /* @nikhil_supertramp */
 
-import java.awt.*;
+
 import java.io.*;
 import java.math.*;
 import java.util.*;
 
 
-class XORGM
+public class BangloreGangsters
 {
     public static void main(String[] args)throws Exception
     {
@@ -18,55 +18,79 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
-    Solver() {
-        hp = new Helper(MOD, MAXN);
-        hp.initIO(System.in, System.out);
-    }
+//javac -d ../../classes
+//problem link : https://www.hackerrank.com/contests/covid19-long-challenge/challenges/bangalore-gangsters
 
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        int n = hp.nextInt();
+        int k  = hp.nextInt();
+        int sum = hp.nextInt();
+        int[] arr = new int[n];
+        for(int i = 0; i < n; i++)
         {
-            int n = hp.nextInt();
-            int[] a = new int[n];
-            int[] b = new int[n];
-            int x = 0;
-            HashSet<Integer> hs = new HashSet<>();
-            for(int i = 0; i < n; i++)
-            {
-                a[i] = hp.nextInt();
-                x ^= a[i];
-            }
-            for(int i = 0; i < n; i++)
-            {
-                b[i] = hp.nextInt();
-                hs.add(b[i]);
-                x ^= b[i];
-            }
-            boolean flag = true;
-            int ans[] = new int[n];
-            for(int i = 0; i < n; i++)
-            {
-                ans[i] = x ^ a[i];
-                if(!hs.contains(ans[i]))
-                    {
-                        flag = false;
-                        break;
-                    }
-            }
-            if(flag)
-            {
-                for(int i = 0; i < n; i++)
-                    hp.print(ans[i] + " ");
-            }
-            else
-            {
-                hp.print(-1);
-            }
-            hp.println();
-
+            arr[i] = hp.nextInt();
         }
+        List<Integer> li = new ArrayList<>();
+        getSubset(arr, n, k, sum, li);
+        Collections.sort(li);
+        for(int i : li)
+            hp.println(i);
         hp.flush();
+    }
+
+    void getSubset(int[] arr, int n, int k,
+                    int sum, List<Integer> li)throws Exception
+    {
+        boolean[] visited = new boolean[n];
+        getAllSubsets(arr, k, 0, 0, visited, sum, li);
+    }
+    boolean flag = true;
+
+    void getAllSubsets(int[] arr, int k, int start, int curr,
+                        boolean[] used, int sum, List<Integer> li)throws Exception
+    {
+        if(curr == k)
+        {
+            int localSum = 0;
+            for(int i = 0; i < arr.length; i++)
+            {
+                if(used[i] == true)
+                {
+                    //li.add(arr[i]);
+                    localSum += arr[i];
+                    //hp.print(arr[i] + " ");
+                }
+            }
+
+            if(localSum == sum && flag)
+            {
+                flag = false;
+                for(int i = 0; i < arr.length; i++)
+                {
+                    if(used[i] == true)
+                    {
+                        li.add(arr[i]);
+                    }
+                }
+            }
+            //hp.print(localSum);
+            //hp.println();
+            return;
+        }
+
+        if(start == arr.length)return;
+
+        used[start] = true;
+        getAllSubsets(arr, k, start + 1, curr + 1, used, sum, li);
+        used[start] = false;
+        getAllSubsets(arr, k , start + 1, curr, used, sum, li);
+    }
+
+
+    Solver() {
+        hp = new Helper(MOD, MAXN);
+        hp.initIO(System.in, System.out);
     }
 }
 
@@ -320,5 +344,23 @@ class Helper {
 
     public void flush() throws Exception {
         bw.flush();
+    }
+}
+class Pair implements Comparable<Pair>{
+    int x;
+    int y;//long z;
+
+    public Pair(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+        //this.z = z;
+    }
+    @Override
+    public int compareTo(Pair p)
+    {
+        if(p.y == y)
+        return x - p.x;
+        return p.y - y;
     }
 }

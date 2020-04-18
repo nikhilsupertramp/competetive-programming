@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-class XORGM
+public class AlmostArithmeticProgression
 {
     public static void main(String[] args)throws Exception
     {
@@ -18,55 +18,57 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
-    Solver() {
-        hp = new Helper(MOD, MAXN);
-        hp.initIO(System.in, System.out);
-    }
+//javac -d ../../classes
+//problem link : https://codeforces.com/contest/978/problem/D
 
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        int n = hp.nextInt();
+        if(n <= 2)
+            hp.println(0);
+        else
         {
-            int n = hp.nextInt();
-            int[] a = new int[n];
-            int[] b = new int[n];
-            int x = 0;
-            HashSet<Integer> hs = new HashSet<>();
-            for(int i = 0; i < n; i++)
+            int[] arr = hp.getIntArray(n);
+            int min  = Integer.MAX_VALUE;
+            for(int i = -1; i <= 1; i++)
             {
-                a[i] = hp.nextInt();
-                x ^= a[i];
-            }
-            for(int i = 0; i < n; i++)
-            {
-                b[i] = hp.nextInt();
-                hs.add(b[i]);
-                x ^= b[i];
-            }
-            boolean flag = true;
-            int ans[] = new int[n];
-            for(int i = 0; i < n; i++)
-            {
-                ans[i] = x ^ a[i];
-                if(!hs.contains(ans[i]))
+                //hp.println(i);
+                for(int j = -1; j <= 1; j++)
+                {
+                    int[] ans = new int[n];
+                    ans[0] = arr[0] + i;
+                    ans[1] = arr[1] + j;
+                    int diff = ans[1] - ans[0];
+                    for(int p = 2; p < n; p++)
                     {
-                        flag = false;
-                        break;
+                        ans[p] = ans[p - 1] + diff;
                     }
-            }
-            if(flag)
-            {
-                for(int i = 0; i < n; i++)
-                    hp.print(ans[i] + " ");
-            }
-            else
-            {
-                hp.print(-1);
-            }
-            hp.println();
+                    min = Math.min(min, min(ans, arr));
+                    //hp.println(i + " " + j +  "  arrau is : " + Arrays.toString(ans));
+                }
 
+            }
+
+            hp.println(min == Integer.MAX_VALUE ? -1 : min);
         }
         hp.flush();
+    }
+
+    int min(int[] a, int[] b)
+    {
+        int count = 0;
+        for(int i = 0; i < a.length; i++)
+        {
+            int dif = Math.abs(a[i] - b[i]);
+            if(dif > 1)return Integer.MAX_VALUE;
+            count += dif;
+        }
+        return count;
+    }
+
+    Solver() {
+        hp = new Helper(MOD, MAXN);
+        hp.initIO(System.in, System.out);
     }
 }
 
@@ -320,5 +322,23 @@ class Helper {
 
     public void flush() throws Exception {
         bw.flush();
+    }
+}
+class Pair implements Comparable<Pair>{
+    int x;
+    int y;//long z;
+
+    public Pair(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+        //this.z = z;
+    }
+    @Override
+    public int compareTo(Pair p)
+    {
+        if(p.y == y)
+        return x - p.x;
+        return p.y - y;
     }
 }

@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-class XORGM
+class XORGAME
 {
     public static void main(String[] args)throws Exception
     {

@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-class XORGM
+public class DivideByThreeMultiplyBy2
 {
     public static void main(String[] args)throws Exception
     {
@@ -18,55 +18,70 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
-    Solver() {
-        hp = new Helper(MOD, MAXN);
-        hp.initIO(System.in, System.out);
-    }
+//javac -d ../../classes
+//problem link : https://codeforces.com/contest/977/problem/D
+//observations : just find the first element of the actual sequence.
+//the first element of the actual sequence will have highest degree of 3 and will have lowest degree of 2
 
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            int[] a = new int[n];
-            int[] b = new int[n];
-            int x = 0;
-            HashSet<Integer> hs = new HashSet<>();
+            long[] arr = new long[n];
             for(int i = 0; i < n; i++)
             {
-                a[i] = hp.nextInt();
-                x ^= a[i];
+                arr[i] = hp.nextLong();
             }
-            for(int i = 0; i < n; i++)
-            {
-                b[i] = hp.nextInt();
-                hs.add(b[i]);
-                x ^= b[i];
-            }
-            boolean flag = true;
-            int ans[] = new int[n];
-            for(int i = 0; i < n; i++)
-            {
-                ans[i] = x ^ a[i];
-                if(!hs.contains(ans[i]))
-                    {
-                        flag = false;
-                        break;
-                    }
-            }
-            if(flag)
-            {
-                for(int i = 0; i < n; i++)
-                    hp.print(ans[i] + " ");
-            }
-            else
-            {
-                hp.print(-1);
-            }
-            hp.println();
 
+            Pair[] pairs = new Pair[n];
+            HashSet<Long> hs = new HashSet<>();
+            for(int i = 0; i < n; i++)
+            {
+                hs.add(arr[i]);
+                int deg3 = getDeg3(arr[i]);
+                int deg2 = getDeg2(arr[i]);
+                pairs[i] = new Pair(deg2, deg3, arr[i]);
+            }
+            Arrays.sort(pairs);
+            long a0 = pairs[0].z;
+            hp.print(a0 + " ");
+            for(int i = 0; i < n - 1; i++)
+            {
+                a0 = (hs.contains(a0 * 2)) ? a0 * 2 : a0 / 3;
+                hp.print(a0 + " ");
+            }
+            //hp.println(deg2);
         }
         hp.flush();
+    }
+
+    int getDeg2(long n)
+    {
+        int count = 0;
+        while(n % 2L == 0 )
+        {
+            if(n <= 0)break;
+            n = n / 2L;
+            count++;
+        }
+        return count;
+    }
+    int getDeg3(long n)
+    {
+        int count = 0;
+        while( n % 3L == 0 )
+        {
+            if(n <= 0)break;
+            n = n / 3L;
+            count++;
+        }
+        return count;
+    }
+
+    Solver() {
+        hp = new Helper(MOD, MAXN);
+        hp.initIO(System.in, System.out);
     }
 }
 
@@ -320,5 +335,23 @@ class Helper {
 
     public void flush() throws Exception {
         bw.flush();
+    }
+}
+class Pair implements Comparable<Pair>{
+    int x;
+    int y;long z;
+
+    public Pair(int x, int y, long z)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+    @Override
+    public int compareTo(Pair p)
+    {
+        if(p.y == y)
+        return x - p.x;
+        return p.y - y;
     }
 }

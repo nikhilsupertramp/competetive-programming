@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-class XORGM
+public class TwoGrams
 {
     public static void main(String[] args)throws Exception
     {
@@ -18,55 +18,38 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
+//javac -d ../../classes
+    void solve() throws Exception
+    {
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        {
+            int n = hp.nextInt();
+            String str = hp.next();
+            HashMap<String, Integer> hm = new HashMap<>();
+            for(int i = 0; i < n - 1; i++)
+            {
+                String s = str.substring(i, i + 2);
+
+                hm.put(s, hm.getOrDefault(s, 0) + 1);
+            }
+            int max = 0;
+            String max_s = "";
+            for(String key : hm.keySet())
+            {
+                if(hm.get(key) > max)
+                {
+                    max_s = key;
+                    max = hm.get(key);
+                }
+            }
+            hp.println(max_s);
+        }
+        hp.flush();
+    }
+
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
-    }
-
-    void solve() throws Exception
-    {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
-        {
-            int n = hp.nextInt();
-            int[] a = new int[n];
-            int[] b = new int[n];
-            int x = 0;
-            HashSet<Integer> hs = new HashSet<>();
-            for(int i = 0; i < n; i++)
-            {
-                a[i] = hp.nextInt();
-                x ^= a[i];
-            }
-            for(int i = 0; i < n; i++)
-            {
-                b[i] = hp.nextInt();
-                hs.add(b[i]);
-                x ^= b[i];
-            }
-            boolean flag = true;
-            int ans[] = new int[n];
-            for(int i = 0; i < n; i++)
-            {
-                ans[i] = x ^ a[i];
-                if(!hs.contains(ans[i]))
-                    {
-                        flag = false;
-                        break;
-                    }
-            }
-            if(flag)
-            {
-                for(int i = 0; i < n; i++)
-                    hp.print(ans[i] + " ");
-            }
-            else
-            {
-                hp.print(-1);
-            }
-            hp.println();
-
-        }
-        hp.flush();
     }
 }
 

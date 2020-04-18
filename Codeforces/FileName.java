@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-class XORGM
+public class FileName
 {
     public static void main(String[] args)throws Exception
     {
@@ -18,55 +18,28 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
-    Solver() {
-        hp = new Helper(MOD, MAXN);
-        hp.initIO(System.in, System.out);
-    }
+//javac -d ../../classes
+//problem link : https://codeforces.com/contest/978/problem/B
 
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        int n = hp.nextInt();
+        char[] s = hp.next().toCharArray();
+        int count = 0;
+        for(int i = 0; i < n - 2; i++)
         {
-            int n = hp.nextInt();
-            int[] a = new int[n];
-            int[] b = new int[n];
-            int x = 0;
-            HashSet<Integer> hs = new HashSet<>();
-            for(int i = 0; i < n; i++)
+            if(s[i] == 'x' && s[i + 1] == 'x' && s[i + 2] == 'x')
             {
-                a[i] = hp.nextInt();
-                x ^= a[i];
+                count++;
             }
-            for(int i = 0; i < n; i++)
-            {
-                b[i] = hp.nextInt();
-                hs.add(b[i]);
-                x ^= b[i];
-            }
-            boolean flag = true;
-            int ans[] = new int[n];
-            for(int i = 0; i < n; i++)
-            {
-                ans[i] = x ^ a[i];
-                if(!hs.contains(ans[i]))
-                    {
-                        flag = false;
-                        break;
-                    }
-            }
-            if(flag)
-            {
-                for(int i = 0; i < n; i++)
-                    hp.print(ans[i] + " ");
-            }
-            else
-            {
-                hp.print(-1);
-            }
-            hp.println();
-
         }
+        hp.println(count);
         hp.flush();
+    }
+
+    Solver() {
+        hp = new Helper(MOD, MAXN);
+        hp.initIO(System.in, System.out);
     }
 }
 
@@ -320,5 +293,23 @@ class Helper {
 
     public void flush() throws Exception {
         bw.flush();
+    }
+}
+class Pair implements Comparable<Pair>{
+    int x;
+    int y;//long z;
+
+    public Pair(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+        //this.z = z;
+    }
+    @Override
+    public int compareTo(Pair p)
+    {
+        if(p.y == y)
+        return x - p.x;
+        return p.y - y;
     }
 }

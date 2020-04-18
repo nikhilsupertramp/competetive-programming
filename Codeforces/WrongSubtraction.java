@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-class XORGM
+public class WrongSubtraction
 {
     public static void main(String[] args)throws Exception
     {
@@ -18,55 +18,29 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
+//javac -d ../../classes
+    void solve() throws Exception
+    {
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        {
+            int n = hp.nextInt();
+            int k= hp.nextInt();
+            for(int i = k; k > 0; k--)
+            {
+                if(n % 10 == 0)
+                    n /= 10;
+                else
+                    n -= 1;
+                //hp.println(n);
+            }
+            hp.println(n);
+        }
+        hp.flush();
+    }
+
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
-    }
-
-    void solve() throws Exception
-    {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
-        {
-            int n = hp.nextInt();
-            int[] a = new int[n];
-            int[] b = new int[n];
-            int x = 0;
-            HashSet<Integer> hs = new HashSet<>();
-            for(int i = 0; i < n; i++)
-            {
-                a[i] = hp.nextInt();
-                x ^= a[i];
-            }
-            for(int i = 0; i < n; i++)
-            {
-                b[i] = hp.nextInt();
-                hs.add(b[i]);
-                x ^= b[i];
-            }
-            boolean flag = true;
-            int ans[] = new int[n];
-            for(int i = 0; i < n; i++)
-            {
-                ans[i] = x ^ a[i];
-                if(!hs.contains(ans[i]))
-                    {
-                        flag = false;
-                        break;
-                    }
-            }
-            if(flag)
-            {
-                for(int i = 0; i < n; i++)
-                    hp.print(ans[i] + " ");
-            }
-            else
-            {
-                hp.print(-1);
-            }
-            hp.println();
-
-        }
-        hp.flush();
     }
 }
 

@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-class XORGM
+public class ConsecutiveSubsequence
 {
     public static void main(String[] args)throws Exception
     {
@@ -18,55 +18,59 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
-    Solver() {
-        hp = new Helper(MOD, MAXN);
-        hp.initIO(System.in, System.out);
-    }
+//javac -d ../../classes
+//problem link : https://codeforces.com/contest/977/problem/F
+
 
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        HashMap<Integer, Integer> hm = new HashMap<>();
+        int n = hp.nextInt();
+        int max = 0;
+        int max_element = -1;
+        int[] arr = new int[n];
+        for(int i = 1; i <= n; i++)
         {
-            int n = hp.nextInt();
-            int[] a = new int[n];
-            int[] b = new int[n];
-            int x = 0;
-            HashSet<Integer> hs = new HashSet<>();
-            for(int i = 0; i < n; i++)
+            int input = hp.nextInt();
+            arr[i - 1] = input;
+            if(hm.containsKey(input - 1))
             {
-                a[i] = hp.nextInt();
-                x ^= a[i];
-            }
-            for(int i = 0; i < n; i++)
-            {
-                b[i] = hp.nextInt();
-                hs.add(b[i]);
-                x ^= b[i];
-            }
-            boolean flag = true;
-            int ans[] = new int[n];
-            for(int i = 0; i < n; i++)
-            {
-                ans[i] = x ^ a[i];
-                if(!hs.contains(ans[i]))
-                    {
-                        flag = false;
-                        break;
-                    }
-            }
-            if(flag)
-            {
-                for(int i = 0; i < n; i++)
-                    hp.print(ans[i] + " ");
+                int value =  (hm.get(input - 1) + 1);
+                hm.put(input, value);
             }
             else
             {
-                hp.print(-1);
+                hm.put(input, 1);
             }
-            hp.println();
+            int value = hm.get(input);
+            if(value > max)
+            {
+
+                max = value;
+                max_element = input;
+                //hp.println("max is" + max + " and input is " + max_element);
+            }
 
         }
+        hp.println(max);
+        //hp.println(Arrays.toString(arr));
+        max_element -= (max - 1);
+        for(int i = 0; i < n; i++)
+        {
+            //hp.println(max_element);
+            if(arr[i] == max_element)
+            {
+                hp.print((i + 1) + " ");
+                max_element++;
+            }
+        }
         hp.flush();
+    }
+
+    Solver() {
+        hp = new Helper(MOD, MAXN);
+        hp.initIO(System.in, System.out);
     }
 }
 
@@ -320,5 +324,23 @@ class Helper {
 
     public void flush() throws Exception {
         bw.flush();
+    }
+}
+class Pair implements Comparable<Pair>{
+    int x;
+    int y;//long z;
+
+    public Pair(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+        //this.z = z;
+    }
+    @Override
+    public int compareTo(Pair p)
+    {
+        if(p.y == y)
+        return x - p.x;
+        return p.y - y;
     }
 }

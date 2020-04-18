@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-class XORGM
+public class CyclicComponents
 {
     public static void main(String[] args)throws Exception
     {
@@ -18,55 +18,81 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
-    Solver() {
-        hp = new Helper(MOD, MAXN);
-        hp.initIO(System.in, System.out);
-    }
+//javac -d ../../classes
+//problem link : https://codeforces.com/contest/977/problem/E
 
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        HashMap<Integer, ArrayList<Integer>> hm = new HashMap<>();
+        int n = hp.nextInt();
+        int m = hp.nextInt();
+        for(int i = 0; i < n; i++)
+            hm.put(i + 1, new ArrayList<Integer>());
+        for(int i = 0; i < m; i++)
         {
-            int n = hp.nextInt();
-            int[] a = new int[n];
-            int[] b = new int[n];
-            int x = 0;
-            HashSet<Integer> hs = new HashSet<>();
-            for(int i = 0; i < n; i++)
-            {
-                a[i] = hp.nextInt();
-                x ^= a[i];
-            }
-            for(int i = 0; i < n; i++)
-            {
-                b[i] = hp.nextInt();
-                hs.add(b[i]);
-                x ^= b[i];
-            }
-            boolean flag = true;
-            int ans[] = new int[n];
-            for(int i = 0; i < n; i++)
-            {
-                ans[i] = x ^ a[i];
-                if(!hs.contains(ans[i]))
-                    {
-                        flag = false;
-                        break;
-                    }
-            }
-            if(flag)
-            {
-                for(int i = 0; i < n; i++)
-                    hp.print(ans[i] + " ");
-            }
-            else
-            {
-                hp.print(-1);
-            }
-            hp.println();
-
+            int u = hp.nextInt();
+            int v = hp.nextInt();
+            if(!hm.containsKey(u))hm.put(u, new ArrayList<Integer>());
+            if(!hm.containsKey(v))hm.put(v, new ArrayList<Integer>());
+            hm.get(u).add(v);
+            hm.get(v).add(u);
         }
+        boolean[] visited = new boolean[n + 1];
+        int count = 0;
+        HashMap<Integer, ArrayList<Integer>> countMap = new HashMap<>();
+        for(int i = 1; i < n + 1; i++)
+        {
+            if(!visited[i])
+            {
+                //hp.println(i);
+                count++;
+                countMap.put(count, new ArrayList<>());
+                dfs((i), visited, hm, count, countMap);
+            }
+        }
+        ///hp.println(countMap);
+        int cycleCount = 0;
+        //hp.println(count);
+        for(int i = 1; i <= count; i++)
+        {
+            //hp.println(hm.get(count));
+            if(check(countMap.get(i), hm))
+                cycleCount++;
+        }
+
+        hp.println(cycleCount);
         hp.flush();
+    }
+    boolean check(ArrayList<Integer> li, HashMap<Integer, ArrayList<Integer>> hm)throws Exception
+    {
+        boolean flag = true;
+        for(int i : li)
+        {
+            if(hm.get(i).size() != 2)
+            {
+                //hp.println(i);
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    }
+
+    void dfs(int node,boolean[] visited, HashMap<Integer, ArrayList<Integer>> hm,
+            int count, HashMap<Integer, ArrayList<Integer>> countMap)
+    {
+        visited[node] = true;
+        countMap.get(count).add(node);
+        for(int i : hm.get(node))
+        {
+            if(!visited[i])
+            dfs(i, visited, hm, count, countMap);
+        }
+    }
+    Solver() {
+        hp = new Helper(MOD, MAXN);
+        hp.initIO(System.in, System.out);
     }
 }
 
@@ -320,5 +346,23 @@ class Helper {
 
     public void flush() throws Exception {
         bw.flush();
+    }
+}
+class Pair implements Comparable<Pair>{
+    int x;
+    int y;long z;
+
+    public Pair(int x, int y, long z)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+    @Override
+    public int compareTo(Pair p)
+    {
+        if(p.y == y)
+        return x - p.x;
+        return p.y - y;
     }
 }
