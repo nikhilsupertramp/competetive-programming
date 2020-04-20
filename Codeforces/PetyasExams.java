@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class
+public class PetyasExams
 {
     public static void main(String[] args)throws Exception
     {
@@ -19,32 +19,77 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
 
 ////javac -d ../../classes
-//problem link : https://codeforces.com/contest/978/problem/F
+//problem link : https://codeforces.com/contest/978/problem/G
     void solve() throws Exception
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            int t1 = hp.nextInt();
-            int t2 = hp.nextInt();
-            int k = hp.nextInt();
-            for(int i = 0; i < n; i++)
+            int m = hp.nextInt();
+            Exam[] arr = new Exam[m];
+            for(int i = 0; i < m; i++)
             {
-                int u = hp.nextInt();
-                int v = hp.nextInt();
-                double max = getMax(u, v, t1, t2, k);
-                hp.println(max + " " + i);
+                int published = hp.nextInt();
+                int exam_date = hp.nextInt();
+                int preparation_time = hp.nextInt();
+                arr[i] = new Exam(i + 1, published, exam_date, preparation_time);
             }
+            Arrays.sort(arr);
+            solution(arr, n, m);
         }
         hp.flush();
     }
 
-    double getMax(int u, int v, int  t1, int t2, int k)
+    void solution(Exam[] exams, int n, int m) throws Exception
     {
-        double l = ((double)((u * t1) * (100 - k)) / 100) + (double)(v * t2);
-        double r = ((double)((v * t1) * (100 - k)) / 100) + (double)(u * t2);
-        double ans = (double)Math.round(Math.max(l, r) * 100) / 100;
-        return ans;
+        int sum_prepration = 0;
+        for(int i = 0; i < m ;i++)
+        {
+            int exam_date = exams[i].exam_date;
+            int published_date = exams[i].published;
+            int preparation_time = exams[i].preparation_time;
+            if(exam_date - published_date < preparation_time)
+            {
+                hp.println(-1);
+                return;
+            }
+            sum_prepration += preparation_time;
+        }
+        if(sum_prepration + m > n)
+        {
+            hp.println(-1);
+            return;
+        }
+        int[] ans = new int[n + 1];
+        for(int i = 0; i < m; i++)
+        {
+            int exam_date = exams[i].exam_date;
+            ans[exam_date] = m + 1;
+        }
+
+        for(int i = 0; i < m; i++)
+        {
+            int index = exams[i].index;
+            int exam_date = exams[i].exam_date;
+            int published_date = exams[i].published;
+            int preparation_time = exams[i].preparation_time;
+            for(int j = published_date; j <= exam_date && preparation_time > 0; j++)
+            {
+                if(ans[j] != 0)continue;
+                ans[j] = index;
+                --preparation_time;
+            }
+            if(preparation_time != 0)
+            {
+                hp.println(-1);
+                return;
+            }
+        }
+
+        for(int i = 1; i <= n; i++)
+        {
+            hp.print(ans[i] + " ");
+        }
 
     }
 
@@ -54,6 +99,21 @@ class Solver {
     }
 }
 
+class Exam implements Comparable<Exam>
+{
+    int index, published, exam_date, preparation_time;
+    public Exam(int index, int published, int exam_date, int preparation_time)
+    {
+        this.index = index;
+        this.published = published;
+        this.exam_date = exam_date;
+        this.preparation_time = preparation_time;
+    }
+    public int compareTo(Exam e)
+    {
+        return exam_date - e.exam_date;
+    }
+}
 class Helper {
     final long MOD;
     final int MAXN;

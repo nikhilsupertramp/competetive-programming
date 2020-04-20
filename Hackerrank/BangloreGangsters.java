@@ -38,55 +38,59 @@ class Solver {
             hp.println(i);
         hp.flush();
     }
-
-    void getSubset(int[] arr, int n, int k,
-                    int sum, List<Integer> li)throws Exception
+    void getSubset(int[] arr, int n, int k, int sum , List<Integer> li)throws Exception
     {
-        boolean[] visited = new boolean[n];
-        getAllSubsets(arr, k, 0, 0, visited, sum, li);
-    }
-    boolean flag = true;
-
-    void getAllSubsets(int[] arr, int k, int start, int curr,
-                        boolean[] used, int sum, List<Integer> li)throws Exception
-    {
-        if(curr == k)
+        for(int i = 0; i <= (1 << n); i++)
         {
-            int localSum = 0;
-            for(int i = 0; i < arr.length; i++)
+            int bitCount = Integer.bitCount(i);
+            if(bitCount == k)
             {
-                if(used[i] == true)
+                getList(arr, i, k, li);
+                if(sum(li) == sum)
                 {
-                    //li.add(arr[i]);
-                    localSum += arr[i];
-                    //hp.print(arr[i] + " ");
+                    return;
                 }
+                li.clear();
             }
-
-            if(localSum == sum && flag)
-            {
-                flag = false;
-                for(int i = 0; i < arr.length; i++)
-                {
-                    if(used[i] == true)
-                    {
-                        li.add(arr[i]);
-                    }
-                }
-            }
-            //hp.print(localSum);
-            //hp.println();
-            return;
         }
-
-        if(start == arr.length)return;
-
-        used[start] = true;
-        getAllSubsets(arr, k, start + 1, curr + 1, used, sum, li);
-        used[start] = false;
-        getAllSubsets(arr, k , start + 1, curr, used, sum, li);
     }
 
+
+
+    int sum( List<Integer> li)
+    {
+        int sum = 0;
+        for(int i : li)
+            sum += i;
+        return sum;
+    }
+
+    void getList(int[] arr, int n, int k, List<Integer> li)throws Exception
+    {
+        int[] bits = new int[arr.length];
+        getBits(bits, n, arr.length - 1);
+        //hp.println(n + " " + Arrays.toString(bits));
+        for(int i = 0 ; i < bits.length; i++)
+        {
+            if(bits[i] == 1)
+            {
+                li.add(arr[i]);
+            }
+        }
+    }
+
+    void getBits(int[] bits, int n, int len)
+    {
+        while(n > 0)
+        {
+            if((n & 1) == 1)
+            {
+                bits[len] = 1;
+            }
+            n >>= 1;
+            len--;
+        }
+    }
 
     Solver() {
         hp = new Helper(MOD, MAXN);

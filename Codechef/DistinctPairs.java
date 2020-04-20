@@ -6,7 +6,8 @@ import java.math.*;
 import java.util.*;
 
 
-public class
+
+class DistinctPairs
 {
     public static void main(String[] args)throws Exception
     {
@@ -18,39 +19,66 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
-////javac -d ../../classes
-//problem link : https://codeforces.com/contest/978/problem/F
+    Solver() {
+        hp = new Helper(MOD, MAXN);
+        hp.initIO(System.in, System.out);
+    }
+
     void solve() throws Exception
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            int t1 = hp.nextInt();
-            int t2 = hp.nextInt();
-            int k = hp.nextInt();
+            int m = hp.nextInt();
+            Pair[] a = new Pair[n];
+            Pair[] b = new Pair[m];
+
+
+            //HashSet<Integer> hs = new HashSet();
+            int min_in_a = -1;
+            int max_in_b = -1;
+            int max_b = Integer.MIN_VALUE;
+            int min_a = Integer.MAX_VALUE;
             for(int i = 0; i < n; i++)
             {
-                int u = hp.nextInt();
-                int v = hp.nextInt();
-                double max = getMax(u, v, t1, t2, k);
-                hp.println(max + " " + i);
+                int x = i;
+                int y = hp.nextInt();
+                if(y < min_a)
+                {
+                    min_a = y;
+                    min_in_a = i;
+
+                }
+                a[i] = new Pair(x, y);
+            }
+            for(int i = 0; i < m; i++)
+            {
+                int x = i;
+                int y = hp.nextInt();
+                if(y > max_b)
+                {
+                    max_b = y;
+                    max_in_b = i;
+
+                }
+                b[i] = new Pair(x, y);
+            }
+
+            int min = a[min_in_a].y;
+            for(int i = 0; i < m; i++)
+            {
+                hp.println(min_in_a + " " + i);
+            }
+            int max = b[max_in_b].y;
+            for(int i = 0; i < n; i++)
+            {
+
+                int j = max_in_b;
+                if(i != min_in_a)
+                    hp.println(i + " " + j);
             }
         }
         hp.flush();
-    }
-
-    double getMax(int u, int v, int  t1, int t2, int k)
-    {
-        double l = ((double)((u * t1) * (100 - k)) / 100) + (double)(v * t2);
-        double r = ((double)((v * t1) * (100 - k)) / 100) + (double)(u * t2);
-        double ans = (double)Math.round(Math.max(l, r) * 100) / 100;
-        return ans;
-
-    }
-
-    Solver() {
-        hp = new Helper(MOD, MAXN);
-        hp.initIO(System.in, System.out);
     }
 }
 
@@ -304,5 +332,24 @@ class Helper {
 
     public void flush() throws Exception {
         bw.flush();
+    }
+}
+
+class Pair implements Comparable<Pair>{
+    int x;
+    int y;//long z;
+
+    public Pair(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+        //this.z = z;
+    }
+    @Override
+    public int compareTo(Pair p)
+    {
+        if(p.y == y)
+        return x - p.x;
+        return y - p.y;
     }
 }

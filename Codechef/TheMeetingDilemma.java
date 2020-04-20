@@ -5,8 +5,7 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
-
-public class
+class TheMeetingDilemma
 {
     public static void main(String[] args)throws Exception
     {
@@ -18,39 +17,21 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
-////javac -d ../../classes
-//problem link : https://codeforces.com/contest/978/problem/F
-    void solve() throws Exception
-    {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
-        {
-            int n = hp.nextInt();
-            int t1 = hp.nextInt();
-            int t2 = hp.nextInt();
-            int k = hp.nextInt();
-            for(int i = 0; i < n; i++)
-            {
-                int u = hp.nextInt();
-                int v = hp.nextInt();
-                double max = getMax(u, v, t1, t2, k);
-                hp.println(max + " " + i);
-            }
-        }
-        hp.flush();
-    }
-
-    double getMax(int u, int v, int  t1, int t2, int k)
-    {
-        double l = ((double)((u * t1) * (100 - k)) / 100) + (double)(v * t2);
-        double r = ((double)((v * t1) * (100 - k)) / 100) + (double)(u * t2);
-        double ans = (double)Math.round(Math.max(l, r) * 100) / 100;
-        return ans;
-
-    }
-
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
+    }
+
+    void solve() throws Exception
+    {
+        for(int tc = hp.nextInt(); tc > 0; tc--)
+        {
+            long n = hp.nextLong();
+            long ans = hp.pow(2L, n, MOD);
+            hp.println((ans % MOD) - 1);
+
+        }
+        hp.flush();
     }
 }
 

@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class
+public class Mentors
 {
     public static void main(String[] args)throws Exception
     {
@@ -25,27 +25,51 @@ class Solver {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            int t1 = hp.nextInt();
-            int t2 = hp.nextInt();
             int k = hp.nextInt();
+            int arr[] = new int[n];
+            int r[] = new int[n];
             for(int i = 0; i < n; i++)
             {
-                int u = hp.nextInt();
-                int v = hp.nextInt();
-                double max = getMax(u, v, t1, t2, k);
-                hp.println(max + " " + i);
+                arr[i] = hp.nextInt();
+                r[i] = arr[i];
             }
+            hp.shuffle(r);
+            Arrays.sort(r);
+            HashMap<Integer, Integer> hm = new HashMap<>();
+
+            hm.put(r[0], 0);
+            for(int i = 1; i < n; i++)
+            {
+                if(r[i] != r[i - 1])
+                {
+                    hm.put(r[i],i);
+                }
+            }
+            int[] ans = new int[n];
+            for(int i = 0; i < n; i++)
+            {
+                ans[i] = hm.get(arr[i]);
+            }
+            //hp.println(Arrays.toString(arr));
+            //hp.println(Arrays.toString(r));
+            //hp.println(Arrays.toString(ans));
+
+            for(int i = 0; i < k; i++)
+            {
+                int x = hp.nextInt();
+                int y = hp.nextInt();
+                if(arr[x - 1] > arr[y - 1])
+                    ans[x - 1]--;
+                else if(arr[x - 1] < arr[y - 1])
+                    ans[y - 1]--;
+
+            }
+            for(int i : ans)
+                hp.print(i + " ");
+
+
         }
         hp.flush();
-    }
-
-    double getMax(int u, int v, int  t1, int t2, int k)
-    {
-        double l = ((double)((u * t1) * (100 - k)) / 100) + (double)(v * t2);
-        double r = ((double)((v * t1) * (100 - k)) / 100) + (double)(u * t2);
-        double ans = (double)Math.round(Math.max(l, r) * 100) / 100;
-        return ans;
-
     }
 
     Solver() {
@@ -304,5 +328,24 @@ class Helper {
 
     public void flush() throws Exception {
         bw.flush();
+    }
+}
+
+class Pair implements Comparable<Pair>{
+    int x;
+    int y;//long z;
+
+    public Pair(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+        //this.z = z;
+    }
+    @Override
+    public int compareTo(Pair p)
+    {
+        if(p.y == y)
+        return x - p.x;
+        return y - p.y;
     }
 }
