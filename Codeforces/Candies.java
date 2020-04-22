@@ -6,70 +6,48 @@ import java.math.*;
 import java.util.*;
 
 
-public class
+public class Candies
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//cd competetive-programming/src/Codeforces
-////javac -d ../../classes
-//problem link : https://codeforces.com/contest/978/problem/F
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
+//cd competetive-programming/src/Codeforces
+////javac -d ../../classes Candies.java
+//problem link : https://codeforces.com/contest/1343/problem/A
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            int t1 = hp.nextInt();
-            int t2 = hp.nextInt();
-            int k = hp.nextInt();
-            for(int i = 0; i < n; i++)
-            {
-                int u = hp.nextInt();
-                int v = hp.nextInt();
-                double max = getMax(u, v, t1, t2, k);
-                hp.println(max + " " + i);
-            }
+            int ans = process(n);
+            hp.println(ans);
         }
         hp.flush();
     }
 
-    double getMax(int u, int v, int  t1, int t2, int k)
+    int process(int n) throws Exception
     {
-        double l = ((double)((u * t1) * (100 - k)) / 100) + (double)(v * t2);
-        double r = ((double)((v * t1) * (100 - k)) / 100) + (double)(u * t2);
-        double ans = (double)Math.round(Math.max(l, r) * 100) / 100;
-        return ans;
-
+        int i = 2;
+        while(i < 32)
+        {
+            if(n % ((1 << i) - 1) == 0)
+            {
+                return (n / ((1 << i) - 1));
+            }
+            i++;
+        }
+        return -1;
     }
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
-    }
-}
-
-class Pair implements Comparable<Pair>{
-    int x;
-    int y;//long z;
-
-    public Pair(int x, int y)
-    {
-        this.x = x;
-        this.y = y;
-        //this.z = z;
-    }
-    @Override
-    public int compareTo(Pair p)
-    {
-        if(p.y == y)
-        return x - p.x;
-        return p.y - y;
     }
 }
 

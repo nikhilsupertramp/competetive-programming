@@ -6,46 +6,61 @@ import java.math.*;
 import java.util.*;
 
 
-public class
+public class ConstantPalindromeSum
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//cd competetive-programming/src/Codeforces
-////javac -d ../../classes
-//problem link : https://codeforces.com/contest/978/problem/F
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
+//cd competetive-programming/src/Codeforces
+////javac -d ../../classes ConstantPalindromeSum.java
+//problem link : https://codeforces.com/contest/1343/problem/C
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            int t1 = hp.nextInt();
-            int t2 = hp.nextInt();
             int k = hp.nextInt();
-            for(int i = 0; i < n; i++)
-            {
-                int u = hp.nextInt();
-                int v = hp.nextInt();
-                double max = getMax(u, v, t1, t2, k);
-                hp.println(max + " " + i);
-            }
+            int arr[] = hp.getIntArray(n);
+            int ans = process(n, k,  arr);
+            hp.println( ans);
         }
         hp.flush();
     }
 
-    double getMax(int u, int v, int  t1, int t2, int k)
+    int process(int n, int k, int arr[]) throws Exception
     {
-        double l = ((double)((u * t1) * (100 - k)) / 100) + (double)(v * t2);
-        double r = ((double)((v * t1) * (100 - k)) / 100) + (double)(u * t2);
-        double ans = (double)Math.round(Math.max(l, r) * 100) / 100;
-        return ans;
+        int ans = 0;
+        //int[] sums = new int[n / 2];
+        HashMap<Integer, Integer> hm = new HashMap<>();
+        for(int i = 0; i < n / 2; i++)
+        {
+            int sum = arr[i] + arr[n - i + 1];
+            hm.put(sum, hm.getOrDefault(sum, 0) + 1);
+        }
+        Pair[] pairs = new Pair[n / 2];
+        int i = 0;
+        for(int key : hm.keySet())
+        {
+            pairs[i++] = new Pair(key, hm.get(key));
+        }
+        Arrays.sort(pairs);
+        int sum = pairs[0].x;
 
+        for(int i = 0;i < n / 2; i++)
+        {
+            if(arr[i] + arr[n - i + 1] != sum)
+            {
+
+            }
+        }
+
+        return ans;
     }
 
     Solver() {
@@ -72,6 +87,7 @@ class Pair implements Comparable<Pair>{
         return p.y - y;
     }
 }
+
 
 class Helper {
     final long MOD;

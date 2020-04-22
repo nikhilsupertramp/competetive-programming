@@ -6,70 +6,66 @@ import java.math.*;
 import java.util.*;
 
 
-public class
+public class BalancedArray
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//cd competetive-programming/src/Codeforces
-////javac -d ../../classes
-//problem link : https://codeforces.com/contest/978/problem/F
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
+//cd competetive-programming/src/Codeforces
+////javac -d ../../classes BalancedArray.java
+//problem link : https://codeforces.com/contest/1343/problem/B
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            int t1 = hp.nextInt();
-            int t2 = hp.nextInt();
-            int k = hp.nextInt();
-            for(int i = 0; i < n; i++)
+            int ans[] = new int[n];
+            if(process(n, ans))
             {
-                int u = hp.nextInt();
-                int v = hp.nextInt();
-                double max = getMax(u, v, t1, t2, k);
-                hp.println(max + " " + i);
+                hp.println("YES");
+                for(int i : ans)
+                hp.print(i + " ");
+                hp.println();
             }
+            else
+                hp.println("NO");
         }
         hp.flush();
     }
 
-    double getMax(int u, int v, int  t1, int t2, int k)
+    boolean process(int n,int ans[]) throws Exception
     {
-        double l = ((double)((u * t1) * (100 - k)) / 100) + (double)(v * t2);
-        double r = ((double)((v * t1) * (100 - k)) / 100) + (double)(u * t2);
-        double ans = (double)Math.round(Math.max(l, r) * 100) / 100;
-        return ans;
+        if(n % 4 != 0)
+            return false;
+        else
+        {
+            for(int i = 0 ; i  < n / 2; i++)
+            {
+                ans[i] = 2 *(i + 1);
+            }
+            int k = 0;
+            for(int i = n / 2; i < n - 1; i++)
+            {
+                ans[i] = (2 * k + 1);
+                k++;
+            }
+            long sum_e = ((n / 2) * ((n / 2) + 1));
+            long sum_o = (((n / 2) - 1) * ((n / 2)- 1));
+            ans[n - 1] = (int)(sum_e - sum_o);
 
+        }
+        return true;
     }
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
-    }
-}
-
-class Pair implements Comparable<Pair>{
-    int x;
-    int y;//long z;
-
-    public Pair(int x, int y)
-    {
-        this.x = x;
-        this.y = y;
-        //this.z = z;
-    }
-    @Override
-    public int compareTo(Pair p)
-    {
-        if(p.y == y)
-        return x - p.x;
-        return p.y - y;
     }
 }
 
