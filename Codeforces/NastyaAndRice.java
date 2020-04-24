@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class
+public class NastyaAndRice
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,18 +14,32 @@ public class
     }
 }
 //cd competetive-programming/src/Codeforces
-////javac -d ../../classes
-//problem link : https://codeforces.com/contest/1341/problem/A
+////javac -d ../../classes NastyaAndRice.java
+//problem link : https://codeforces.com/contest/1341/problem/0
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
+            int a = hp.nextInt();
+            int b = hp.nextInt();
+            int c = hp.nextInt();
+            int d = hp.nextInt();
+            int minima = n * (a - b);
+            int maxima = n *(a + b);
+            int given_minima = (c - d);
+            int given_maxima = (c + d);
+            //hp.println(maxima + " " + minima + " " + given_maxima + " " + given_minima);
 
+            if(maxima < given_minima || minima > given_maxima)
+                hp.println("NO");
+            else //if(minima < given_minima || minima > given_maxima)
+                hp.println("Yes");
+            
         }
         hp.flush();
     }

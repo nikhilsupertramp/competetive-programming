@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class
+public class NastyaAndDoor
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,17 +14,69 @@ public class
     }
 }
 //cd competetive-programming/src/Codeforces
-////javac -d ../../classes
-//problem link : https://codeforces.com/contest/1341/problem/A
+////javac -d ../../classes NastyaAndDoor.java
+//problem link : https://codeforces.com/contest/1341/problem/B
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
+            int k = hp.nextInt();
+            int[] peak = new int[n];
+            int[] arr = hp.getIntArray(n);
+            for(int i = 1 ; i < n - 1; i++)
+            {
+                if(arr[i] > arr[i - 1] && arr[i]  > arr[i + 1])
+                    peak[i] = 1;
+            }
+            int max = -1;
+            int count = 0, index = 0;
+
+            for(int i = 0; i < k; i++)
+            {
+                if(peak[i] == 1)
+                {
+                    count++;
+                }
+            }
+            int[] peak_count = new int[n - k + 1];
+            if(peak[k - 1] == 1)
+                peak_count[0] = count - 1;
+            else
+                peak_count[0] = count;
+            //hp.println(Arrays.toString(peak));
+            for(int i = k; i < n; i++)
+            {
+                //hp.println("count is : " + count + " and k is : " + i);
+
+                count += (peak[i] - peak[i - k]);
+                if(peak[i] == 0 && peak[i - k + 1] == 0)
+                    peak_count[i - k + 1] = count;
+                else if(peak[i] == 1 && peak[i - k + 1] == 1)
+                    peak_count[i - k + 1] = count - 2;
+                else if(peak[i] == 1 || peak[i - k + 1] == 1)
+                    peak_count[i - k + 1] = count - 1;
+
+                //hp.println("k  and (i - k) are : " + i + " " + (i - k + 1));
+                /*
+                p.println("count is : " + count + " and k  and (i - k) is : " + i + " " + (i - k) +
+                " and peak[i] and peak[i - k] are " + peak[i] + " and " + peak[i - k + 1]);
+                */
+            }
+
+            for(int i = 0; i < (n - k + 1); i++)
+            {
+                if(peak_count[i] > max)
+                {
+                    max = peak_count[i];
+                    index = i + 1;
+                }
+            }
+            hp.println((max + 1) + " " + index);
 
         }
         hp.flush();

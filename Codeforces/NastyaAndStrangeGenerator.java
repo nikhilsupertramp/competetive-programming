@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class
+public class NastyaAndStrangeGenerator
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,18 +14,20 @@ public class
     }
 }
 //cd competetive-programming/src/Codeforces
-////javac -d ../../classes
-//problem link : https://codeforces.com/contest/1341/problem/A
+////javac -d ../../classes NastyaAndStrangeGenerator.java
+//problem link : https://codeforces.com/contest/1341/problem/C
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-
+            int k = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
+            
         }
         hp.flush();
     }

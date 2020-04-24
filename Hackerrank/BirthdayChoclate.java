@@ -4,31 +4,44 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-
-public class
+public class BirthdayChoclate
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//cd competetive-programming/src/Codeforces
-////javac -d ../../classes
-//problem link : https://codeforces.com/contest/1341/problem/A
+//cd competetive-programming/src/Hackerrank
+////javac -d ../../classes BirthdayChoclate.java
+//problem link : https://www.hackerrank.com/challenges/the-birthday-bar/problem
+
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        int n = hp.nextInt();
+        int[] arr = hp.getIntArray(n);
+        int day = hp.nextInt();
+        int month = hp.nextInt();
+        int sum  = 0, count = 0;
+        for(int i = 0 ; i < month; i++)
         {
-            int n = hp.nextInt();
-
+            sum += arr[i];
         }
+        if(sum == day)count++;
+        for(int i = month; i < n; i++)
+        {
+            sum += (arr[i] - arr[i - month]);
+            if(sum == day)count++;
+        }
+        hp.println(count);
         hp.flush();
     }
+
 
     Solver() {
         hp = new Helper(MOD, MAXN);
@@ -51,7 +64,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 

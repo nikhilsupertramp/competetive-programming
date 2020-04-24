@@ -4,32 +4,43 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-
-public class
+public class Kangaroo
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//cd competetive-programming/src/Codeforces
-////javac -d ../../classes
-//problem link : https://codeforces.com/contest/1341/problem/A
+//cd competetive-programming/src/Hackerrank
+////javac -d ../../classes Kangaroo.java
+//problem link : https://www.hackerrank.com/challenges/kangaroo/problem
+
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        int x1 = hp.nextInt();
+        int v1 = hp.nextInt();
+        int x2 = hp.nextInt();
+        int v2 = hp.nextInt();
+        if(v2 >= v1)
         {
-            int n = hp.nextInt();
-
+            hp.println("NO");
+        }
+        else
+        {
+            int rem = (x2 - x1) % (v1 - v2);
+            if(rem == 0)
+                hp.println("YES");
+            else
+                hp.println("NO");
         }
         hp.flush();
     }
-
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
@@ -51,7 +62,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 

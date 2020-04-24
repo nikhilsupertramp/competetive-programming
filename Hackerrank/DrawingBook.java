@@ -4,31 +4,41 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-
-public class
+public class DrawingBook
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//cd competetive-programming/src/Codeforces
-////javac -d ../../classes
-//problem link : https://codeforces.com/contest/1341/problem/A
+//cd competetive-programming/src/Hackerrank
+////javac -d ../../classes DrawingBook.java
+//problem link : https://www.hackerrank.com/challenges/drawing-book/problem
+
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        int[] socks = new int[100];
+        int n = hp.nextInt();
+        int[] arr = hp.getIntArray(n);
+        for(int i = 0; i < n; i++)
         {
-            int n = hp.nextInt();
-
+            socks[arr[i] - 1]++;
         }
+        int count = 0;
+        for(int i = 0 ; i < 100; i++)
+        {
+            count += socks[i] / 2;
+        }
+        hp.println(count);
         hp.flush();
     }
+
 
     Solver() {
         hp = new Helper(MOD, MAXN);
@@ -51,7 +61,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 
