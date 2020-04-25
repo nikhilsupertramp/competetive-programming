@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class DrawingBook
+public class UtopianTree
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,32 +14,31 @@ public class DrawingBook
     }
 }
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes DrawingBook.java
-//problem link : https://www.hackerrank.com/challenges/drawing-book/problem
-
+////javac -d ../../classes UtopianTree.java
+//problem link : https://www.hackerrank.com/challenges/utopian-tree/problem
+//1 3 7 15 31 63
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
-        int n = hp.nextInt();
-        int page = hp.nextInt();
-        int from_begin = -1, from_end = -1;
-        if(n % 2 == 0)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            from_begin = page / 2;
-            from_end = (int)Math.ceil((double)(n - page) / 2);
+            if(n % 2 == 0)
+                hp.println(get(n / 2 + 1));
+            else
+                hp.println(get((n + 1) / 2 + 1) - 1);
         }
-        else
-        {
-            from_begin = page / 2;
-            from_end = (n - page) / 2;
-        }
-        hp.println(Math.min(from_end, from_begin));
         hp.flush();
     }
 
+    int get(int n)
+    {
+        return ((1 << n) - 1);
+    }
+
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);

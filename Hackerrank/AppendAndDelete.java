@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class DrawingBook
+public class AppendAndDelete
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,32 +14,50 @@ public class DrawingBook
     }
 }
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes DrawingBook.java
-//problem link : https://www.hackerrank.com/challenges/drawing-book/problem
+////javac -d ../../classes AppendAndDelete.java
+//problem link : https://www.hackerrank.com/challenges/append-and-delete/problem
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
-        int n = hp.nextInt();
-        int page = hp.nextInt();
-        int from_begin = -1, from_end = -1;
-        if(n % 2 == 0)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            from_begin = page / 2;
-            from_end = (int)Math.ceil((double)(n - page) / 2);
-        }
-        else
-        {
-            from_begin = page / 2;
-            from_end = (n - page) / 2;
-        }
-        hp.println(Math.min(from_end, from_begin));
+            String s = hp.next();
+            String t = hp.next();
+            int k = hp.nextInt();
+            int commonLength = 0;
+
+            for (int i=0; i<java.lang.Math.min(s.length(),t.length());i++){
+                if (s.charAt(i)==t.charAt(i))
+                    commonLength++;
+                else
+                    break;
+            }
+    //CASE A
+            if((s.length()+t.length()-2*commonLength)>k){
+                hp.println("No");
+            }
+    //CASE B
+            else if((s.length()+t.length()-2*commonLength)%2==k%2){
+                hp.println("Yes");
+            }
+    //CASE C
+            else if((s.length()+t.length()-k)<0){
+                hp.println("Yes");
+            }
+    //CASE D
+            else{
+                hp.println("No");
+            }
+
+      }
         hp.flush();
     }
 
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);

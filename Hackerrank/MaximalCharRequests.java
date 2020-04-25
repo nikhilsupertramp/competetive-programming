@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class DrawingBook
+public class MaximalCharRequests
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,36 +14,114 @@ public class DrawingBook
     }
 }
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes DrawingBook.java
-//problem link : https://www.hackerrank.com/challenges/drawing-book/problem
+////javac -d ../../classes MaximalCharRequests.java
+//problem link : https://www.hackerrank.com/contests/hack-the-interview-ii-global/challenges/maximal-char-requests
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        int n = hp.nextInt();
-        int page = hp.nextInt();
-        int from_begin = -1, from_end = -1;
-        if(n % 2 == 0)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            from_begin = page / 2;
-            from_end = (int)Math.ceil((double)(n - page) / 2);
+            int n = hp.nextInt();
+            char[] s = hp.next().toLowerCase().toCharArray();
+            int q = hp.nextInt();
+            HashMap<Character, ArrayList<Integer>> hm  = new HashMap<>();
+            int arr[] = new int[n];
+            for(int i = 0; i < n; i++)
+            {
+                char ch = s[i];
+                arr[i] = ch - 'a';
+                if(!hm.containsKey(ch))hm.put(ch, new ArrayList<Integer>());
+                hm.get(ch).add(i);
+            }
+            SegementTree st = new SegementTree();
+            st.constructST(arr, n);
+            //hp.println(hm);
+            for(int i = 0; i < q; i++)
+            {
+                int l = hp.nextInt();
+                int r = hp.nextInt();
+                char ch = (char)(st.max(n, l, r) + 'a');
+                //hp.print(ch + " a = ");
+                int a = lowerBound(hm.get(ch), l);
+                int b = upperBound(hm.get(ch), r);
+                //hp.print(a+ " b = " + b + " ");
+                hp.println(b - a);
+            }
         }
-        else
-        {
-            from_begin = page / 2;
-            from_end = (n - page) / 2;
-        }
-        hp.println(Math.min(from_end, from_begin));
         hp.flush();
     }
 
+    int lowerBound(ArrayList<Integer> li, int value)
+    {
+        int index = Collections.binarySearch(li, value);
+        if(index < 0)
+        {
+            index = Math.abs(index) - 1;
+        }
+        return index;
+    }
+    int upperBound(ArrayList<Integer> li, int value)
+    {
+        int index = Collections.binarySearch(li, value);
+        if(index < 0)
+        {
+            index = Math.abs(index) - 2;
+        }
+        return index + 1;
+    }
+
+
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
+    }
+}
+
+class SegementTree
+{
+    int[] st;
+    void constructST(int[] arr, int n)
+    {
+        int x = (int)Math.ceil(Math.log(n) / Math.log(2));
+        int size = 2 * (int)(1 << x) - 1;
+        st = new int[size];
+        constructSTUtil(arr, 0, n - 1, 0);
+    }
+
+    int constructSTUtil(int[] arr, int start, int end, int index)
+    {
+        if(start == end)
+        {
+            st[index] = arr[start];
+            return arr[start];
+        }
+        int mid = start + (end - start) / 2;
+        st[index] = Math.max(constructSTUtil(arr, mid + 1, end, (index * 2 + 2)),
+                             constructSTUtil(arr, start, mid, index * 2 + 1));
+        return st[index];
+    }
+
+    int max(int n, int l, int r)
+    {
+        if(l < 0 || r > n - 1 || l > r)return -1;
+
+        return maxUtil(0, n - 1, l, r, 0);
+    }
+
+    int maxUtil(int start, int end, int l, int r, int index)
+    {
+        if(l <= start && r >= end)
+            return st[index];
+        if(end < l || start > r)return Integer.MIN_VALUE;
+
+        int mid = start + (end - start) / 2;
+        return Math.max(maxUtil(start, mid, l, r, 2 * index + 1),
+                        maxUtil(mid + 1, end, l, r, 2 * index + 2));
     }
 }
 

@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class DrawingBook
+public class ViralAdvertising
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,32 +14,52 @@ public class DrawingBook
     }
 }
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes DrawingBook.java
-//problem link : https://www.hackerrank.com/challenges/drawing-book/problem
-
+////javac -d ../../classes ViralAdvertising.java
+//problem link :https://www.hackerrank.com/challenges/strange-advertising/problem
+//2068789129
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
-        int n = hp.nextInt();
-        int page = hp.nextInt();
-        int from_begin = -1, from_end = -1;
-        if(n % 2 == 0)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            from_begin = page / 2;
-            from_end = (int)Math.ceil((double)(n - page) / 2);
+            int n = hp.nextInt();
+            int arr[] = new int[n];
+            long sum = 0;
+            arr[0] = 5;
+            for(int i = 1; i < n; i++)
+            {
+                int half = arr[i - 1] / 2;
+                arr[i] = half * 3;
+                sum += half;
+            }
+            sum += (arr[n - 1] / 2);
+            hp.println(sum);
         }
-        else
-        {
-            from_begin = page / 2;
-            from_end = (n - page) / 2;
-        }
-        hp.println(Math.min(from_end, from_begin));
         hp.flush();
     }
 
+    boolean check(int n, int k)
+    {
+        int rev = getRev(n);
+        if(Math.abs(rev - n) % k == 0)return true;
+        return false;
+    }
+
+    int getRev(int n)
+    {
+        int rev = 0;
+        while(n > 0)
+        {
+            rev = (rev * 10) + (n % 10);
+            n /= 10;
+        }
+        return rev;
+    }
+
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);

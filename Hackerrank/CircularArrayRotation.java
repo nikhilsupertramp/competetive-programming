@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class DrawingBook
+public class CircularArrayRotation
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,32 +14,45 @@ public class DrawingBook
     }
 }
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes DrawingBook.java
-//problem link : https://www.hackerrank.com/challenges/drawing-book/problem
+////javac -d ../../classes CircularArrayRotation.java
+//problem link : https://www.hackerrank.com/challenges/circular-array-rotation/problem
+
+/*
+    a b c d e
+    e a b c d
+    d e a b c
+    c d e a b
+    b c d e a
+    a b c d e
+    e a b c d
+    d e a b c
+    c d e a b
+1 2 3 > 3 1 2 > 2 3 1
+*/
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
-        int n = hp.nextInt();
-        int page = hp.nextInt();
-        int from_begin = -1, from_end = -1;
-        if(n % 2 == 0)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            from_begin = page / 2;
-            from_end = (int)Math.ceil((double)(n - page) / 2);
+            int n = hp.nextInt();
+            int k = hp.nextInt();
+            int q = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
+            int[] queries = hp.getIntArray(q);
+            int pos_a = k % n;
+            for(int query : queries)
+            {
+                hp.println(arr[((n - pos_a) + query) % n]);
+            }
         }
-        else
-        {
-            from_begin = page / 2;
-            from_end = (n - page) / 2;
-        }
-        hp.println(Math.min(from_end, from_begin));
         hp.flush();
     }
 
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);

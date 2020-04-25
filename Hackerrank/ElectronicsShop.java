@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class DrawingBook
+public class ElectronicsShop
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,8 +14,8 @@ public class DrawingBook
     }
 }
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes DrawingBook.java
-//problem link : https://www.hackerrank.com/challenges/drawing-book/problem
+////javac -d ../../classes ElectronicsShop.java
+//problem link : https://www.hackerrank.com/challenges/electronics-shop/problem
 
 class Solver {
     final Helper hp;
@@ -23,21 +23,47 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
+        int budget = hp.nextInt();
         int n = hp.nextInt();
-        int page = hp.nextInt();
-        int from_begin = -1, from_end = -1;
-        if(n % 2 == 0)
-        {
-            from_begin = page / 2;
-            from_end = (int)Math.ceil((double)(n - page) / 2);
-        }
+        int m = hp.nextInt();
+        int[] keyboards = hp.getIntArray(n);
+        int[] mouses = hp.getIntArray(m);
+
+        Arrays.sort(keyboards);
+        Arrays.sort(mouses);
+        if(keyboards[0] + mouses[0] > budget)
+            hp.println(-1);
         else
         {
-            from_begin = page / 2;
-            from_end = (n - page) / 2;
+            int max = -1;
+            boolean flag = false;
+            for(int i = n - 1; i >= 0; i--)
+            {
+                int keyboard = keyboards[i];
+                int mouse_pos = Arrays.binarySearch(mouses, (budget - keyboard));
+                if(mouse_pos >= 0)
+                {
+                    hp.println(budget);
+                    flag = true;
+                    break;
+                }
+                else
+                {
+                    mouse_pos = Math.abs(mouse_pos);
+                    if(mouse_pos > 1)
+                    {
+                        int sum = keyboard + (mouses[mouse_pos - 2]);
+                        if((sum > max) && (sum <= budget))
+                            max = sum;
+                    }
+                }
+            }
+            if(!flag)
+                hp.println(max);
         }
-        hp.println(Math.min(from_end, from_begin));
+
         hp.flush();
+
     }
 
 

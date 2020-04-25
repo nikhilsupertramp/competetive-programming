@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class DrawingBook
+public class ProductDistribution
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,32 +14,48 @@ public class DrawingBook
     }
 }
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes DrawingBook.java
-//problem link : https://www.hackerrank.com/challenges/drawing-book/problem
+////javac -d ../../classes ProductDistribution.java
+//problem link : https://www.hackerrank.com/contests/hack-the-interview-ii-global/challenges/distribution-in-m-bins
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        int n = hp.nextInt();
-        int page = hp.nextInt();
-        int from_begin = -1, from_end = -1;
-        if(n % 2 == 0)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            from_begin = page / 2;
-            from_end = (int)Math.ceil((double)(n - page) / 2);
+            int n = hp.nextInt();
+            long k = hp.nextLong();
+            long[] arr = hp.getLongArray(n);
+            Arrays.sort(arr);
+            long ans = 0;
+            int pointer = 0;
+            for(long i = 1; i <= (n / k); i++)
+            {
+                if(i < n / k)
+                {
+                    for(int j = 0; j < k; j++)
+                    {
+                        ans =(ans + ((arr[pointer] * i) % MOD)) % MOD;
+                        pointer++;
+                    }
+                }
+                if(i == n / k)
+                {
+                    while(pointer < n)
+                    {
+                        ans =(ans + ((arr[pointer] * i) % MOD)) % MOD;
+                        pointer++;
+                    }
+                }
+            }
+            hp.println(ans % MOD) ;
+
         }
-        else
-        {
-            from_begin = page / 2;
-            from_end = (n - page) / 2;
-        }
-        hp.println(Math.min(from_end, from_begin));
         hp.flush();
     }
 
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);

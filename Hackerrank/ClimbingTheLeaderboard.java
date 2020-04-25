@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class DrawingBook
+public class ClimbingTheLeaderboard
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,32 +14,75 @@ public class DrawingBook
     }
 }
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes DrawingBook.java
-//problem link : https://www.hackerrank.com/challenges/drawing-book/problem
+////javac -d ../../classes ClimbingTheLeaderboard.java
+//problem link : https://www.hackerrank.com/challenges/picking-numbers/problem
 
 class Solver {
+
+    void solve() throws Exception
+    {
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        {
+            int n = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
+            int m = hp.nextInt();
+            int[] scores = hp.getIntArray(m);
+            int[] ranks = new int[n];
+            ranks[0] = 1;
+            for(int i = 1; i < n; i++)
+            {
+                ranks[i] = (arr[i] == arr[i - 1]) ? ranks[i - 1] : (ranks[i - 1] + 1);
+            }
+
+            reverseArrays(arr, ranks, n);
+
+            for(int i = 0; i < m; i++)
+            {
+                int pos = Arrays.binarySearch(arr, scores[i]);
+                if(pos >= 0)
+                    hp.println(ranks[pos]);
+                else
+                {
+                    pos = Math.abs(pos) - 1;
+                    if(pos == n)
+                        hp.println(1);
+                    else
+                        hp.println(ranks[pos] + 1);
+                }
+            }
+        }
+        hp.flush();
+    }
+    /*
+        10 20 40 40 50 100 100
+         5  4  3  3  2  1     1
+    */
+
+    void reverseArrays(int[] a, int[] b, int n)
+    {
+        int[] temp = new int[n];
+        for(int i = 0; i < n; i++)
+        {
+            temp[i] = a[n - i - 1];
+        }
+        for(int i = 0; i < n; i++)
+        {
+            a[i] = temp[i];
+        }
+
+        for(int i = 0; i < n; i++)
+        {
+            temp[i] = b[n - i - 1];
+        }
+        for(int i = 0; i < n; i++)
+        {
+            b[i] = temp[i];
+        }
+    }
+
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
-    void solve() throws Exception
-    {
-        int n = hp.nextInt();
-        int page = hp.nextInt();
-        int from_begin = -1, from_end = -1;
-        if(n % 2 == 0)
-        {
-            from_begin = page / 2;
-            from_end = (int)Math.ceil((double)(n - page) / 2);
-        }
-        else
-        {
-            from_begin = page / 2;
-            from_end = (n - page) / 2;
-        }
-        hp.println(Math.min(from_end, from_begin));
-        hp.flush();
-    }
-
 
     Solver() {
         hp = new Helper(MOD, MAXN);

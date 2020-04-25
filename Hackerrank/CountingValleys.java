@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class DrawingBook
+public class CountingValleys
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,8 +14,8 @@ public class DrawingBook
     }
 }
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes DrawingBook.java
-//problem link : https://www.hackerrank.com/challenges/drawing-book/problem
+////javac -d ../../classes CountingValleys.java
+//problem link : https://www.hackerrank.com/challenges/counting-valleys/problem
 
 class Solver {
     final Helper hp;
@@ -24,20 +24,17 @@ class Solver {
     void solve() throws Exception
     {
         int n = hp.nextInt();
-        int page = hp.nextInt();
-        int from_begin = -1, from_end = -1;
-        if(n % 2 == 0)
+        char[] arr = hp.next().toCharArray();
+        int level  = 0, count = 0;
+        for(int i = 0; i < n; i++)
         {
-            from_begin = page / 2;
-            from_end = (int)Math.ceil((double)(n - page) / 2);
+            if(arr[i] == 'D')level--;
+            if(arr[i] == 'U')level++;
+            if(level == 0 && arr[i] == 'U')count++;
         }
-        else
-        {
-            from_begin = page / 2;
-            from_end = (n - page) / 2;
-        }
-        hp.println(Math.min(from_end, from_begin));
+        hp.println(count);
         hp.flush();
+
     }
 
 

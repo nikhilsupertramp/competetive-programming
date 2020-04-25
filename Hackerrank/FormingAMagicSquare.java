@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class DrawingBook
+public class FormingAMagicSquare
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,8 +14,8 @@ public class DrawingBook
     }
 }
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes DrawingBook.java
-//problem link : https://www.hackerrank.com/challenges/drawing-book/problem
+////javac -d ../../classes FormingAMagicSquare.java
+//problem link : https://www.hackerrank.com/challenges/magic-square-forming/problem
 
 class Solver {
     final Helper hp;
@@ -23,21 +23,21 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        int n = hp.nextInt();
-        int page = hp.nextInt();
-        int from_begin = -1, from_end = -1;
-        if(n % 2 == 0)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            from_begin = page / 2;
-            from_end = (int)Math.ceil((double)(n - page) / 2);
+            int a = hp.nextInt();
+            int b = hp.nextInt();
+            int c = hp.nextInt();
+            int cat1 = Math.abs(a - c);
+            int cat2 = Math.abs(b - c);
+            if(cat1 > cat2)
+                hp.println("Cat B");
+            else if(cat1 < cat2)
+                hp.println("Cat A");
+            else hp.println("Mouse C");
         }
-        else
-        {
-            from_begin = page / 2;
-            from_end = (n - page) / 2;
-        }
-        hp.println(Math.min(from_end, from_begin));
         hp.flush();
+
     }
 
 

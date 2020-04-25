@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class DrawingBook
+public class JumpingOnTheCloudsRevisited
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,32 +14,34 @@ public class DrawingBook
     }
 }
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes DrawingBook.java
-//problem link : https://www.hackerrank.com/challenges/drawing-book/problem
+////javac -d ../../classes JumpingOnTheCloudsRevisited.java
+//problem link : https://www.hackerrank.com/challenges/jumping-on-the-clouds-revisited/problem
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
-        int n = hp.nextInt();
-        int page = hp.nextInt();
-        int from_begin = -1, from_end = -1;
-        if(n % 2 == 0)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            from_begin = page / 2;
-            from_end = (int)Math.ceil((double)(n - page) / 2);
+            int n = hp.nextInt();
+            int k = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
+            int cost = 0;
+            for(int i  = k; ; i += k)
+            {
+                //hp.print(i + " " );
+
+                cost += (arr[i % n] == 1) ? 3 : 1;
+                if(i % n == 0)break;
+            }
+            hp.println(100 - cost);
         }
-        else
-        {
-            from_begin = page / 2;
-            from_end = (n - page) / 2;
-        }
-        hp.println(Math.min(from_end, from_begin));
         hp.flush();
     }
 
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);

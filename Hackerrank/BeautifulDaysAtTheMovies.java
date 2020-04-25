@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class DrawingBook
+public class BeautifulDaysAtTheMovies
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,32 +14,49 @@ public class DrawingBook
     }
 }
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes DrawingBook.java
-//problem link : https://www.hackerrank.com/challenges/drawing-book/problem
+////javac -d ../../classes BeautifulDaysAtTheMovies.java
+//problem link : https://www.hackerrank.com/challenges/beautiful-days-at-the-movies/problem
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
-        int n = hp.nextInt();
-        int page = hp.nextInt();
-        int from_begin = -1, from_end = -1;
-        if(n % 2 == 0)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            from_begin = page / 2;
-            from_end = (int)Math.ceil((double)(n - page) / 2);
+            int l = hp.nextInt();
+            int r = hp.nextInt();
+            int k = hp.nextInt();
+            int count = 0;
+            for(int i = l; i <= r ; i++)
+            {
+                if(check(i, k))count++;
+            }
+            hp.println(count);
         }
-        else
-        {
-            from_begin = page / 2;
-            from_end = (n - page) / 2;
-        }
-        hp.println(Math.min(from_end, from_begin));
         hp.flush();
     }
 
+    boolean check(int n, int k)
+    {
+        int rev = getRev(n);
+        if(Math.abs(rev - n) % k == 0)return true;
+        return false;
+    }
+
+    int getRev(int n)
+    {
+        int rev = 0;
+        while(n > 0)
+        {
+            rev = (rev * 10) + (n % 10);
+            n /= 10;
+        }
+        return rev;
+    }
+
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);
