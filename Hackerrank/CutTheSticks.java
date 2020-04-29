@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class MigratoryBirds 
+public class CutTheSticks
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,8 +14,8 @@ public class MigratoryBirds
     }
 }
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes MigratoryBirds.java
-//problem link : https://www.hackerrank.com/challenges/migratory-birds/problem
+////javac -d ../../classes CutTheSticks.java
+//problem link : https://www.hackerrank.com/challenges/cut-the-sticks/problem
 
 class Solver {
     final Helper hp;
@@ -24,26 +24,23 @@ class Solver {
     void solve() throws Exception
     {
         int n = hp.nextInt();
-        //int k = hp.nextInt();
         int[] arr = hp.getIntArray(n);
-        int count= 0 ;
-        int[] freq = new int[5];
-        for(int i = 0; i < n; i++)
+        StringBuilder sb = new StringBuilder();
+        Arrays.sort(arr);
+        int min = arr[n - 1];
+        int last_min = n - 1;
+        for(int i = n - 1; i >= 0; i--)
         {
-            freq[arr[i] - 1]++;
-        }
-        int max = -1;
-        int max_i = -1;
-        for(int i =0 ; i < 5; i++)
-        {
-            if(freq[i] > max)
+            if(arr[i] < min)
             {
-                max = freq[i];
-                max_i = i + 1;
+                sb.insert(0,(((n - 1) - i) + "\n" ));
+                min = arr[i];
+                last_min = i;
             }
         }
-    //    hp.println(Arrays.toString(freq));
-        hp.println(max_i);
+        sb.insert(0, (n + "\n"));
+        hp.println(sb.toString());
+
         hp.flush();
     }
 

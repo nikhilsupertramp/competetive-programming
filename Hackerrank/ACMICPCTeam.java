@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class MigratoryBirds 
+public class ACMICPCTeam
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,8 +14,8 @@ public class MigratoryBirds
     }
 }
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes MigratoryBirds.java
-//problem link : https://www.hackerrank.com/challenges/migratory-birds/problem
+////javac -d ../../classes ACMICPCTeam.java
+//problem link : https://www.hackerrank.com/challenges/acm-icpc-team/problem
 
 class Solver {
     final Helper hp;
@@ -25,29 +25,40 @@ class Solver {
     {
         int n = hp.nextInt();
         //int k = hp.nextInt();
-        int[] arr = hp.getIntArray(n);
-        int count= 0 ;
-        int[] freq = new int[5];
+        int m = hp.nextInt();
+        String[] arr = new String[n];
         for(int i = 0; i < n; i++)
-        {
-            freq[arr[i] - 1]++;
-        }
-        int max = -1;
-        int max_i = -1;
-        for(int i =0 ; i < 5; i++)
-        {
-            if(freq[i] > max)
-            {
-                max = freq[i];
-                max_i = i + 1;
-            }
-        }
-    //    hp.println(Arrays.toString(freq));
-        hp.println(max_i);
+            arr[i] = hp.next();
+        Pair ways = permute(arr, n, m);
+        hp.println(ways.x + "\n" + ways.y);
         hp.flush();
     }
 
+    Pair permute(String[] arr, int n, int m)
+    {
+        int max = 0, count = 0;
+        for(int i = 0; i < n - 1; i++)
+        {
+            for(int j = i + 1; j < n; j++)
+            {
+                int temp = 0;
+                for(int p = 0; p < m; p++)
+                {
+                    if(arr[i].charAt(p) == '1' || arr[j].charAt(p) == '1')
+                        temp++;
+                }
+                if(temp > max)
+                {
+                    max = temp;
+                    count = 0;
+                }
+                if(temp == max)
+                    count++;
 
+            }
+        }
+        return new Pair(max, count);
+    }
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);

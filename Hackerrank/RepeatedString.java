@@ -6,44 +6,42 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class MigratoryBirds 
+public class RepeatedString
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//cd competetive-programming/src/Hackerrank
-////javac -d ../../classes MigratoryBirds.java
-//problem link : https://www.hackerrank.com/challenges/migratory-birds/problem
-
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes RepeatedString.java
+//  problem link : https://www.hackerrank.com/challenges/repeated-string/problem
+//aab
+//882787
+//588525
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        int n = hp.nextInt();
-        //int k = hp.nextInt();
-        int[] arr = hp.getIntArray(n);
-        int count= 0 ;
-        int[] freq = new int[5];
-        for(int i = 0; i < n; i++)
+        String s = hp.next();
+        long n = hp.nextLong();
+        int len = s.length();
+        int[] arr = new int[len];
+        int count = 0;
+        for(int i = 0; i < len; i++)
         {
-            freq[arr[i] - 1]++;
+            char ch = s.charAt(i);
+            if(ch == 'a')count++;
+            arr[i] = count;
         }
-        int max = -1;
-        int max_i = -1;
-        for(int i =0 ; i < 5; i++)
-        {
-            if(freq[i] > max)
-            {
-                max = freq[i];
-                max_i = i + 1;
-            }
-        }
-    //    hp.println(Arrays.toString(freq));
-        hp.println(max_i);
+        long k = n / len;
+        int rem = (int)(n % len) ;
+
+        long ans = (k * count) + ((rem > 0) ? arr[rem - 1] : 0);
+        hp.println(ans);
+
         hp.flush();
     }
 

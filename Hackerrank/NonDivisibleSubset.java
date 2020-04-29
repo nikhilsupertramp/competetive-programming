@@ -6,17 +6,17 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class MigratoryBirds 
+public class NonDivisibleSubset
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//cd competetive-programming/src/Hackerrank
-////javac -d ../../classes MigratoryBirds.java
-//problem link : https://www.hackerrank.com/challenges/migratory-birds/problem
-
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes NonDivisibleSubset.java
+//  problem link : https://www.hackerrank.com/challenges/non-divisible-subset/problem
+//[0 1 2 3 4 5 6 7]
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
@@ -24,26 +24,29 @@ class Solver {
     void solve() throws Exception
     {
         int n = hp.nextInt();
-        //int k = hp.nextInt();
-        int[] arr = hp.getIntArray(n);
-        int count= 0 ;
-        int[] freq = new int[5];
+        int k = hp.nextInt();
+        int[] arr = new int[n];
+        int freq[] = new int[k];
         for(int i = 0; i < n; i++)
         {
-            freq[arr[i] - 1]++;
+            arr[i] = hp.nextInt();
+            freq[arr[i] % k]++;
         }
-        int max = -1;
-        int max_i = -1;
-        for(int i =0 ; i < 5; i++)
+        int count = 0;
+        if(freq[0] > 0)count += 1;
+        //hp.println(Arrays.toString(freq));
+        for(int i = 1; i <= k / 2; i++)
         {
-            if(freq[i] > max)
+            if(i == k - i)
             {
-                max = freq[i];
-                max_i = i + 1;
+                if(freq[i] > 0)
+                    count += 1;
             }
+            else
+                count += Math.max(freq[i], freq[k - i]);
         }
-    //    hp.println(Arrays.toString(freq));
-        hp.println(max_i);
+        hp.println(count);
+
         hp.flush();
     }
 

@@ -6,53 +6,161 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class MigratoryBirds 
+public class QueensAttackII
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//cd competetive-programming/src/Hackerrank
-////javac -d ../../classes MigratoryBirds.java
-//problem link : https://www.hackerrank.com/challenges/migratory-birds/problem
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes QueensAttackII.java
+//  problem link : https://www.hackerrank.com/challenges/queens-attack-2/problem
 
 class Solver {
     final Helper hp;
+
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
         int n = hp.nextInt();
-        //int k = hp.nextInt();
-        int[] arr = hp.getIntArray(n);
-        int count= 0 ;
-        int[] freq = new int[5];
-        for(int i = 0; i < n; i++)
+        int k = hp.nextInt();
+        Pair queen = new Pair(hp.nextInt(), hp.nextInt());
+        HashMap<String, Pair> hm = new HashMap<>();
+
+        hm.put("L", new Pair(0, queen.y));
+        hm.put("R", new Pair(n + 1, queen.y));
+        hm.put("T", new Pair(queen.x, n + 1));
+        hm.put("B", new Pair(queen.x, 0));
+
+        int min = Math.min(queen.x, queen.y);
+        int max = n -  Math.max(queen.x, queen.y);
+        hm.put("BL", new Pair(queen.x - min, queen.y - min));
+        hm.put("TR", new Pair(queen.x + max + 1, queen.y + max + 1));
+
+        int tl = Math.min((n - queen.y), (queen.x - 1));
+        int br = Math.min((n - queen.x), (queen.y - 1));
+        hm.put("BR", new Pair((queen.x + br + 1), (queen.y - br - 1)));
+        hm.put("TL", new Pair((queen.x - tl - 1), (queen.y + tl + 1)));
+
+        while(k-- > 0)
         {
-            freq[arr[i] - 1]++;
+            int x = hp.nextInt();
+            int y = hp.nextInt();
+            getDirection(x, y, queen, hm);
         }
-        int max = -1;
-        int max_i = -1;
-        for(int i =0 ; i < 5; i++)
-        {
-            if(freq[i] > max)
-            {
-                max = freq[i];
-                max_i = i + 1;
-            }
-        }
-    //    hp.println(Arrays.toString(freq));
-        hp.println(max_i);
+        int totalDist = 0;
+        int ld = Math.abs(queen.x - hm.get("L").x) - 1;
+        int rd = Math.abs(queen.x - hm.get("R").x) - 1;
+        int td = Math.abs(queen.y - hm.get("T").y) - 1;
+        int bd = Math.abs(queen.y - hm.get("B").y) - 1;
+
+        //hp.println(ld + " " + rd + " " + td + " " + bd);
+
+        int trd = Math.abs(queen.x - hm.get("TR").x) - 1;
+        int brd = Math.abs(queen.x - hm.get("BR").x) - 1;
+        int bld = Math.abs(queen.x - hm.get("BL").x) - 1;
+        int tld = Math.abs(queen.x - hm.get("TL").x) - 1;
+
+        //hp.println(trd + " " + tld + " " + brd + " " + bld );
+
+        totalDist = (ld + rd + td + bd + trd + brd + tld + bld);
+        hp.println(totalDist);
+
         hp.flush();
     }
-
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
+
+    void getDirection(int x, int y, Pair queen, HashMap<String, Pair> hm)throws Exception
+    {
+        int px = queen.x;
+        int py = queen.y;
+        int xdiff = x - px;
+        int ydiff = y - py;
+        if((Math.abs(xdiff) == Math.abs(ydiff)) || (xdiff == 0 || ydiff == 0))
+        {
+            //hp.println("it matters");
+            if((Math.abs(xdiff) == Math.abs(ydiff)))
+            {
+                if(xdiff == ydiff)
+                {
+                    if(xdiff < 0 && ydiff < 0)
+                    {
+                        Pair p = hm.get("BL");
+                        if(x > p.x && y > p.y)
+                            hm.put("BL", new Pair(x, y));
+                    }
+                    else if(xdiff > 0 && ydiff > 0)
+                    {
+                        Pair p = hm.get("TR");
+                        if(x < p.x && y < p.y)
+                            hm.put("TR", new Pair(x, y));
+                    }
+                }
+                else
+                {
+                    if(xdiff < 0 && ydiff > 0)
+                    {
+                        Pair p = hm.get("TL");
+                        if(x > p.x && y < p.y)
+                            hm.put("TL", new Pair(x, y));
+                    }
+                    else if(xdiff > 0 || ydiff < 0)
+                    {
+                        //hp.println("im here");
+                        Pair p = hm.get("BR");
+                        if(x < p.x && y > p.y){
+                            hm.put("BR", new Pair(x, y));
+                            //hp.println("changed values ti " + x + " " + y);
+                        }
+                    }
+                }
+            }
+            else if((xdiff == 0) || (ydiff == 0))
+            {
+                if(xdiff == 0 && ydiff != 0)
+                {
+                    if(ydiff < 0)
+                    {
+                        Pair p = hm.get("B");
+                        if(y > p.y)
+                            hm.put("B", new Pair(px, y));
+                    }
+                    else
+                    {
+                        Pair p = hm.get("T");
+                        if(y < p.y)
+                            hm.put("T", new Pair(px, y));
+                    }
+                }
+                else if(xdiff != 0 && ydiff == 0)
+                {
+                    if(xdiff > 0)
+                    {
+                        Pair p = hm.get("R");
+                        if(x < p.x)
+                            hm.put("R", new Pair(x, py));
+                    }
+                    else if(xdiff < 0)
+                    {
+                        //hp.println("changing left");
+                        Pair p = hm.get("L");
+                        if(x > p.x)
+                            hm.put("L", new Pair(x, py));
+                    }
+                }
+            }
+        }
+    }
 }
+
+
+
 
 class Pair implements Comparable<Pair>{
     int x;

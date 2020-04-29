@@ -6,16 +6,16 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class MigratoryBirds 
+public class JumpingOnTheClouds
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//cd competetive-programming/src/Hackerrank
-////javac -d ../../classes MigratoryBirds.java
-//problem link : https://www.hackerrank.com/challenges/migratory-birds/problem
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes JumpingOnTheClouds.java
+//  problem link : https://www.hackerrank.com/challenges/jumping-on-the-clouds/problem
 
 class Solver {
     final Helper hp;
@@ -24,26 +24,23 @@ class Solver {
     void solve() throws Exception
     {
         int n = hp.nextInt();
-        //int k = hp.nextInt();
-        int[] arr = hp.getIntArray(n);
-        int count= 0 ;
-        int[] freq = new int[5];
-        for(int i = 0; i < n; i++)
+        int[] arr = new int[n + 1];
+        int count = 0;
+        for(int i = 0 ; i < n; i++)arr[i] = hp.nextInt();
+        for(int i = 0; i < n - 1; i++)
         {
-            freq[arr[i] - 1]++;
-        }
-        int max = -1;
-        int max_i = -1;
-        for(int i =0 ; i < 5; i++)
-        {
-            if(freq[i] > max)
+            if(arr[i + 2] == 1)
             {
-                max = freq[i];
-                max_i = i + 1;
+                count++;
+            }
+            else
+            {
+                i++;
+                count++;
             }
         }
-    //    hp.println(Arrays.toString(freq));
-        hp.println(max_i);
+        hp.println(count);
+
         hp.flush();
     }
 

@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class MigratoryBirds 
+public class LibraryFine
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,8 +14,8 @@ public class MigratoryBirds
     }
 }
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes MigratoryBirds.java
-//problem link : https://www.hackerrank.com/challenges/migratory-birds/problem
+////javac -d ../../classes LibraryFine.java
+//problem link : https://www.hackerrank.com/challenges/library-fine/problem
 
 class Solver {
     final Helper hp;
@@ -23,30 +23,27 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        int n = hp.nextInt();
-        //int k = hp.nextInt();
-        int[] arr = hp.getIntArray(n);
-        int count= 0 ;
-        int[] freq = new int[5];
-        for(int i = 0; i < n; i++)
-        {
-            freq[arr[i] - 1]++;
-        }
-        int max = -1;
-        int max_i = -1;
-        for(int i =0 ; i < 5; i++)
-        {
-            if(freq[i] > max)
-            {
-                max = freq[i];
-                max_i = i + 1;
-            }
-        }
-    //    hp.println(Arrays.toString(freq));
-        hp.println(max_i);
+        int d1 = hp.nextInt();
+        int m1 = hp.nextInt();
+        int y1 = hp.nextInt();
+        int d2 = hp.nextInt();
+        int m2 = hp.nextInt();
+        int y2 = hp.nextInt();
+        int fine = process(d1, d2, m1, m2, y1, y2);
+        hp.println(fine);
+
         hp.flush();
     }
 
+    int process(int d1, int d2, int m1, int m2, int y1, int y2)
+    {
+        if(y1 > y2)return 10000;
+        else if(y1 < y2)return 0;
+        if(m1 > m2)return (m1 - m2) * 500;
+        else if(m1 < m2)return 0;
+        if(d1 > d2)return (d1 - d2) * 15;
+        return 0;
+    }
 
     Solver() {
         hp = new Helper(MOD, MAXN);

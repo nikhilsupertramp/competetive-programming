@@ -6,16 +6,16 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class MigratoryBirds 
+public class EqualizeTheArray
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//cd competetive-programming/src/Hackerrank
-////javac -d ../../classes MigratoryBirds.java
-//problem link : https://www.hackerrank.com/challenges/migratory-birds/problem
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes EqualizeTheArray.java
+//  problem link : https://www.hackerrank.com/challenges/equality-in-a-array/problem
 
 class Solver {
     final Helper hp;
@@ -24,26 +24,21 @@ class Solver {
     void solve() throws Exception
     {
         int n = hp.nextInt();
-        //int k = hp.nextInt();
         int[] arr = hp.getIntArray(n);
-        int count= 0 ;
-        int[] freq = new int[5];
+        int[] freq = new int[101];
         for(int i = 0; i < n; i++)
         {
-            freq[arr[i] - 1]++;
+            freq[arr[i]]++;
         }
         int max = -1;
-        int max_i = -1;
-        for(int i =0 ; i < 5; i++)
+        for(int i = 0; i < 101; i++)
         {
             if(freq[i] > max)
             {
                 max = freq[i];
-                max_i = i + 1;
             }
         }
-    //    hp.println(Arrays.toString(freq));
-        hp.println(max_i);
+        hp.print(n - max);
         hp.flush();
     }
 
