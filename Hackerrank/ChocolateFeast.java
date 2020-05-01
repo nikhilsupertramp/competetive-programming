@@ -6,37 +6,39 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class TaumAndBDay
+public class ChocolateFeast
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes TaumAndBDay.java
-//problem link : https://www.hackerrank.com/challenges/taum-and-bday/problem
+////javac -d ../../classes ChocolateFeast.java
+//problem link : https://www.hackerrank.com/challenges/chocolate-feast/problem
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            long b = hp.nextLong();
-            long w = hp.nextLong();
-            long bc = hp.nextLong();
-            long wc = hp.nextLong();
-            long z = hp.nextLong();
-            long cost = b * bc + w * wc;
-            long bCost = (b + w) * bc + (w * z);
-            long wcost = (b + w) * wc + (b * z);
-            hp.println(Math.min(cost, Math.min(bCost, wcost)));
+            int n = hp.nextInt();
+            int c = hp.nextInt();
+            int m = hp.nextInt();
+            int num = n / c;
+            int count = num;
+            int choclates = num;
+            int wrappers = num;
+            while(wrappers >= m)
+            {
+                //hp.print(num + " ");
+                choclates = wrappers / m;
+                count += choclates;
+                wrappers = (wrappers % m) + choclates;
+            }
+            hp.println(count);
         }
-
         hp.flush();
     }
 
@@ -44,6 +46,9 @@ class Solver {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 }
 
 class Pair implements Comparable<Pair>{
@@ -125,7 +130,7 @@ class Helper {
         int[] ar = new int[size];
         for (int i = 0; i < size; ++i) ar[i] = nextInt();
         return ar;
-    }
+	}
 
     public int[] getIntArray(String s)throws Exception
     {
@@ -139,7 +144,7 @@ class Helper {
         return arr;
     }
 
-    public long gcd(long a, long b) {
+	public long gcd(long a, long b) {
         return b == 0 ? a : gcd(b, a % b);
     }
 

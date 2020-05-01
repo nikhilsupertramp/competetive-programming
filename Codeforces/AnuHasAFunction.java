@@ -4,19 +4,20 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
-import java.util.ArrayList;
 
-public class TaumAndBDay
+
+public class AnuHasAFunction
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
+//  cd competetive-programming/src/Codeforces
+//  javac -d ../../classes AnuHasAFunction.java
+//  java AnuHasAFunction
+//  problem link : https://codeforces.com/contest/1300/problem/C
 
-//cd competetive-programming/src/Hackerrank
-////javac -d ../../classes TaumAndBDay.java
-//problem link : https://www.hackerrank.com/challenges/taum-and-bday/problem
 
 class Solver {
     final Helper hp;
@@ -24,17 +25,33 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            long b = hp.nextLong();
-            long w = hp.nextLong();
-            long bc = hp.nextLong();
-            long wc = hp.nextLong();
-            long z = hp.nextLong();
-            long cost = b * bc + w * wc;
-            long bCost = (b + w) * bc + (w * z);
-            long wcost = (b + w) * wc + (b * z);
-            hp.println(Math.min(cost, Math.min(bCost, wcost)));
+            int n = hp.nextInt();
+            int  arr[] = hp.getIntArray(n);
+            for(int b = 30; b >= 0; b--)
+            {
+                ArrayList<Integer> li = new ArrayList<>();
+                for(int i = 0; i < n; i++)
+                {
+                    if(((arr[i]) & (1 << b)) > 0)
+                        li.add(i);
+                }
+
+                if(li.size() == 1)
+                {
+                    hp.print(arr[li.get(0)] + " ");
+                    for(int i = 0; i < n; i++)
+                    {
+                        if(i != li.get(0))
+                            hp.print(arr[i] + " ");
+                    }
+                    hp.println();
+                    hp.flush();
+                    return;
+                }
+            }
+            for(int i : arr)hp.print(i + " ");
         }
 
         hp.flush();
@@ -61,7 +78,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return y - p.y;
+        return p.y - y;
     }
 }
 
@@ -125,7 +142,7 @@ class Helper {
         int[] ar = new int[size];
         for (int i = 0; i < size; ++i) ar[i] = nextInt();
         return ar;
-    }
+	}
 
     public int[] getIntArray(String s)throws Exception
     {
@@ -139,7 +156,7 @@ class Helper {
         return arr;
     }
 
-    public long gcd(long a, long b) {
+	public long gcd(long a, long b) {
         return b == 0 ? a : gcd(b, a % b);
     }
 

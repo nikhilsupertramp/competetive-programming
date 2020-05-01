@@ -6,17 +6,16 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class TaumAndBDay
+public class Encryption
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes TaumAndBDay.java
-//problem link : https://www.hackerrank.com/challenges/taum-and-bday/problem
+////javac -d ../../classes Encryption.java
+//problem link : https://www.hackerrank.com/challenges/encryption/problem
 
 class Solver {
     final Helper hp;
@@ -24,19 +23,21 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            long b = hp.nextLong();
-            long w = hp.nextLong();
-            long bc = hp.nextLong();
-            long wc = hp.nextLong();
-            long z = hp.nextLong();
-            long cost = b * bc + w * wc;
-            long bCost = (b + w) * bc + (w * z);
-            long wcost = (b + w) * wc + (b * z);
-            hp.println(Math.min(cost, Math.min(bCost, wcost)));
-        }
+            String s = hp.next();
+            int n = s.length();
 
+            int row = (int)Math.round(Math.sqrt(n));
+            int coloumn = (row >= Math.sqrt(n)) ? row : row + 1;
+            StringBuilder sb = new StringBuilder();
+            for(int i = 0; i < coloumn; i++){
+                for(int j = i; j < n; j += coloumn)sb.append(s.charAt(j));
+                sb.append(" ");
+            }
+            hp.println(sb.toString());
+
+        }
         hp.flush();
     }
 
@@ -125,7 +126,7 @@ class Helper {
         int[] ar = new int[size];
         for (int i = 0; i < size; ++i) ar[i] = nextInt();
         return ar;
-    }
+	}
 
     public int[] getIntArray(String s)throws Exception
     {
@@ -139,7 +140,7 @@ class Helper {
         return arr;
     }
 
-    public long gcd(long a, long b) {
+	public long gcd(long a, long b) {
         return b == 0 ? a : gcd(b, a % b);
     }
 

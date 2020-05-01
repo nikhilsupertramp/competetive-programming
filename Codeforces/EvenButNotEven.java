@@ -4,19 +4,21 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
-import java.util.ArrayList;
 
-public class TaumAndBDay
+
+public class EvenButNotEven
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-
-//cd competetive-programming/src/Hackerrank
-////javac -d ../../classes TaumAndBDay.java
-//problem link : https://www.hackerrank.com/challenges/taum-and-bday/problem
+//  cd competetive-programming/src/Codeforces
+//  javac -d ../../classes EvenButNotEven.java
+//  java EvenButNotEven
+//  problem link : https://codeforces.com/problemset/problem/1291/A
+//  observations: find the position of second odd number then return substring
+//  from 0 - position (inclusive)
 
 class Solver {
     final Helper hp;
@@ -26,17 +28,29 @@ class Solver {
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            long b = hp.nextLong();
-            long w = hp.nextLong();
-            long bc = hp.nextLong();
-            long wc = hp.nextLong();
-            long z = hp.nextLong();
-            long cost = b * bc + w * wc;
-            long bCost = (b + w) * bc + (w * z);
-            long wcost = (b + w) * wc + (b * z);
-            hp.println(Math.min(cost, Math.min(bCost, wcost)));
-        }
+            int n = hp.nextInt();
+            String str = hp.next();
 
+            int pos = -1, count = 0;
+            for(int i = 0; i < n; i++)
+            {
+                int value = (int)(str.charAt(i) - '0');
+                if(value % 2 == 1)
+                {
+                    count++;
+                }
+                if(count == 2)
+                {
+                    pos = i;
+                    break;
+                }
+            }
+            if(pos == -1)
+            {
+                hp.println(-1);continue;
+            }
+            hp.println(str.substring(0, pos + 1));
+        }
         hp.flush();
     }
 
@@ -61,7 +75,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return y - p.y;
+        return p.y - y;
     }
 }
 
@@ -125,7 +139,7 @@ class Helper {
         int[] ar = new int[size];
         for (int i = 0; i < size; ++i) ar[i] = nextInt();
         return ar;
-    }
+	}
 
     public int[] getIntArray(String s)throws Exception
     {
@@ -139,7 +153,7 @@ class Helper {
         return arr;
     }
 
-    public long gcd(long a, long b) {
+	public long gcd(long a, long b) {
         return b == 0 ? a : gcd(b, a % b);
     }
 

@@ -6,17 +6,16 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class TaumAndBDay
+public class TowerOfHanoi
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes TaumAndBDay.java
-//problem link : https://www.hackerrank.com/challenges/taum-and-bday/problem
+////javac -d ../../classes TowerOfHanoi.java
+//problem link : https://www.hackerrank.com/contests/smart-interviews/challenges/si-tower-of-hanoi
 
 class Solver {
     final Helper hp;
@@ -24,20 +23,27 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        int tcs = hp.nextInt();
+        for(int tc = 1;tc <= tcs; tc++)
         {
-            long b = hp.nextLong();
-            long w = hp.nextLong();
-            long bc = hp.nextLong();
-            long wc = hp.nextLong();
-            long z = hp.nextLong();
-            long cost = b * bc + w * wc;
-            long bCost = (b + w) * bc + (w * z);
-            long wcost = (b + w) * wc + (b * z);
-            hp.println(Math.min(cost, Math.min(bCost, wcost)));
+            int n = hp.nextInt();
+            hp.println((1 << n) - 1);
+            process(n);
         }
-
         hp.flush();
+    }
+
+    void process(int n)throws Exception
+    {
+        towerOfHanoi(n, 'A', 'C', 'B');
+    }
+
+    void towerOfHanoi(int n, char u, char v, char temp)throws Exception
+    {
+        if(n == 0)return;
+        towerOfHanoi(n - 1, u, temp, v);
+        hp.println("Move " + n + " from " + u + " to " + v);
+        towerOfHanoi(n - 1, temp, v, u);
     }
 
     Solver() {
@@ -125,7 +131,7 @@ class Helper {
         int[] ar = new int[size];
         for (int i = 0; i < size; ++i) ar[i] = nextInt();
         return ar;
-    }
+	}
 
     public int[] getIntArray(String s)throws Exception
     {
@@ -139,7 +145,7 @@ class Helper {
         return arr;
     }
 
-    public long gcd(long a, long b) {
+	public long gcd(long a, long b) {
         return b == 0 ? a : gcd(b, a % b);
     }
 

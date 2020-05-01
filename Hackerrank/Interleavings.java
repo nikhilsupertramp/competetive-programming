@@ -6,17 +6,16 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class TaumAndBDay
+public class Interleavings
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes TaumAndBDay.java
-//problem link : https://www.hackerrank.com/challenges/taum-and-bday/problem
+////javac -d ../../classes Interleavings.java
+//problem link : https://www.hackerrank.com/contests/smart-interviews/challenges/si-interleavings
 
 class Solver {
     final Helper hp;
@@ -24,21 +23,49 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        int tcs = hp.nextInt();
+        for(int tc = 1;tc <= tcs; tc++)
         {
-            long b = hp.nextLong();
-            long w = hp.nextLong();
-            long bc = hp.nextLong();
-            long wc = hp.nextLong();
-            long z = hp.nextLong();
-            long cost = b * bc + w * wc;
-            long bCost = (b + w) * bc + (w * z);
-            long wcost = (b + w) * wc + (b * z);
-            hp.println(Math.min(cost, Math.min(bCost, wcost)));
+            hp.println("Case #" + tc + ":" );
+            ArrayList<String> li = new ArrayList<>();
+            String s1 = hp.next();
+            String s2 = hp.next();
+            process(s1, s2, li);
+            Collections.sort(li);
+            for(String s : li)
+                hp.println(s);
         }
-
         hp.flush();
     }
+
+    void process(String s1, String s2, ArrayList<String> li)
+    {
+        char[] arr = new char[(s1.length() + s2.length())];
+        interleavings(s1, s2, arr, 0, 0, 0, li);
+    }
+    void interleavings(String s1, String s2, char[] arr, int pos1, int pos2,
+                        int curr, ArrayList<String> li)
+    {
+        if(pos1 == s1.length() && s2.length() == pos2)
+        {
+            StringBuilder sb = new StringBuilder();
+            for(char ch : arr)sb.append(ch);
+            li.add(sb.toString());
+        }
+
+        if(pos1 < s1.length())
+        {
+            arr[curr] = s1.charAt(pos1);
+            interleavings(s1, s2, arr, pos1 + 1, pos2, curr + 1, l1);
+        }
+
+        if(pos2 < s2.length())
+        {
+            arr[curr] = s2.charAt(pos2);
+            interleavings(s1, s2, arr, pos1, pos2 + 1, curr + 1, li);
+        }
+    }
+
 
     Solver() {
         hp = new Helper(MOD, MAXN);
@@ -125,7 +152,7 @@ class Helper {
         int[] ar = new int[size];
         for (int i = 0; i < size; ++i) ar[i] = nextInt();
         return ar;
-    }
+	}
 
     public int[] getIntArray(String s)throws Exception
     {
@@ -139,7 +166,7 @@ class Helper {
         return arr;
     }
 
-    public long gcd(long a, long b) {
+	public long gcd(long a, long b) {
         return b == 0 ? a : gcd(b, a % b);
     }
 

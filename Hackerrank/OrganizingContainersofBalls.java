@@ -6,17 +6,16 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class TaumAndBDay
+public class OrganizingContainersofBalls
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes TaumAndBDay.java
-//problem link : https://www.hackerrank.com/challenges/taum-and-bday/problem
+////javac -d ../../classes OrganizingContainersofBalls.java
+//problem link : https://www.hackerrank.com/challenges/organizing-containers-of-balls/problem
 
 class Solver {
     final Helper hp;
@@ -26,15 +25,50 @@ class Solver {
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            long b = hp.nextLong();
-            long w = hp.nextLong();
-            long bc = hp.nextLong();
-            long wc = hp.nextLong();
-            long z = hp.nextLong();
-            long cost = b * bc + w * wc;
-            long bCost = (b + w) * bc + (w * z);
-            long wcost = (b + w) * wc + (b * z);
-            hp.println(Math.min(cost, Math.min(bCost, wcost)));
+            int n = hp.nextInt();
+            int[][] arr = new int[n][n];
+            for(int i = 0; i < n; i++)
+            {
+                for(int j = 0; j < n; j++)
+                {
+                    arr[i][j] = hp.nextInt();
+                }
+            }
+            long[] balls = new long[n];
+            long[] sizes = new long[n];
+
+            for(int i = 0; i < n; i++)
+            {
+                long sum = 0;
+                for(int j = 0; j < n; j++)
+                {
+                    sum += arr[i][j];
+                }
+                balls[i] = sum;
+            }
+            for(int i = 0; i < n;i++)
+            {
+                long sum = 0;
+                for(int j = 0; j < n; j++)
+                {
+                    sum += arr[j][i];
+                }
+                sizes[i] = sum;;;
+            }
+            Arrays.sort(balls);
+            Arrays.sort(sizes);
+            boolean flag = true;
+            for(int i = 0; i < n; i++)
+            {
+                if(balls[i] != sizes[i])
+                {
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag)hp.println("Possible");
+            else hp.println("Impossible");
+
         }
 
         hp.flush();
@@ -125,7 +159,7 @@ class Helper {
         int[] ar = new int[size];
         for (int i = 0; i < size; ++i) ar[i] = nextInt();
         return ar;
-    }
+	}
 
     public int[] getIntArray(String s)throws Exception
     {
@@ -139,7 +173,7 @@ class Helper {
         return arr;
     }
 
-    public long gcd(long a, long b) {
+	public long gcd(long a, long b) {
         return b == 0 ? a : gcd(b, a % b);
     }
 

@@ -6,44 +6,59 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class TaumAndBDay
+public class MinimumDistances
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes TaumAndBDay.java
-//problem link : https://www.hackerrank.com/challenges/taum-and-bday/problem
+////javac -d ../../classes MinimumDistances.java
+//problem link :https://www.hackerrank.com/challenges/minimum-distances/problem
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            long b = hp.nextLong();
-            long w = hp.nextLong();
-            long bc = hp.nextLong();
-            long wc = hp.nextLong();
-            long z = hp.nextLong();
-            long cost = b * bc + w * wc;
-            long bCost = (b + w) * bc + (w * z);
-            long wcost = (b + w) * wc + (b * z);
-            hp.println(Math.min(cost, Math.min(bCost, wcost)));
-        }
+            int n = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
+            HashMap<Integer, ArrayList<Integer>> hm = new HashMap<>();
+            for(int i = 0; i < n; i++)
+            {
+                if(!hm.containsKey(arr[i]))hm.put(arr[i], new ArrayList<Integer>());
+                hm.get(arr[i]).add(i);
+            }
+            int min = Integer.MAX_VALUE;
+            for(int key : hm.keySet())
+            {
+                if(hm.get(key).size() == 1)continue;
+                else
+                {
+                    //hp.println("IM here");
+                    ArrayList<Integer> li = hm.get(key);
 
+                    for(int i = 0; i < li.size() - 1; i++)
+                    {
+                        //hp.println(li.get(i + 1) - li.get(i));
+                        min = Math.min(min, (li.get(i + 1) - li.get(i)));
+                    }
+                }
+            }
+            if(min == Integer.MAX_VALUE)min = -1;
+            hp.println(min);
+        }
         hp.flush();
     }
-
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 }
 
 class Pair implements Comparable<Pair>{
@@ -125,7 +140,7 @@ class Helper {
         int[] ar = new int[size];
         for (int i = 0; i < size; ++i) ar[i] = nextInt();
         return ar;
-    }
+	}
 
     public int[] getIntArray(String s)throws Exception
     {
@@ -139,7 +154,7 @@ class Helper {
         return arr;
     }
 
-    public long gcd(long a, long b) {
+	public long gcd(long a, long b) {
         return b == 0 ? a : gcd(b, a % b);
     }
 

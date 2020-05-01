@@ -6,17 +6,16 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class TaumAndBDay
+public class BiggerIsGreater
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes TaumAndBDay.java
-//problem link : https://www.hackerrank.com/challenges/taum-and-bday/problem
+////javac -d ../../classes BiggerIsGreater
+//problem link : https://www.hackerrank.com/challenges/bigger-is-greater/problem
 
 class Solver {
     final Helper hp;
@@ -26,17 +25,43 @@ class Solver {
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            long b = hp.nextLong();
-            long w = hp.nextLong();
-            long bc = hp.nextLong();
-            long wc = hp.nextLong();
-            long z = hp.nextLong();
-            long cost = b * bc + w * wc;
-            long bCost = (b + w) * bc + (w * z);
-            long wcost = (b + w) * wc + (b * z);
-            hp.println(Math.min(cost, Math.min(bCost, wcost)));
-        }
+            char[] arr = hp.next().toCharArray();
+            int n = arr.length;
+            int pos = -1;
+            for(int i = n - 2; i >= 0; i--)
+            {
+                if(arr[i] < arr[i + 1])
+                {
+                    pos = i;
+                    break;
+                }
+            }
+            if(pos == -1)
+            {
+                hp.println("no answer");
+                continue;
+            }
 
+            int min = Integer.MAX_VALUE;
+            int min_pos = -1;
+            for(int i = pos + 1; i < n; i++)
+            {
+                int dist = arr[i] - arr[pos];
+                if(dist <= 0)continue;
+                if(dist <= min){
+                    min = dist;
+                    min_pos = i;
+                }
+            }
+            //hp.print(pos + " " + min_pos);
+            char temp = arr[pos];
+            arr[pos] = arr[min_pos];
+            arr[min_pos] = temp;
+            Arrays.sort(arr, pos + 1, n);
+            for(char ch : arr)hp.print(ch);
+            hp.println();
+
+        }
         hp.flush();
     }
 
@@ -125,7 +150,7 @@ class Helper {
         int[] ar = new int[size];
         for (int i = 0; i < size; ++i) ar[i] = nextInt();
         return ar;
-    }
+	}
 
     public int[] getIntArray(String s)throws Exception
     {
@@ -139,7 +164,7 @@ class Helper {
         return arr;
     }
 
-    public long gcd(long a, long b) {
+	public long gcd(long a, long b) {
         return b == 0 ? a : gcd(b, a % b);
     }
 

@@ -4,19 +4,19 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
-import java.util.ArrayList;
 
-public class TaumAndBDay
+
+public class NonZero
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-
-//cd competetive-programming/src/Hackerrank
-////javac -d ../../classes TaumAndBDay.java
-//problem link : https://www.hackerrank.com/challenges/taum-and-bday/problem
+//  cd competetive-programming/src/Codeforces
+//  javac -d ../../classes NonZero.java
+//  java NonZero
+//  problem link : https://codeforces.com/contest/1300/problem/A
 
 class Solver {
     final Helper hp;
@@ -26,17 +26,19 @@ class Solver {
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            long b = hp.nextLong();
-            long w = hp.nextLong();
-            long bc = hp.nextLong();
-            long wc = hp.nextLong();
-            long z = hp.nextLong();
-            long cost = b * bc + w * wc;
-            long bCost = (b + w) * bc + (w * z);
-            long wcost = (b + w) * wc + (b * z);
-            hp.println(Math.min(cost, Math.min(bCost, wcost)));
+            int n = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
+            int sum = 0;
+            int zeros = 0;
+            for(int i : arr){
+                sum += i;
+                if(i == 0)zeros++;
+            }
+            if(zeros + sum == 0)
+                hp.println(zeros + 1);
+            else
+                hp.println(zeros);
         }
-
         hp.flush();
     }
 
@@ -61,7 +63,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return y - p.y;
+        return p.y - y;
     }
 }
 
@@ -125,7 +127,7 @@ class Helper {
         int[] ar = new int[size];
         for (int i = 0; i < size; ++i) ar[i] = nextInt();
         return ar;
-    }
+	}
 
     public int[] getIntArray(String s)throws Exception
     {
@@ -139,7 +141,7 @@ class Helper {
         return arr;
     }
 
-    public long gcd(long a, long b) {
+	public long gcd(long a, long b) {
         return b == 0 ? a : gcd(b, a % b);
     }
 

@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class SubstringsSort
+public class PointsAndPowersofTwo
 {
     public static void main(String[] args)throws Exception
     {
@@ -18,39 +18,58 @@ class Solver {
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
-////javac -d ../../classes
-//problem link : https://codeforces.com/contest/988/problem/B
+// cd competetive-programming/src/Codeforces
+// javac -d ../../classes PointsAndPowersofTwo.java
+// problem link : https://codeforces.com/contest/988/problem/D
+
     void solve() throws Exception
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            String[] arr = new String[n];
+            long[] arr = hp.getLongArray(n);
+            HashSet<Long> hs = new HashSet<>();
+            for(int i = 0; i < n; i++)hs.add(arr[i]);
+            boolean flag = false;
+
             for(int i = 0; i < n; i++)
             {
-                arr[i] = hp.next();
-            }
-            Arrays.sort(arr, (s1, s2) -> s1.length() - s2.length());
-            boolean flag = true;
-            for(int i = 1; i < n; i++)
-            {
-                if(arr[i].indexOf(arr[i - 1]) == -1)
+                for(long pt = 1; pt < (1L << 31); pt *= 2)
                 {
-                    flag = false;break;
+                    if(hs.contains(arr[i] - pt) && hs.contains(arr[i] + pt))
+                    {
+                        hp.println(3);
+                        hp.println((arr[i] - pt) + " " +
+                                    arr[i] + " " + (arr[i] + pt));
+                        //hp.println(pt);
+                        flag = true;
+                        break;
+                    }
                 }
+                if(flag == true)break;
             }
-            if(flag)
+            if(!flag)
             {
-                hp.println("YES");
                 for(int i = 0; i < n; i++)
                 {
-                    hp.println(arr[i]);
+                    for(long pt = 1; pt < (1L << 31); pt *= 2)
+                    {
+                        if(hs.contains(arr[i] - pt))
+                        {
+                            hp.println(2);
+                            hp.println((arr[i] - pt) + " " + arr[i]);
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if(flag == true)break;
                 }
             }
-            else
+            if(!flag)
             {
-                hp.println("NO");
+                hp.println(1 + "\n" + arr[0]);
             }
+
         }
         hp.flush();
     }

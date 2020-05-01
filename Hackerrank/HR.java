@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class MigratoryBirds 
+public class Interleavings
 {
     public static void main(String[] args)throws Exception
     {
@@ -15,7 +15,7 @@ public class MigratoryBirds
 }
 //cd competetive-programming/src/Hackerrank
 ////javac -d ../../classes MigratoryBirds.java
-//problem link : https://www.hackerrank.com/challenges/migratory-birds/problem
+//problem link : https://www.hackerrank.com/contests/smart-interviews/challenges/si-interleavings
 
 class Solver {
     final Helper hp;

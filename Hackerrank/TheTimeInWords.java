@@ -6,44 +6,113 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class TaumAndBDay
+public class TheTimeInWords
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes TaumAndBDay.java
-//problem link : https://www.hackerrank.com/challenges/taum-and-bday/problem
+////javac -d ../../classes TheTimeInWords.java
+//problem link : https://www.hackerrank.com/challenges/the-time-in-words/problem
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            long b = hp.nextLong();
-            long w = hp.nextLong();
-            long bc = hp.nextLong();
-            long wc = hp.nextLong();
-            long z = hp.nextLong();
-            long cost = b * bc + w * wc;
-            long bCost = (b + w) * bc + (w * z);
-            long wcost = (b + w) * wc + (b * z);
-            hp.println(Math.min(cost, Math.min(bCost, wcost)));
-        }
+            int h = hp.nextInt();
+            String mins = hp.next();
+            int m = parseValue(mins);
+            String ans = "";
 
+            if(m == 30)
+            {
+                ans = "half past " + arr[h];
+            }
+            else if(m < 30)
+            {
+                if(m == 0)ans = arr[h] + " o' clock";
+                else if(m == 1)ans = arr[m] + " minute past " + arr[h];
+                else if(m == 15)
+                {
+                    ans = "quarter past " + arr[h];
+                }
+                else
+                {
+                    ans = arr[m] + " minutes past " + arr[h];
+                }
+
+            }
+            else if(m > 30)
+            {
+                if(h == 12) h = 1;else h += 1;
+                if(m == 45)
+                    ans = "quarter to " + arr[h];
+                else
+                {
+                    m = 60 - m;
+                    if(m == 1)ans = arr[m] + " minute to " + arr[h];
+                    else ans = arr[m] + " minutes to " + arr[h];
+                }
+            }
+            hp.println(ans);
+        }
         hp.flush();
     }
 
+    int parseValue(String s)
+    {
+        int ans = 0; int i = 0;
+        int n = s.length();
+        while(i < n)
+        {
+            ans = (ans * 10) + ((int)(s.charAt(i) - '0'));
+            i++;
+        }
+        return ans;
+    }
+
+    String[] arr = {"zero",
+                    "one",
+                    "two",
+                    "three",
+                    "four",
+                    "five",
+                    "six",
+                    "seven",
+                    "eight",
+                    "nine",
+                    "ten",
+                    "eleven",
+                    "twelve",
+                    "thirteen",
+                    "fourteen",
+                    "quarter",
+                    "sixteen",
+                    "seventeen",
+                    "eighteen",
+                    "nineteen",
+                    "twenty",
+                    "twenty one",
+                    "twenty two",
+                    "twenty three",
+                    "twenty four",
+                    "twenty five",
+                    "twenty six",
+                    "twenty seven",
+                    "twenty eight",
+                    "twenty nine"
+                };
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 }
 
 class Pair implements Comparable<Pair>{
@@ -125,7 +194,7 @@ class Helper {
         int[] ar = new int[size];
         for (int i = 0; i < size; ++i) ar[i] = nextInt();
         return ar;
-    }
+	}
 
     public int[] getIntArray(String s)throws Exception
     {
@@ -139,7 +208,7 @@ class Helper {
         return arr;
     }
 
-    public long gcd(long a, long b) {
+	public long gcd(long a, long b) {
         return b == 0 ? a : gcd(b, a % b);
     }
 

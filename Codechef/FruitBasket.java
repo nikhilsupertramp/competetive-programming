@@ -4,9 +4,9 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
-import java.util.ArrayList;
 
-public class TaumAndBDay
+
+class FruitBasket
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,54 +14,37 @@ public class TaumAndBDay
     }
 }
 
-//cd competetive-programming/src/Hackerrank
-////javac -d ../../classes TaumAndBDay.java
-//problem link : https://www.hackerrank.com/challenges/taum-and-bday/problem
+//  cd competetive-programming/src/Codeforces
+//  javac -d ../../classes  FruitBasket.java
+//  java FruitBasket
+//  problem link : https://www.codechef.com/COW42020/problems/COW3A
+
 
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
-    void solve() throws Exception
-    {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
-        {
-            long b = hp.nextLong();
-            long w = hp.nextLong();
-            long bc = hp.nextLong();
-            long wc = hp.nextLong();
-            long z = hp.nextLong();
-            long cost = b * bc + w * wc;
-            long bCost = (b + w) * bc + (w * z);
-            long wcost = (b + w) * wc + (b * z);
-            hp.println(Math.min(cost, Math.min(bCost, wcost)));
-        }
-
-        hp.flush();
-    }
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-}
 
-class Pair implements Comparable<Pair>{
-    int x;
-    int y;//long z;
+    void solve() throws Exception
+    {
+        for(int tc = hp.nextInt(); tc > 0; tc--)
+        {
+            int a = hp.nextInt();
+            int b = hp.nextInt();
+            int c = hp.nextInt();
+            int d = hp.nextInt();
+            int mangoes = a + b - d;
+            int oranges = b + c - d;
+            int apples = d - (mangoes + oranges);
+            hp.println(apples + " " + mangoes + " " + oranges);
 
-    public Pair(int x, int y)
-    {
-        this.x = x;
-        this.y = y;
-        //this.z = z;
-    }
-    @Override
-    public int compareTo(Pair p)
-    {
-        if(p.y == y)
-        return x - p.x;
-        return y - p.y;
+        }
+        hp.flush();
     }
 }
 
@@ -125,7 +108,7 @@ class Helper {
         int[] ar = new int[size];
         for (int i = 0; i < size; ++i) ar[i] = nextInt();
         return ar;
-    }
+	}
 
     public int[] getIntArray(String s)throws Exception
     {
@@ -139,7 +122,7 @@ class Helper {
         return arr;
     }
 
-    public long gcd(long a, long b) {
+	public long gcd(long a, long b) {
         return b == 0 ? a : gcd(b, a % b);
     }
 

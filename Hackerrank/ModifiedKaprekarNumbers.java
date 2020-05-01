@@ -6,38 +6,72 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class TaumAndBDay
+public class ModifiedKaprekarNumbers
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes TaumAndBDay.java
-//problem link : https://www.hackerrank.com/challenges/taum-and-bday/problem
-
+////javac -d ../../classes ModifiedKaprekarNumbers.java
+//problem link : https://www.hackerrank.com/challenges/kaprekar-numbers/problem
+//0015 = 0  *
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            long b = hp.nextLong();
-            long w = hp.nextLong();
-            long bc = hp.nextLong();
-            long wc = hp.nextLong();
-            long z = hp.nextLong();
-            long cost = b * bc + w * wc;
-            long bCost = (b + w) * bc + (w * z);
-            long wcost = (b + w) * wc + (b * z);
-            hp.println(Math.min(cost, Math.min(bCost, wcost)));
+            long l = hp.nextLong();
+            long r = hp.nextLong();
+            boolean flag = false;
+            for(long i = l; i <= r; i++)
+            {
+                if(isKarpekerNum(i))
+                {
+                    flag = true;
+                    hp.print(i + " ");
+                }
+            }
+            if(!flag)hp.println("INVALID RANGE");
         }
-
         hp.flush();
+    }
+
+    boolean isKarpekerNum(long n)
+    {
+        int d = getNoOfDigits(n);
+        long square = n * n;
+        String str = square +"";
+        long left = parseValue(str.substring(0, str.length() - d));
+        long right = parseValue(str.substring(str.length() - d));
+        return ((left + right) == n);
+    }
+
+    long parseValue(String s)
+    {
+        long ans = 0; int i = 0;
+        int n = s.length();
+        while(i < n)
+        {
+            ans = (ans * 10) + ((int)(s.charAt(i) - '0'));
+            i++;
+        }
+        return ans;
+    }
+
+    int getNoOfDigits(long n)
+    {
+        int count = 0;
+        while(n > 0)
+        {
+            count++;
+            n/=10;
+        }
+        return count;
     }
 
     Solver() {
@@ -125,7 +159,7 @@ class Helper {
         int[] ar = new int[size];
         for (int i = 0; i < size; ++i) ar[i] = nextInt();
         return ar;
-    }
+	}
 
     public int[] getIntArray(String s)throws Exception
     {
@@ -139,7 +173,7 @@ class Helper {
         return arr;
     }
 
-    public long gcd(long a, long b) {
+	public long gcd(long a, long b) {
         return b == 0 ? a : gcd(b, a % b);
     }
 

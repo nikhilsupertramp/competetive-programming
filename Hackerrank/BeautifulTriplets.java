@@ -6,17 +6,16 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class TaumAndBDay
+public class BeautifulTriplets
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-
 //cd competetive-programming/src/Hackerrank
-////javac -d ../../classes TaumAndBDay.java
-//problem link : https://www.hackerrank.com/challenges/taum-and-bday/problem
+////javac -d ../../classes BeautifulTriplets.java
+//problem link : https://www.hackerrank.com/challenges/beautiful-triplets/problem
 
 class Solver {
     final Helper hp;
@@ -24,22 +23,30 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            long b = hp.nextLong();
-            long w = hp.nextLong();
-            long bc = hp.nextLong();
-            long wc = hp.nextLong();
-            long z = hp.nextLong();
-            long cost = b * bc + w * wc;
-            long bCost = (b + w) * bc + (w * z);
-            long wcost = (b + w) * wc + (b * z);
-            hp.println(Math.min(cost, Math.min(bCost, wcost)));
-        }
+            int n = hp.nextInt();
+            int d = hp.nextInt();
+            int[] arr = new int[n];
+            HashMap<Integer, Integer> hm = new HashMap<>();
 
+            for(int i = 0; i < n; i++)
+            {
+                arr[i] = hp.nextInt();
+                hm.put(arr[i], hm.getOrDefault(arr[i], 0) + 1);
+            }
+            int count = 0;
+            for(int key : hm.keySet())
+            {
+                int val1 = hm.get(key);
+                int val2 = hm.getOrDefault(key + d, 0);
+                int val3 = hm.getOrDefault(key + (2 * d), 0);
+                count += (val1 * val2 * val3);
+            }
+            hp.println(count);
+        }
         hp.flush();
     }
-
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
@@ -125,7 +132,7 @@ class Helper {
         int[] ar = new int[size];
         for (int i = 0; i < size; ++i) ar[i] = nextInt();
         return ar;
-    }
+	}
 
     public int[] getIntArray(String s)throws Exception
     {
@@ -139,7 +146,7 @@ class Helper {
         return arr;
     }
 
-    public long gcd(long a, long b) {
+	public long gcd(long a, long b) {
         return b == 0 ? a : gcd(b, a % b);
     }
 

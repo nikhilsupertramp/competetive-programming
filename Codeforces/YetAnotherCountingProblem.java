@@ -4,19 +4,36 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
-import java.util.ArrayList;
 
-public class TaumAndBDay
+
+public class YetAnotherCountingProblem
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
+//  cd competetive-programming/src/Codeforces
+//  javac -d ../../classes YetAnotherCountingProblem.java
+//  java YetAnotherCountingProblem
+//  problem link : https://codeforces.com/contest/1342/problem/C
 
-//cd competetive-programming/src/Hackerrank
-////javac -d ../../classes TaumAndBDay.java
-//problem link : https://www.hackerrank.com/challenges/taum-and-bday/problem
+/*
+6
+2 3 1
+1 300 // for every 6 nums 3
+
+2 5 1
+1 300// for every 10 nums 5
+2 7 1
+1 300// for every 14 7
+3 7 1
+1 300// for every 21 7
+4 7 1
+1 300
+4 10 1//
+1 300
+*/
 
 class Solver {
     final Helper hp;
@@ -26,18 +43,49 @@ class Solver {
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            long b = hp.nextLong();
-            long w = hp.nextLong();
-            long bc = hp.nextLong();
-            long wc = hp.nextLong();
-            long z = hp.nextLong();
-            long cost = b * bc + w * wc;
-            long bCost = (b + w) * bc + (w * z);
-            long wcost = (b + w) * wc + (b * z);
-            hp.println(Math.min(cost, Math.min(bCost, wcost)));
-        }
+            int a = hp.nextInt();
+            int b = hp.nextInt();
+            int lcm = (a * b / hp.gcd(a, b));
+            int q = hp.nextInt();
+            int rep = Math.max(a, b);
+            for(int i = 0; i < q; i++)
+            {
 
+                long l = hp.nextLong() - 1;
+                long r = hp.nextLong();
+                long tl = l % (long)lcm;
+                long tr = r % (long)lcm;
+                long to_left = 0;
+                long to_right = 0;
+
+                if(tl >= rep)to_left += (tl - rep + 1);
+                if(tr >= rep)to_right += (tr - rep + 1);
+                to_left += (l / lcm) * (lcm - rep);
+                to_right += (r / lcm) * (lcm - rep);
+
+                hp.print((to_right - to_left) + " " );
+
+
+                /*
+                for(int x = l; x <= r; x++)
+                {
+                    int m = ((x % a) % b);
+                    int n = ((x % b) % a);
+                    if(m == n)
+                    hp.println(x + " " + m + " " + n + " here ");
+                    else
+                    hp.println(x + " " + m + " " + n );
+                }
+                */
+            }
+            hp.println();
+        }
         hp.flush();
+    }
+
+    long getLB(long n, int lcm)
+    {
+        return n - (n % lcm);
     }
 
     Solver() {
@@ -61,7 +109,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return y - p.y;
+        return p.y - y;
     }
 }
 
@@ -125,7 +173,7 @@ class Helper {
         int[] ar = new int[size];
         for (int i = 0; i < size; ++i) ar[i] = nextInt();
         return ar;
-    }
+	}
 
     public int[] getIntArray(String s)throws Exception
     {
@@ -139,7 +187,7 @@ class Helper {
         return arr;
     }
 
-    public long gcd(long a, long b) {
+	public long gcd(long a, long b) {
         return b == 0 ? a : gcd(b, a % b);
     }
 
