@@ -6,30 +6,17 @@ import java.math.*;
 import java.util.*;
 
 
-class ChefAndBitwiseProduct
+public class  PhoenixAndBalance
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codechef
-//  javac -d ../../classes ChefAndBitwiseProduct.java
-//  java ChefAndBitwiseProduct
-//  problem link : https://www.codechef.com/MAY20B/problems/CHANDF
-/* *observations*
-    see its like taking the Bitwise OR of both x  &  y will give
-    us the value that gives us the maximum value when we take individual Bitwise AND
-
-    now the problem is to find a number which has got set bits in the setbit positions of
-    Bitwise OR of x & y, in the range from L to R.
-
-    Iteratively find the solution find the value for Z in the limits of L and R
-    start Z from X|Y,
-    i.e. check if Z > R, Z /= 2
-         or if Z < L,    Z *=
-*/
-
+//  cd competetive-programming/src/Codeforces
+//  javac -d ../../classes PhoenixAndBalance.java
+//  java PhoenixAndBalance
+//  problem link : https://codeforces.com/contest/1348/problem/0
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
@@ -38,30 +25,20 @@ class Solver {
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            long x = hp.nextLong();
-            long y = hp.nextLong();
-            long l = hp.nextLong();
-            long r = hp.nextLong();
-            //long Z = (x | y);
-            int count = bitCount(Math.max(x, y));
-            long value = (1L << (count)) - 1L;
-            hp.println(value);
-
-            //hp.println(max);
-
+            int n = hp.nextInt();
+            long l = (1L << n);
+            for(int i = 1; i < n / 2; i++)
+                l += (1L << i);
+            long r = 0;
+            for(int i = n / 2; i < n; i++)
+            {
+                r += (1L << i);
+            }
+            hp.println(l - r);
         }
         hp.flush();
     }
-    int bitCount(long  n)
-    {
-        int count = 0;
-        while(n > 0)
-        {
-            count++;
-            n >>= 1;
-        }
-        return count;
-    }
+
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);

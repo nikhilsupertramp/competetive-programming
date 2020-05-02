@@ -3,23 +3,22 @@ import java.util.*;
 class Solution{
     public static void main(String[] args)throws Exception {
         Scanner sc = new Scanner(System.in);
-        int n = 1000;
-        int count = 0;
-        for(int i = 2; i < n; i++)
-            if(isPrime(i)){
-                System.out.print((i) + ", ");
-                count++;
-            }
-            System.out.println("\n" + count);
-    }
-    static boolean isPrime(int n)
-    {
-        //int count = 0;
-        for(int i = 2; i * i <= n; i++)
+        long x = sc.nextLong();
+        long y = sc.nextLong();
+        long Z = 2 * Math.max(x, y);
+        long max = Integer.MIN_VALUE;
+        for(long i = 0; i <= Z; i++)
         {
-            if(n % i == 0)
-                return false;
+            long sol = (x & i) * (y & i);
+            if(sol > max)
+            {
+                max = sol;
+                System.out.println(max + " at i = " + i);
+            }
         }
-        return true;
+        long orV = (x | y);
+        System.out.println((x & orV) * (y & orV));
+        System.out.println(x | y);
     }
+
 }

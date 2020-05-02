@@ -6,30 +6,17 @@ import java.math.*;
 import java.util.*;
 
 
-class ChefAndBitwiseProduct
+public class  PhoenixAndBeauty
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codechef
-//  javac -d ../../classes ChefAndBitwiseProduct.java
-//  java ChefAndBitwiseProduct
-//  problem link : https://www.codechef.com/MAY20B/problems/CHANDF
-/* *observations*
-    see its like taking the Bitwise OR of both x  &  y will give
-    us the value that gives us the maximum value when we take individual Bitwise AND
-
-    now the problem is to find a number which has got set bits in the setbit positions of
-    Bitwise OR of x & y, in the range from L to R.
-
-    Iteratively find the solution find the value for Z in the limits of L and R
-    start Z from X|Y,
-    i.e. check if Z > R, Z /= 2
-         or if Z < L,    Z *=
-*/
-
+//  cd competetive-programming/src/Codeforces
+//  javac -d ../../classes PhoenixAndBeauty.java
+//  java PhoenixAndBeauty
+//  problem link : https://codeforces.com/contest/1348/problem/B
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
@@ -38,30 +25,49 @@ class Solver {
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            long x = hp.nextLong();
-            long y = hp.nextLong();
-            long l = hp.nextLong();
-            long r = hp.nextLong();
-            //long Z = (x | y);
-            int count = bitCount(Math.max(x, y));
-            long value = (1L << (count)) - 1L;
-            hp.println(value);
+            int n = hp.nextInt();
+            int k = hp.nextInt();
+            ArrayList<Integer> li = new ArrayList<>();
+            HashSet<Integer> hs = new HashSet<>();
+            for(int i = 0; i < n; i++)
+            {
+                int val = hp.nextInt();
+                li.add(val);
+                hs.add(val);
+            }
+            if(hs.size() > k)
+            {
+                hp.println(-1);
+                continue;
+            }
+            StringBuilder sb = new StringBuilder();
+            Integer[] arr= new Integer[hs.size()];
+            hs.toArray(arr);
+            if(hs.size() == k)
+            {
+                for(int i : hs)
+                    sb.append(i + " ");
+            }
+            else
+            {
+                for(int i = 1; i <= k; i++)
+                {
+                    sb.append(arr[i % hs.size()] + " ");
+                }
+            }
 
-            //hp.println(max);
+            hp.println(n * k);
+            for(int i = 0; i < n; i++)
+            {
 
+                    hp.print(sb.toString());
+
+            }
+            hp.println();
         }
         hp.flush();
     }
-    int bitCount(long  n)
-    {
-        int count = 0;
-        while(n > 0)
-        {
-            count++;
-            n >>= 1;
-        }
-        return count;
-    }
+
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
