@@ -6,106 +6,229 @@ import java.math.*;
 import java.util.*;
 
 
-class ChefAndBitwiseProduct
+class SortingVases
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
+
 //  cd competetive-programming/src/Codechef
-//  javac -d ../../classes ChefAndBitwiseProduct.java
-//  java ChefAndBitwiseProduct
-//  problem link : https://www.codechef.com/MAY20B/problems/CHANDF
+//  javac -d ../../classes SortingVases.java
+//  java SortingVases
+//  problem link : https://www.codechef.com/MAY20B/problems/SORTVS
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+    HashMap<Integer, HashSet<Integer>> uv;
+    @SuppressWarnings("unchecked")
     void solve() throws Exception
     {
+
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-              long x = hp.nextLong();
-              long y = hp.nextLong();
-              long l = hp.nextLong();
-              long r = hp.nextLong();
+            int n = hp.nextInt();
+            int k = hp.nextInt();
+            int[] arr = new int[n + 1];
+            int[] pos = new int[n + 1];
+            int[] start = new int[n + 1];
+            HashMap<Integer, ArrayList<Integer>> hm = new HashMap<>();
+            hm.put(0, new ArrayList<Integer>());
+            for(int i = 1;i <= n; i++){
+                hm.put(i, new ArrayList<Integer>());
+                pos[i] = hp.nextInt();
+            }
+            for(int i = 1;i <= n; i++)
+                arr[pos[i]] = i;
 
+            for(int i = 0; i < k; i++)
+            {
+                int x = hp.nextInt();
+                int y = hp.nextInt();
+                hm.get(x).add(y);
+                hm.get(y).add(x);
+            }
+            int[] ref = new int[n + 1];
+            for(int i = 1; i <= n; i++){
+                ref[i] = i;
+                start[i] = i;
+            }//hp.println("\n"+ Arrays.toString(pos));
+            uv = new HashMap<>();
 
-            bruteforce(x, y , l, r);
-            ///optimized(x, y, l, r);
-            hp.println();
+            for(int i = 0; i <= n; i++)
+            {
+                uv.put(i, new HashSet<Integer>());
+            }
+
+            for(int i = 1; i <= n; i++)
+            {
+                for(int j = 1; j <= n; j++)
+                {
+                    if(checkPath(i, j, hm))
+                    {
+                        uv.get(i).add(j);
+                        //uv.get(j).add(i);
+                    }
+                }
+                //hp.println(uv.get(i));
+            }
+
+            int min = Integer.MAX_VALUE;
+            ///*
+            for(int i = 0; i < (1 << n); i++)
+            {
+                String bits = getBits(i, n);
+                int[] prr = new int[n + 1];
+                for(int j = 1; j <= n; j++){
+                    prr[j] = arr[j];
+                    start[j] = j;
+                    ref[j] = j;
+                }
+                //hp.println(i);
+                //hp.println(Arrays.toString(start));
+                int count = process(bits, prr, start, ref);
+                //
+                count += countSwaps(start, arr, n);
+                //hp.println(count);
+                if(count < min)min  = count;
+                //hp.println();
+            } //*/
+
+            //int[] arr2 = {0, 2, 1, 3, 11, 5, 7, 6, 8, 9, 10, 4, 12};
+            //int[] req = {0, 8, 9, 6, 7, 5, 11, 1, 4, 3, 12, 2, 10};
+            //hp.println(countSwaps(arr2, req, 12));
+
+            hp.println(min );
 
         }
         hp.flush();
     }
 
-    void getBits(int[] arr, long n)
+    int process(String bits, int[] arr, int[] start, int[] pos)throws Exception
     {
-        int i = 40;
-        while(n > 0)
+        int n = arr.length - 1;
+
+        hp.println(Arrays.toString(arr));
+        hp.println(Arrays.toString(start));
+
+        hp.println(bits);
+        int count = 0;
+        for(int i = 1; i <= n; i++)
         {
-            arr[i--] = (int)(n & 1);
-            n >>= 1;
+            int x = i;
+            int y = pos[arr[i]];
+            //hp.println(x + " " + y);
+
+            if(bits.charAt(i) == '1')
+            {
+                if(uv.get(x).contains(y))
+                {
+                    swap(start, x, y);
+                    pos[start[x]] = x;
+                    pos[start[y]] = y;
+                    /*
+                    hp.println("needed     " + Arrays.toString(arr));
+                    hp.println("staet      " +Arrays.toString(start));
+                    hp.println("positions  " + Arrays.toString(pos));
+                    */
+                }
+                else
+                {
+                    swap(start, x, y);
+                    pos[start[x]] = x;
+                    pos[start[y]] = y;
+                    count++;
+                }
+            }
+
         }
+        hp.println(Arrays.toString(start));
+        return count;
     }
 
-    StringBuilder getSBits(long n)
+    String getBits(int n, int k)
     {
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < 20; i++)
+        for(int i = 0; i <= k; i++)
         {
             sb.insert(0, (n & 1));
             n >>= 1;
         }
-        return sb;
+        return sb.toString();
     }
 
-    void optimized(long x, long y, long l, long r)throws Exception
-    {
 
-    }
 
-    long val(long x, long y, long ans)
-    {
-        return (x & ans) * (y & ans);
-    }
 
-    void bruteforce(long x, long y, long l, long r)throws Exception
+    int countSwaps(int[] arr, int[] arr2, int n)
     {
-        long max = Integer.MIN_VALUE;
-        long ans = 0;
-        for(long i = l; i <= r; i++)
+        int swaps = 0;
+        boolean[] visited = new boolean[n + 1];
+
+        HashMap<Integer, Integer> hm = new HashMap<>();
+        for(int i = 1; i <= n; i++)
+            hm.put(arr[i], arr2[i]);
+        for(int i = 1; i <= n; i++)
         {
-            long sol = (x & i) * (y & i);
-            if(sol > max)
+            int j = arr[i], cycle = 0;
+            while(!visited[j])
             {
-                max = sol;
-                ans = i;
+                //hp.println("here");
+                visited[j] = true;
+                j = hm.get(j);
+                cycle++;
+            }
+            //hp.println(cycle);
+            if(cycle != 0)
+                swaps += (cycle - 1);
+        }
+        return swaps;
+    }
+
+    void swap(int[] arr, int i, int j)throws Exception
+    {
+        //hp.println("beforeswap  = " + Arrays.toString(arr));
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+        //hp.println("after swap  = " + Arrays.toString(arr));
+    }
+
+
+    boolean checkPath(int u, int v, HashMap<Integer, ArrayList<Integer>> hm)
+    {
+        Queue<Integer> queue = new LinkedList<>();
+        if(u == v)return true;
+        boolean[] visited = new boolean[(hm.size())];
+        visited[u] = true;
+        queue.offer(u);
+        while(!queue.isEmpty())
+        {
+            u = queue.poll();
+            ArrayList<Integer> li = hm.get(u);
+            for(int i = 0; i < li.size(); i++)
+            {
+                if(li.get(i) == v)return true;
+                if(!visited[li.get(i)])
+                {
+                    visited[li.get(i)] = true;
+                    queue.offer(li.get(i));
+                }
             }
         }
-
-        hp.println(x + " " + y + " " + l + " " + r + " " + ans);
-        //hp.println(ans + " " + (x & ans) + " " + (y & ans));
-        StringBuilder sb = getSBits((x | y));
-        sb.insert(0,"X | Y         = ");
-
-        sb.append("\nX =           = " + getSBits(x));
-        sb.append("\nY =           = " + getSBits(y));
-        sb.append("\nL             = " + getSBits(l));
-        sb.append("\nr             = " + getSBits(r));
-        sb.append("\nZ =           = " + getSBits(ans));
-        sb.append("\nX&Z           = " + getSBits(x & ans));
-        sb.append("\nY&Z           = " + getSBits(y & ans));
-
-        hp.println(sb.toString());
+        return false;
     }
+
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         //hp.initIO(System.in, System.out);
-        hp.initIO("../tests/ChefAndBitwiseProduct.txt", "../tests/ChefAndBitwiseProductOut.txt");
+        hp.initIO("../tests/SortingVases.txt", "../tests/SortingVasesOut.txt");
     }
+
 }
 
 class Pair implements Comparable<Pair>{
@@ -126,6 +249,7 @@ class Pair implements Comparable<Pair>{
         return p.y - y;
     }
 }
+
 
 class Helper {
     final long MOD;
@@ -379,121 +503,3 @@ class Helper {
         bw.flush();
     }
 }
-
-
-/* *observations*
-    see its like taking the Bitwise OR of both x  &  y will give
-    us the value that gives us the maximum value when we take individual Bitwise AND
-
-    now the problem is to find a number which has got set bits in the setbit positions of
-    Bitwise OR of x & y, in the range from L to R.
-
-    Iteratively find the solution find the value for Z in the limits of L and R
-    start Z from X|Y,
-    i.e. check if Z > R, Z /= 2
-         or if Z < L,    Z *=
-*/
-/*
-50
-6284 8314 0 9248
-7292 7611 0 2428
-5359 9270 0 7277
-6473 7636 0 2383
-7704 8731 0 8737
-1381 5502 0 4559
-3652 3932 0 8566
-9310 9681 0 359
-6232 7177 0 2888
-6033 9935 0 2112
-6663 7667 0 4496
-9800 9856 0 3620
-5111 9618 0 2387
-1618 7736 0 896
-4234 4709 0 7530
-1668 4430 0 8996
-8088 8166 0 6781
-2833 6314 0 9937
-6884 8090 0 9795
-6910 7915 0 7829
-5393 9020 0 6992
-1955 6321 0 9605
-5653 8194 0 4865
-6343 6764 0 1304
-1934 5732 0 2432
-5905 8778 0 9595
-840 3663 0 6313
-686 9079 0 8834
-3060 9897 0 3350
-1397 6009 0 4181
-6174 8333 0 7753
-8127 9247 0 8322
-3067 3666 0 3390
-3843 5195 0 1800
-5885 7009 0 2050
-7968 9315 0 6601
-6144 6885 0 1376
-4104 8826 0 7754
-2752 4258 0 4961
-5789 7070 0 4896
-8614 9125 0 5045
-2889 9252 0 2776
-5468 8936 0 812
-3576 8046 0 8008
-5217 7106 0 2877
-5453 6800 0 6378
-3628 4934 0 4829
-8452 9158 0 6859
-759 2652 0 3257
-9286 9312 0 2176
-8446 1163960
-2428 5125920
-5375 5777002
-2381 5638244
-8731 4679816
-4479 1598646
-3932 14359664
-351 31678
-2137 4393752
-2015 3376191
-4496 18415616
-1736 2675712
-2039 1447390
-634 337392
-4847 19937906
-6094 7389240
-6780 45130080
-7099 17887562
-8190 55691560
-7829 53132436
-5949 4465404
-8115 12357555
-4631 9258
-751 123380
-2030 3164024
-9563 10721002
-3919 3076920
-8834 5589252
-3349 2382100
-4181 355045
-6303 870534
-8322 1065220
-3387 7301670
-1800 1849344
-2049 2049
-6499 636768
-741 0
-4730 2601936
-4834 2997632
-4895 22693478
-935 393726
-2669 94788
-812 147936
-8008 27227200
-2851 92994
-6365 26239824
-4718 2600968
-966 251160
-2815 2012868
-1126 1225280
-
-*/
