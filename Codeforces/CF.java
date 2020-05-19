@@ -5,7 +5,6 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
-
 public class
 {
     public static void main(String[] args)throws Exception
@@ -14,29 +13,18 @@ public class
     }
 }
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
+//  javac -d ../../classes 
 //  java
-//  problem link : https://codeforces.com/contest/1342/problem/0
+//  problem link : https://codeforces.com/contest/1354/problem/0
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n = hp.nextInt();
-            int[] arr = hp.getIntArray(n);
-            int sum = 0;
-            int zeros = 0;
-            for(int i : arr){
-                sum += i;
-                if(i == 0)zeros++;
-            }
-            if(zeros + sum == 0)
-                hp.println(zeros + 1);
-            else
-                hp.println(zeros);
+
         }
         hp.flush();
     }
