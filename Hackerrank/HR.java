@@ -13,9 +13,10 @@ public class Interleavings
         new Solver().solve();
     }
 }
-//cd competetive-programming/src/Hackerrank
-////javac -d ../../classes MigratoryBirds.java
-//problem link : https://www.hackerrank.com/contests/smart-interviews/challenges/si-interleavings
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes MigratoryBirds.java
+//
+//problem link : https://www.hackerrank.com/contests/smart-interviews/challenges/si-distinct-elements-in-window
 
 class Solver {
     final Helper hp;

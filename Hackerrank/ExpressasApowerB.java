@@ -20,22 +20,31 @@ public class ExpressasApowerB
 
 class Solver {
     final Helper hp;
-    final int MAXN = 1000_006;
+    final int MAXN = (int)1e7 + 4;
+    final long MAX = (int)1e8 + 4;
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
+        HashSet<Integer> hs = new HashSet<>();
+
+        for(long i = 2; i * i <= MAX; i++)
+        {
+            //hp.println(i);
+            for(long j = i * i; j <= MAX; j *= i)
+            {
+                //hp.println(i + " " + j);
+                hs.add((int)j);
+            }
+        }
+
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            //int k = hp.nextInt();
-            boolean ans = check(n);
-            hp.println(ans);
+            String ans;
+            hp.println(ans = (hs.contains(n)) ? "Yes":"No");
         }
         hp.flush();
     }
-
-    boolean check(int[] arr, int )
-    getLog()
 
     Solver() {
         hp = new Helper(MOD, MAXN);

@@ -5,131 +5,94 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
-
-class NotARealWorldProblem
+public class Polygon
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-
-//  cd competetive-programming/src/Codechef
-//  javac -d ../../classes NotARealWorldProblem.java
-//  java NotARealWorldProblem
-//  problem link : https://www.codechef.com/MAY20B/problems/NRWP
-
-
+//  cd competetive-programming/src/Codeforces
+//  javac -d ../../classes Polygon.java
+//  java Polygon
+//  problem link : https://codeforces.com/contest/1360/problem/E
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
+    void solve() throws Exception
+    {
+        for(int tc = hp.nextInt(); tc > 0; tc--)
+        {
+            int n = hp.nextInt();
+            char[][] arr = new char[n][n];
+            for(int i = 0; i < n; i++)
+            {
+                arr[i] = hp.next().toCharArray();
+            }
+            if(check(arr, n))hp.println("YES");
+            else hp.println("NO");
+        }
+        hp.flush();
+    }
+
+    boolean check(char[][] arr, int n)
+    {
+        boolean ans = true;
+        for(int i = 0; i < n; i++)
+        {
+            for(int j = 0; j < n; j++)
+            {
+                if(arr[i][j] == '1')
+                {
+                    if(!(checkVertical(arr, i, j, n)))
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    boolean checkVertical(char[][] arr, int i, int j, int n)
+    {
+        if(i == n - 1 || j == n - 1)return true;
+
+        if(arr[i + 1][j] == '1' || arr[i][j + 1] == '1')return true;
+        return false;
+    }
+    /*
+    boolean checkHorizontal(char[][] arr, int i, int j, int n)
+    {
+        if(i == n - 1 || j == n - 1)return true;
+
+        if(arr[i + 1] == '1' || arr[j ] )
+    }
+    */
+
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
+}
 
-    void solve() throws Exception
+class Pair implements Comparable<Pair>{
+    int x;
+    int y;//long z;
+
+    public Pair(int x, int y)
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
-        {
-            int h = hp.nextInt();
-            int w = hp.nextInt();
-            int n = hp.nextInt();
-            int[][] arr = new int[h + 1][w + 1];
-            for(int i = 1; i <= h; i++)
-            {
-                for(int j = 1; j <= w; j++)
-                {
-                    arr[i][j] = hp.nextInt();
-                }
-            }
-
-            int[] x = new int[n];
-            int[] y = new int[n];
-            int[] p = new int[n];
-            for(int i = 0; i < n; i++)
-            {
-                x[i] = hp.nextInt();
-                y[i] = hp.nextInt();
-                p[i] = hp.nextInt();
-            }
-            Long max = Long.MIN_VALUE;
-            int max_at = -1;
-
-            int[] bits = new int[n];
-            for(int itr = 0; itr < (1 << n); itr++)
-            {
-                long instance = getValue(arr, x, y, p, itr);
-                if(instance > max)
-                {
-                    max = instance;
-                    max_at = itr;
-                }
-            }
-
-
-            hp.println(max);
-            int ans[] = new int[n];
-            getBits(max_at, ans);
-            for(int i : ans)hp.print(i + " ");
-        }
-        hp.flush();
+        this.x = x;
+        this.y = y;
+        //this.z = z;
     }
-
-    long getValue(int[][] arr, int[] x, int[] y, int[] p, int curr)throws Exception
+    @Override
+    public int compareTo(Pair p)
     {
-        int[] bits = new int[x.length];
-        getBits(curr, bits);
-        long left = getLeftValue(p, bits, x, y, arr);
-        long right = getRightValue(p, bits);
-        return (left + right);
+        if(p.y == y)
+        return x - p.x;
+        return p.y - y;
     }
-
-    long getLeftValue(int[] p, int[] bits, int[] x, int[] y, int[][] arr)throws Exception
-    {
-        long sum = 0;
-        int n = p.length;
-        //hp.println(Arrays.toString(p) + "\n" +
-        //            Arrays.toString(x) + "\n" + Arrays.toString(y));
-        for(int i = 0; i < n; i++)
-        {
-            int pv = (p[i] * bits[i]);
-            int h = arr[x[i]][y[i]];
-            sum += (pv * h);
-            //hp.println(pv + " " + h);
-        }
-        //hp.print(sum + " ");
-        return sum;
-    }
-
-    long getRightValue(int[] p, int[] bits)throws Exception
-    {
-        int n = p.length;
-        long sum = 0;
-        for(int i = 0; i < n - 1; i++)
-        {
-            int p1 = p[i] * bits[i];
-            int p2 = p[i + 1]  * bits[i + 1];
-            sum += (p1 * p2);
-        }
-        //hp.println(sum + " ");
-        return sum;
-    }
-
-    void getBits(int n, int[] arr)
-    {
-        int i = 0;
-        while(n > 0)
-        {
-            arr[i++] = (n & 1);
-            n >>= 1;
-        }
-        for(i = 0; i < arr.length; i++)
-            if(arr[i] == 0)arr[i] = -1;
-    }
-
 }
 
 class Helper {

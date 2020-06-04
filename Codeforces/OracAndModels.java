@@ -16,6 +16,7 @@ public class OracAndModels
 //  cd competetive-programming/src/Codeforces
 //  javac -d ../../classes OracAndModels.java
 //  java OracAndModels
+//  problem link : https://codeforces.com/problemset/problem/1350/B
 
 class Solver {
     final Helper hp;
@@ -26,17 +27,26 @@ class Solver {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            int k = hp.nextInt();
-            int first = n;
-            for(int i = 2; i * i <= n; i++)
+            int[] arr = new int[n + 1];
+            for(int i = 1; i <= n; i++)
+                arr[i] = hp.nextInt();
+            int dp[] = new int[n + 1];
+            for(int i = 1; i <= n; i++)dp[i] = 1;
+            for(int i = 1; i <= n; i++)
             {
-                if(n % i == 0)
+                for(int j = 2 * i; j <= n; j += i)
                 {
-                    first = i;
-                    break;
+                    if(arr[j] > arr[i])
+                    {
+                        dp[j] = Math.max(dp[i] + 1, dp[j]);
+                    }
                 }
+
             }
-            int ans = n + first + 2 * (k - 1);
+            int ans = 0;
+            for(int i = 1; i <= n; i++)
+                ans = Math.max(ans, dp[i]);
+
             hp.println(ans);
         }
         hp.flush();

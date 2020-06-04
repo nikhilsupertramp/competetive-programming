@@ -36,34 +36,33 @@ class Solver {
 
     String process(int[] arr, int n)throws Exception
     {
-        int l = 0, r = n - 1;
-        int a = 0, b = 0, curra = 0, currb  = 0, moves = 0;
-
-        while(r >= l)
+        int[] count = new int[n + 1];
+        for(int i : arr)
         {
-            if(moves % 2 == 0){
-                moves++;
-                while(curra <= currb && r >= l)
-                    curra += arr[l++];
-                a += curra;
-                //hp.println(l + " is l value . alice ate " + a +  " and in this move he ate " + curra);
-                currb = 0;
-            }
-            else
-            {
-                moves++;
-                while(currb <= curra && r >= l)
-                {
-                    currb += arr[r--];
-                }
-                b += currb;
+            count[i]++;
+        }
+        //hp.println(Arrays.toString(count));
+        int[] prefix_sums = new int[n + 1];
 
-                //hp.println(r + " is r value bob ate " + b +  " and in this move he ate " + currb);
-                curra = 0;
+        int ans = 0;
+        for(int i = 0; i < n; i++)
+        {
+            prefix_sums[i + 1] = prefix_sums[i] + arr[i];
+        }
+        for(int i = 1; i < n; i++)
+        {
+            for(int j = i + 1; j <= n; j++)
+            {
+                int sum = prefix_sums[j] - prefix_sums[i - 1];
+                if(sum <= n && count[sum] > 0)
+                {
+                    ans += count[sum];
+                    count[sum] = 0;
+                }
             }
         }
-        String ans = moves + " " + a + " " + b;
-        return ans;
+        //String ans = "0";
+        return ans +"";
     }
 
 

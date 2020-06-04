@@ -15,29 +15,30 @@ public class ServiceLane
 }
 //cd competetive-programming/src/Hackerrank
 ////javac -d ../../classes ServiceLane.java
+//  java ServiceLane
 //problem link : https://www.hackerrank.com/challenges/service-lane/problem
 
 class Solver {
 
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            int c = hp.nextInt();
-            int m = hp.nextInt();
-            int num = n / c;
-            int count = num;
-            int choclates = num;
-            int wrappers = num;
-            while(wrappers >= m)
+            int k = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
+            while(k -- > 0)
             {
-                //hp.print(num + " ");
-                choclates = wrappers / m;
-                count += choclates;
-                wrappers = (wrappers % m) + choclates;
+                int l = hp.nextInt();
+                int r = hp.nextInt();
+                int min = MAXN;
+                for(int i= l; i <= r; i++)
+                {
+                    if(arr[i] < min)
+                        min = arr[i];
+                }
+                hp.println(min);
             }
-            hp.println(count);
         }
         hp.flush();
     }
