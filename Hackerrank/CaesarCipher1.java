@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class MaximumAbsolutePermutation
+public class CaesarCipher1
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,47 +14,40 @@ public class MaximumAbsolutePermutation
     }
 }
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes MaximumAbsolutePermutation.java
-//  java MaximumAbsolutePermutation
-//  https://www.hackerrank.com/challenges/absolute-permutation/problem
+//  javac -d ../../classes CaesarCipher1.java
+//  java CaesarCipher1
+//  https://www.hackerrank.com/challenges/caesar-cipher-1/problem
 
 class Solver {
 
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
+            char[] s = hp.next().toCharArray();
             int k = hp.nextInt();
-            int[] ans = new int[n + 1];
-            if(possible(n, k, ans))
-                for(int i = 1; i <= n; i++)hp.print(ans[i] + " " );
-            else
-                hp.print(-1);
-            hp.println();
+            for(int i = 0; i < n; i++)
+            {
+                if((s[i] <= 'Z' && s[i] >= 'A'))
+                    s[i] = (char)(((s[i] - 'A' + k) % 26) + 'A');
+                if(s[i] >= 'a' && s[i] <= 'z')
+                    s[i] = (char)(((s[i] - 'a' + k) % 26) + 'a');
+            }
+            for(char ch : s)
+                hp.print(ch);
         }
         hp.flush();
     }
 
-    boolean possible(int n, int k, int[] arr)
+    void printArr(int[] arr)throws Exception
     {
-        boolean[] visit = new boolean[n + 1];
-        for(int i = 1; i <= n; i++)
-        {
-            if( i - k > 0 && !visit[i - k])
-            {
-                arr[i] = i - k;
-                visit[i - k] = true;
-            }
-            else
-            {
-                if(i + k > n)return false;
-                arr[i] = i + k ;
-                visit[i + k] = true;
-            }
-        }
-        return true;
+        for(int i : arr)
+            hp.print(i + " ");
+        hp.println();
     }
+
+
 
     final Helper hp;
     final int MAXN = 1000_006;

@@ -4,61 +4,76 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
-import java.util.ArrayList;
 
-public class MaximumAbsolutePermutation
+public class JohhnyAndAncientComputer
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes MaximumAbsolutePermutation.java
-//  java MaximumAbsolutePermutation
-//  https://www.hackerrank.com/challenges/absolute-permutation/problem
+//  cd competetive-programming/src/Codeforces
+//  javac -d ../../classes JohhnyAndAncientComputer.java
+//  java JohhnyAndAncientComputer
+//  problem link : https://codeforces.com/contest/1362/problem/A
 
 class Solver {
-
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n = hp.nextInt();
-            int k = hp.nextInt();
-            int[] ans = new int[n + 1];
-            if(possible(n, k, ans))
-                for(int i = 1; i <= n; i++)hp.print(ans[i] + " " );
+            long a = hp.nextLong();
+            long b = hp.nextLong();
+            //int b = hp.nextInt();
+            int ans = -1;
+            if(a > b)
+                ans = getSol(a, b);
             else
-                hp.print(-1);
-            hp.println();
+                ans = getSol(b, a);
+            hp.println(ans);
         }
         hp.flush();
     }
 
-    boolean possible(int n, int k, int[] arr)
+    int getSol(long a, long b)
     {
-        boolean[] visit = new boolean[n + 1];
-        for(int i = 1; i <= n; i++)
+        if(a % b != 0)return -1;
+        long div = a / b;
+        if(!process(div))
         {
-            if( i - k > 0 && !visit[i - k])
-            {
-                arr[i] = i - k;
-                visit[i - k] = true;
-            }
-            else
-            {
-                if(i + k > n)return false;
-                arr[i] = i + k ;
-                visit[i + k] = true;
-            }
+            return -1;
         }
-        return true;
+        int count = 0;
+        while(div > 0)
+        {
+            if(div % 2 == 0)count++;
+            div /=2;
+        }
+        return ((count % 3) == 0) ? count / 3 : (count / 3) + 1;
     }
 
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+    int getAns(long n)
+    {
+        long temp = 1;
+        int i = 0;
+        for(i = 0; i < 64; i++)
+        {
+            if((temp << 1) == n)
+                break;
+        }
+        int ans = (i % 3) + (i / 3);
+        return ans;
+
+    }
+
+    boolean process(long x)
+    {
+        return x!=0 && ((x&(x-1)) == 0);
+    }
+
 
     Solver() {
         hp = new Helper(MOD, MAXN);
@@ -81,7 +96,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return y - p.y;
+        return p.y - y;
     }
 }
 

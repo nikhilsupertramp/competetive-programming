@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class MaximumAbsolutePermutation
+public class StrongPassword
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,47 +14,46 @@ public class MaximumAbsolutePermutation
     }
 }
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes MaximumAbsolutePermutation.java
-//  java MaximumAbsolutePermutation
-//  https://www.hackerrank.com/challenges/absolute-permutation/problem
+//  javac -d ../../classes StrongPassword.java
+//  java StrongPassword
+//  https://www.hackerrank.com/challenges/strong-password/problem
 
 class Solver {
 
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            int k = hp.nextInt();
-            int[] ans = new int[n + 1];
-            if(possible(n, k, ans))
-                for(int i = 1; i <= n; i++)hp.print(ans[i] + " " );
-            else
-                hp.print(-1);
-            hp.println();
+            String s = hp.next();
+            boolean uc = false, lc = false, num = false, sc = false;
+            char[] arr = ("!@#$%^&*()-+").toCharArray();
+            HashSet<Character> hs = new HashSet<>();
+            for(char c : arr)hs.add(c);
+            for(int i = 0; i < n; i++)
+            {
+                if(s.charAt(i) >= '0' && s.charAt(i) <= '9')num = true;
+                if(s.charAt(i) >= 'a' && s.charAt(i) <= 'z')lc = true;
+                if(s.charAt(i) >= 'A' && s.charAt(i) <= 'Z')uc = true;
+                if(hs.contains(s.charAt(i)))sc = true;
+            }
+            int count = (num ? 1 : 0) + (lc ? 1 : 0) + (uc ? 1 : 0) + (sc ? 1 : 0);
+            int ans = 4 - count;
+            if(s.length() + ans < 6)ans = ans + 6 - (s.length() + ans);
+            hp.println(ans);
+
         }
         hp.flush();
     }
 
-    boolean possible(int n, int k, int[] arr)
+    void printArr(int[] arr)throws Exception
     {
-        boolean[] visit = new boolean[n + 1];
-        for(int i = 1; i <= n; i++)
-        {
-            if( i - k > 0 && !visit[i - k])
-            {
-                arr[i] = i - k;
-                visit[i - k] = true;
-            }
-            else
-            {
-                if(i + k > n)return false;
-                arr[i] = i + k ;
-                visit[i + k] = true;
-            }
-        }
-        return true;
+        for(int i : arr)
+            hp.print(i + " ");
+        hp.println();
     }
+
+
 
     final Helper hp;
     final int MAXN = 1000_006;

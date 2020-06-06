@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class MaximumAbsolutePermutation
+public class BigSorting
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,47 +14,35 @@ public class MaximumAbsolutePermutation
     }
 }
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes MaximumAbsolutePermutation.java
-//  java MaximumAbsolutePermutation
-//  https://www.hackerrank.com/challenges/absolute-permutation/problem
+//  javac -d ../../classes BigSorting.java
+//  java BigSorting
+//  https://www.hackerrank.com/challenges/big-sorting/problem
 
 class Solver {
 
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            int k = hp.nextInt();
-            int[] ans = new int[n + 1];
-            if(possible(n, k, ans))
-                for(int i = 1; i <= n; i++)hp.print(ans[i] + " " );
-            else
-                hp.print(-1);
-            hp.println();
+            String[] arr = new String[n];
+            for(int i = 0; i < n; i++)
+                arr[i] = hp.next();
+            Arrays.sort(arr, new Comparator<String>(){
+                public int compare(String s1, String s2){
+                    if(s1.length() == s2.length())
+                        return s1.compareTo(s2);
+                    else
+                        return s1.length() - s2.length();
+                    }
+            });
+            for(int i = 0; i < n; i++)
+                hp.println(arr[i]);
         }
         hp.flush();
     }
 
-    boolean possible(int n, int k, int[] arr)
-    {
-        boolean[] visit = new boolean[n + 1];
-        for(int i = 1; i <= n; i++)
-        {
-            if( i - k > 0 && !visit[i - k])
-            {
-                arr[i] = i - k;
-                visit[i - k] = true;
-            }
-            else
-            {
-                if(i + k > n)return false;
-                arr[i] = i + k ;
-                visit[i + k] = true;
-            }
-        }
-        return true;
-    }
+
 
     final Helper hp;
     final int MAXN = 1000_006;

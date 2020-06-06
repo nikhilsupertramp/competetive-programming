@@ -12,17 +12,8 @@ class TestGen{
         wr.write(tcs + "\n");
         for(int tc = 0; tc < tcs; tc++)
         {
-            int n = rand(1, 100);
+            int n = rand(100000000, 1000000000);
             wr.write(n + "\n");
-            int sum = 0;
-            for(int i = 0; i < n; i++)
-            {
-                int k = rand(1, 20);
-                sum += k;
-                wr.write(k + " ");
-            }
-            wr.write("\n" + rand((sum / 2), (3 * sum / 2)) + "\n");
-            //wr.write(x + " " + y + " " + l + " "+ r + "\n");
         }
         wr.close();
     }

@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class MaximumAbsolutePermutation
+public class AlmostSorted
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,47 +14,36 @@ public class MaximumAbsolutePermutation
     }
 }
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes MaximumAbsolutePermutation.java
-//  java MaximumAbsolutePermutation
-//  https://www.hackerrank.com/challenges/absolute-permutation/problem
+//  javac -d ../../classes AlmostSorted.java
+//  java AlmostSorted
+//  https://www.hackerrank.com/challenges/almost-sorted/problem
 
 class Solver {
 
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            int k = hp.nextInt();
-            int[] ans = new int[n + 1];
-            if(possible(n, k, ans))
-                for(int i = 1; i <= n; i++)hp.print(ans[i] + " " );
-            else
-                hp.print(-1);
-            hp.println();
+            int[] arr = hp.getIntArray(n);
+            //int ans = new int[2];
+            //StringBuilder sb = new StringBuilder();
+            hp.println(process(arr, n));
         }
         hp.flush();
     }
 
-    boolean possible(int n, int k, int[] arr)
+    StringBuilder process(int[] arr, int n)
     {
-        boolean[] visit = new boolean[n + 1];
-        for(int i = 1; i <= n; i++)
+        StringBuilder ans = new StringBuilder();
+        int p1 = -1, p2 = -1, v1 = -1, v2 = -1;
+
+        for(int i = 1; i < n - 1; i++)
         {
-            if( i - k > 0 && !visit[i - k])
-            {
-                arr[i] = i - k;
-                visit[i - k] = true;
-            }
-            else
-            {
-                if(i + k > n)return false;
-                arr[i] = i + k ;
-                visit[i + k] = true;
-            }
+            if(arr[i] < )
         }
-        return true;
     }
+
 
     final Helper hp;
     final int MAXN = 1000_006;

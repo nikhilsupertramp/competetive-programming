@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class MaximumAbsolutePermutation
+public class WeightedUniformStrings
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,47 +14,53 @@ public class MaximumAbsolutePermutation
     }
 }
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes MaximumAbsolutePermutation.java
-//  java MaximumAbsolutePermutation
-//  https://www.hackerrank.com/challenges/absolute-permutation/problem
+//  javac -d ../../classes WeightedUniformStrings.java
+//  java WeightedUniformStrings
+//  https://www.hackerrank.com/challenges/weighted-uniform-string/problem
 
 class Solver {
 
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n = hp.nextInt();
-            int k = hp.nextInt();
-            int[] ans = new int[n + 1];
-            if(possible(n, k, ans))
-                for(int i = 1; i <= n; i++)hp.print(ans[i] + " " );
-            else
-                hp.print(-1);
-            hp.println();
+            char[] str = hp.nextLine().toCharArray();
+            int n = str.length;
+            int prefix[] = new int[n];
+            prefix[0] = str[0] - 'a' + 1;
+            for(int i = 1; i < n; i++)
+            {
+                if(str[i] == str[i - 1])
+                    prefix[i] = prefix[i - 1] + (str[i] - 'a' + 1);
+                else
+                    prefix[i] = (str[i] - 'a' + 1);
+            }
+            //hp.println(Arrays.toString(prefix));
+            HashSet<Integer> hs = new HashSet<>();
+            for(int i : prefix)hs.add(i);
+
+            int q = hp.nextInt();
+            for(int i = 0; i < q; i++)
+            {
+                int query = hp.nextInt();
+                if(hs.contains(query))
+                    hp.println("Yes");
+                else
+                    hp.println("No");
+
+            }
         }
         hp.flush();
     }
 
-    boolean possible(int n, int k, int[] arr)
+    void printArr(int[] arr)throws Exception
     {
-        boolean[] visit = new boolean[n + 1];
-        for(int i = 1; i <= n; i++)
-        {
-            if( i - k > 0 && !visit[i - k])
-            {
-                arr[i] = i - k;
-                visit[i - k] = true;
-            }
-            else
-            {
-                if(i + k > n)return false;
-                arr[i] = i + k ;
-                visit[i + k] = true;
-            }
-        }
-        return true;
+        for(int i : arr)
+            hp.print(i + " ");
+        hp.println();
     }
+
+
 
     final Helper hp;
     final int MAXN = 1000_006;

@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class MaximumAbsolutePermutation
+public class MarsExplorationProblem
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,47 +14,41 @@ public class MaximumAbsolutePermutation
     }
 }
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes MaximumAbsolutePermutation.java
-//  java MaximumAbsolutePermutation
-//  https://www.hackerrank.com/challenges/absolute-permutation/problem
+//  javac -d ../../classes MarsExplorationProblem.java
+//  java MarsExplorationProblem
+//  https://www.hackerrank.com/challenges/mars-exploration/problem
 
 class Solver {
 
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n = hp.nextInt();
-            int k = hp.nextInt();
-            int[] ans = new int[n + 1];
-            if(possible(n, k, ans))
-                for(int i = 1; i <= n; i++)hp.print(ans[i] + " " );
-            else
-                hp.print(-1);
-            hp.println();
+            //int n = hp.nextInt();
+            char[] s = hp.next().toCharArray();
+            char[] ref = new char[s.length];
+            for(int i = 0; i < s.length; i+= 3)
+            {
+                ref[i] = 'S';
+                ref[i + 1] = 'O';
+                ref[i + 2] = 'S';
+            }
+            int count = 0;
+            for(int i = 0; i < s.length; i++)
+                if(ref[i] != s[i])count++;
+            hp.println(count);
         }
         hp.flush();
     }
 
-    boolean possible(int n, int k, int[] arr)
+    void printArr(int[] arr)throws Exception
     {
-        boolean[] visit = new boolean[n + 1];
-        for(int i = 1; i <= n; i++)
-        {
-            if( i - k > 0 && !visit[i - k])
-            {
-                arr[i] = i - k;
-                visit[i - k] = true;
-            }
-            else
-            {
-                if(i + k > n)return false;
-                arr[i] = i + k ;
-                visit[i + k] = true;
-            }
-        }
-        return true;
+        for(int i : arr)
+            hp.print(i + " ");
+        hp.println();
     }
+
+
 
     final Helper hp;
     final int MAXN = 1000_006;

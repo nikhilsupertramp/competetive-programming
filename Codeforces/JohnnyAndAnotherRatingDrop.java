@@ -4,65 +4,71 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
-import java.util.ArrayList;
 
-public class MaximumAbsolutePermutation
+public class  JohnnyAndAnotherRatingDrop
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes MaximumAbsolutePermutation.java
-//  java MaximumAbsolutePermutation
-//  https://www.hackerrank.com/challenges/absolute-permutation/problem
+//  cd competetive-programming/src/Codeforces
+//  javac -d ../../classes JohnnyAndAnotherRatingDrop.java
+//  java  JohnnyAndAnotherRatingDrop
+//  problem link : https://codeforces.com/contest/1362/problem/C
 
 class Solver {
-
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n = hp.nextInt();
-            int k = hp.nextInt();
-            int[] ans = new int[n + 1];
-            if(possible(n, k, ans))
-                for(int i = 1; i <= n; i++)hp.print(ans[i] + " " );
-            else
-                hp.print(-1);
-            hp.println();
+            long n = hp.nextLong();
+            long[] arr = new long[64];
+            long sum = 0;
+            for(int i = 1; i < 64; i++)
+            {
+                long numerator = (n - ((1L << (i - 1)) - 1));
+                long denominator = (1L << i);
+                if(numerator > 0){
+                //arr[i] = (long)Math.ceil((double)numerator / denominator) ;//: 0;
+                long div = numerator / denominator;
+
+                arr[i] = (numerator % denominator == 0) ? div : (div + 1);
+                //arr[i] =  / (1 << i));
+                //hp.println(i + " " + numerator + "  "+ denominator + " " + arr[i]);
+                }
+
+                sum += arr[i] * (long)i;
+
+            }
+            //long bruteforceSum = bruteforce(n);
+            //if(bruteforceSum !=  sum)hp.print("here at i = " + n);
+            hp.println(sum);
+
+        //    hp.println(Arrays.toString(arr));
         }
+
         hp.flush();
     }
 
-    boolean possible(int n, int k, int[] arr)
+    long bruteforce(long n)
     {
-        boolean[] visit = new boolean[n + 1];
-        for(int i = 1; i <= n; i++)
+        long sum = 0;
+        for(long i = 0; i < n; i++)
         {
-            if( i - k > 0 && !visit[i - k])
-            {
-                arr[i] = i - k;
-                visit[i - k] = true;
-            }
-            else
-            {
-                if(i + k > n)return false;
-                arr[i] = i + k ;
-                visit[i + k] = true;
-            }
+            sum += Long.bitCount(i ^ (i + 1));
         }
-        return true;
+        return sum;
     }
 
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
+        //hp.initIO("../tests/SampleProblemTestInputs.txt", "../tests/SampleProblemTestOutputs.txt");
     }
 }
 
@@ -81,7 +87,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return y - p.y;
+        return p.y - y;
     }
 }
 
