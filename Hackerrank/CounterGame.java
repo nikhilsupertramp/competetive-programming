@@ -4,31 +4,74 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-public class
+public class CounterGame
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/contest/1364/problem/0
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes CounterGame.java
+//  java CounterGame
+//  https://www.hackerrank.com/challenges/counter-game/problem
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
+            long n = hp.nextLong();
+            int count = 0;
+            while(!isPowerof2(n))
+            {
+                n =  n & ((1L << (msb(n))) - 1);
+                count++;
+            }
+            if(isPowerof2(n))
+                count += (Long.toBinaryString(n).length());
+            if(count % 2 == 0)hp.println("Louise");
+            else hp.println("Richard");
+
 
         }
         hp.flush();
     }
+
+    int msb(long n)
+    {
+        return (Long.toBinaryString(n)).length() - 1;
+    }
+
+    boolean isPowerof2(long x)
+    {
+        return (x != 0 && (x & (x - 1)) == 0);
+    }
+
+    int[] getBits(long n)
+    {
+        int[] arr=  new int[64];
+        for(int i = 63; i >= 0; i--)
+        {
+            arr[i] = (int)(n & 1L);
+            n >>= 1;
+        }
+        return arr;
+    }
+
+    void printArr(int[] arr)throws Exception
+    {
+        for(int i : arr)
+            hp.print(i + " ");
+        hp.println();
+    }
+
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);
@@ -51,7 +94,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 

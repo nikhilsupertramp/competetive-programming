@@ -22,33 +22,31 @@ class Solver {
 
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            char[] str = hp.nextLine().toCharArray();
-            int n = str.length;
-            int prefix[] = new int[n];
-            prefix[0] = str[0] - 'a' + 1;
-            for(int i = 1; i < n; i++)
-            {
-                if(str[i] == str[i - 1])
-                    prefix[i] = prefix[i - 1] + (str[i] - 'a' + 1);
-                else
-                    prefix[i] = (str[i] - 'a' + 1);
-            }
-            //hp.println(Arrays.toString(prefix));
-            HashSet<Integer> hs = new HashSet<>();
-            for(int i : prefix)hs.add(i);
+            //char[] str = hp.nextLine().toCharArray();
+            //int n = str.length;
+            String s = hp.next();
+            boolean valid = false;
+    		long firstx = -1;
+    		// Try each possible starting number
+    		for (int i=1; i<=s.length()/2; ++i) {
+    			long x = Long.parseLong(s.substring(0,i));
+    			firstx = x;
+    		   // Build up sequence starting with this number
+    			String test = Long.toString(x);
+    			while (test.length() < s.length()) {
+    				test += Long.toString(++x);
+    			}
+    			// Compare to original
+    			if (test.equals(s)) {
+    				valid = true;
+    				break;
+    			}
+    		}
+            String ans = (valid) ? ("YES " + firstx) : "NO";
+            hp.println(ans);
 
-            int q = hp.nextInt();
-            for(int i = 0; i < q; i++)
-            {
-                int query = hp.nextInt();
-                if(hs.contains(query))
-                    hp.println("Yes");
-                else
-                    hp.println("No");
-
-            }
         }
         hp.flush();
     }

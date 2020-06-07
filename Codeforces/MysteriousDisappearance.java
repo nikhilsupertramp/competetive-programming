@@ -5,17 +5,18 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
-public class
+public class MysteriousDisappearance
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
+
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/contest/1364/problem/0
+//  javac -d ../../classes MysteriousDisappearance.java
+//  java MysteriousDisappearance
+//  problem link : https://codeforces.com/contest/1364/problem/C
 
 class Solver {
     final Helper hp;
@@ -25,9 +26,73 @@ class Solver {
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
+            int n =  hp.nextInt();
+            int[] a = hp.getIntArray(n);
+            int[] b = hp.getIntArray(n);
+            int[] loca = new int[n + 1];
+            int[] locb = new int[n + 1];
+
+            for(int i = 0; i < n; i++)
+            {
+                loca[a[i]] = i;
+                locb[b[i]] = i;
+            }
+
+            int[] distances = new int[n + 1];
+            for(int i = 1; i <= n; i++)
+            {
+                int distance = loca[i] - locb[i];
+                if(distance < 0)distance += n;
+                distances[distance]++;
+            }
+            int max = 0;
+            for(int distance : distances)
+                max = Math.max(distance, max);
+            hp.println(max);
 
         }
         hp.flush();
+    }
+
+    /*
+    int bruteforce(int[] a, int[] b)throws Exception
+    {
+        int max = 0;
+        int n = a.length;
+        for(int i = 0; i < n; i++)
+        {
+            hp.println(Arrays.toString(a));
+            hp.println(Arrays.toString(b));
+            hp.println();
+            int num = checkOccurances(a, b);
+            max = Math.max(num, max);
+            rightrotate(b);
+        }
+        return max;
+
+    }
+    */
+
+    int checkOccurances(int[] a, int[] b)
+    {
+        int count =0;
+        int n = a.length;
+        for(int i = 0; i < n; i++)
+            if(a[i] == b[i])count++;
+        return count;
+    }
+    void rightrotate(int[] arr)
+    {
+        int j, last;
+            //Stores the last element of array
+        last = arr[arr.length-1];
+
+        for(j = arr.length-1; j > 0; j--){
+                //Shift element of array by one
+            arr[j] = arr[j-1];
+        }
+        //Last element of array will be added to the start of array.
+        arr[0] = last;
     }
 
     Solver() {

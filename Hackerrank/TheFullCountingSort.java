@@ -4,31 +4,56 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-public class
+public class TheFullCountingSort
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/contest/1364/problem/0
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes TheFullCountingSort.java
+//  java TheFullCountingSort
+//  https://www.hackerrank.com/challenges/countingsort4/problem
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-
+            int n = hp.nextInt();
+            ArrayList<ArrayList<String>> li = new ArrayList<>();
+            for(int i = 0; i < 100; i++)
+                li.add(new ArrayList<String>());
+            for(int i = 0; i < n; i++)
+            {
+                int k = hp.nextInt();
+                String s = hp.next();
+                if(i < n /2)li.get(k).add("-");
+                else    li.get(k).add(s);
+            }
+            for(ArrayList<String> list : li)
+            {
+                for(String str : list)
+                    hp.print(str + " " );
+            }
         }
         hp.flush();
     }
+
+    void printArr(int[] arr)throws Exception
+    {
+        for(int i : arr)
+            hp.print(i + " ");
+        hp.println();
+    }
+
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);
@@ -51,7 +76,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 

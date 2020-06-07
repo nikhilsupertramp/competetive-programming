@@ -5,16 +5,17 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
-public class
+public class MatrixGames
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
+
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
+//  javac -d ../../classes MatrixGames.java
+//  java MatrixGames
 //  problem link : https://codeforces.com/contest/1364/problem/0
 
 class Solver {
@@ -23,11 +24,98 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
+            int n = hp.nextInt();
+            int m = hp.nextInt();
+            int[][] arr = new int[n][m];
+            for(int i = 0; i < n; i++)
+                for(int j = 0; j < m; j++)
+                    arr[i][j] = hp.nextInt();
+            int count = 0;
+            for(int i = 0; i < n; i++)
+            {
+                for(int j = 0; j < m; j++)
+                {
+                    if(bothcheck(arr, i, j, n, m))
+                    {
+                        arr[i][j] = 1;
+                        count++;
+                        
+                    }
 
+                }
+            }
+            /*
+            for(int i = 0; i < n; i++)
+            {
+                for(int j = 0; j < m; j++)
+                {
+                    if(onecheck(arr, i, j, n, m))
+                    {
+                        arr[i][j] = 1;
+                        count++;
+                        for(int k =  0; k < n; k++)
+                            hp.println(Arrays.toString(arr[k]));
+                    }
+
+                }
+            }*/
+
+            if(count % 2 == 0)
+                hp.println("Vivek");
+            else
+                hp.println("Ashish");
         }
         hp.flush();
+    }
+
+    boolean bothcheck(int[][] arr, int x, int y, int m, int n)
+    {
+        if(arr[x][y] == 1)return false;
+        boolean row = true, col = true;
+        for(int i = 0; i < m; i++)
+        {
+            if(arr[i][y] == 1)
+            {
+                col = false;
+                break;
+            }
+        }
+        for(int i = 0; i < n; i++)
+        {
+            if(arr[x][i] == 1)
+            {
+
+                    row = false;
+                    break;
+            }
+        }
+        return (row&col);
+    }
+
+    boolean onecheck(int[][] arr, int x, int y, int m, int n)
+    {
+        if(arr[x][y] == 1)return false;
+        boolean row = true, col = true;
+        for(int i = 0; i < m; i++)
+        {
+            if(arr[i][y] == 1)
+            {
+                col = false;
+                break;
+            }
+        }
+        for(int i = 0; i < n; i++)
+        {
+            if(arr[x][i] == 1)
+            {
+
+                    row = false;
+                    break;
+            }
+        }
+        return (row|col);
     }
 
     Solver() {

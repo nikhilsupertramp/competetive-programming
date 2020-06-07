@@ -4,31 +4,55 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-public class
+public class YetAnotherMinimax
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/contest/1364/problem/0
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes YetAnotherMinimax.java
+//  java YetAnotherMinimax
+//  https://www.hackerrank.com/challenges/yet-another-minimax-problem/problem
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-
+            int n = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
         }
         hp.flush();
     }
+
+    int[] getBits(long n)
+    {
+        int[] arr=  new int[32];
+        for(int i = 31; i >= 0; i--)
+        {
+            arr[i] = (int)(n & 1);
+            n >>= 1;
+        }
+        return arr;
+    }
+
+    long xor(long n)
+    {
+        long rem = n % 8;
+        if(rem == 0 || rem == 1)return n;
+        if(rem == 2 || rem == 3)return 2;
+        if(rem == 4 || rem == 5)return n + 2;
+        return 0;
+    }
+
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);
@@ -51,7 +75,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 

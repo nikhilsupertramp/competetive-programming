@@ -5,7 +5,7 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
-public class
+public class TroubleSort
 {
     public static void main(String[] args)throws Exception
     {
@@ -13,8 +13,8 @@ public class
     }
 }
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
+//  javac -d ../../classes TroubleSort.java
+//  java TroubleSort
 //  problem link : https://codeforces.com/contest/1364/problem/0
 
 class Solver {
@@ -23,9 +23,13 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-
+            int n = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
+            int[] type = hp.getIntArray(n);
+            int[] dummy = new int[n];
+            
         }
         hp.flush();
     }

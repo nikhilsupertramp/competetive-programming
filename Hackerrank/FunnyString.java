@@ -4,31 +4,58 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-public class
+public class FunnyString
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/contest/1364/problem/0
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes FunnyString.java
+//  java FunnyString
+//  https://www.hackerrank.com/challenges/funny-string/problem
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-
+            //char[] str = hp.nextLine().toCharArray();
+            //int n = str.length;
+            String s = hp.next();
+            String rev = (new StringBuilder(s).reverse()).toString();
+            //int[] diff = new int[s.length()];
+            boolean flag = true;
+            int n = s.length();
+            for(int i = 0; i < n - 1; i++){
+                if(Math.abs(s.charAt(i + 1) - s.charAt(i)) != Math.abs(rev.charAt(i + 1) - rev.charAt(i)))
+                {
+                    flag = false;
+                    break;
+                }
+            }
+            String ans = flag ? "Funny" : "Not Funny";
+            hp.println(ans);
         }
         hp.flush();
     }
+
+    void printArr(int[] arr)throws Exception
+    {
+        for(int i : arr)
+            hp.print(i + " ");
+        hp.println();
+    }
+
+
+
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);
@@ -51,7 +78,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 

@@ -4,31 +4,72 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-public class
+public class CountingSort2
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/contest/1364/problem/0
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes CountingSort2.java
+//  java CountingSort2
+//  https://www.hackerrank.com/challenges/countingsort2/problem
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
+            int n = hp.nextInt();
+            String[] arr = new String[n];
+            for(int i = 0; i < n; i++)
+                arr[i] = hp.next();
+            int[][] cnt = new int[n][26];
+            for(int i = 0; i < n; i++)
+            {
+                populate(arr, cnt, i);
+            }
+            int count = 0;
+            for(int i = 0; i < 26; i++)
+            {
+                boolean flag = true;
+                for(int j = 0; j < n; j++)
+                {
+                    if(cnt[j][i] == 0)
+                    {
+                        flag = false;
+                        break;
+                    }
+                }
+                if(flag)count++;
+            }
+            hp.println(count);
 
         }
         hp.flush();
     }
+    void populate(String[] arr, int[][] cnt, int index)
+    {
+        for(int i = 0; i < arr[index].length();i++)
+            cnt[index][arr[index].charAt(i) - 'a']++;
+    }
+
+    void printArr(int[] arr)throws Exception
+    {
+        for(int i : arr)
+            hp.print(i + " ");
+        hp.println();
+    }
+
+
+
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);
@@ -51,7 +92,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 
