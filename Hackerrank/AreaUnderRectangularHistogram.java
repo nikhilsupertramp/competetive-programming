@@ -4,19 +4,19 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-
-public class 
+public class AreaUnderRectangularHistogram
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/problemset/problem/1351/C
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes AreaUnderRectangularHistogram.java
+//  java AreaUnderRectangularHistogram
+// https://www.hackerrank.com/contests/smart-interviews/challenges/si-rectangular-area-under-histogram
 
 class Solver {
     final Helper hp;
@@ -24,69 +24,71 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
+        //int ;
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            //int n = hp.nextInt();
-            char[] arr = hp.next().toCharArray();
-            int n = arr.length;
-            String ans = process(arr, n);
+            int n = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
+            int ans = process(arr, n);
             hp.println(ans);
         }
         hp.flush();
     }
 
-    String process(char[] arr, int n)throws Exception
-    {
-        int x = 0, y = 0, ans = 0;
-        HashSet<String> hs = new HashSet<>();
-        int tempy = 0, tempx = 0;
-        for(char ch : arr)
-        {
-            if(ch == 'N')
-                tempy = y + 1;
-            else if(ch == 'S')
-                tempy = y - 1;
-            else if(ch == 'E')
-                tempx = x + 1;
-            else if(ch == 'W')
-            {
-                tempx = x - 1;
-                //hp.println("x = " + x  );
-            }
-
-
-//            String debug = ("x = " + x + " y = " + y +
-//                            " tempx = " + tempx + " tempy = " + tempy);
-            String k1 = x + " " + y + " to " + tempx + " " + tempy;
-            String k2 = tempx + " " + tempy + " to " + x + " " + y;
-
-
-/*
-            hp.println("at ch = " + ch);
-            hp.println(debug);
-            hp.println(k1 + "\n" + k2 + "\n");
-*/
-
-            if(hs.contains(k1) || hs.contains(k2))
-                ans += 1;
-            else
-            {
-                ans += 5;
-                hs.add(k1);
-                hs.add(k2);
-            }
-            x = tempx;
-            y = tempy;
-        }
-        return ans +"";
-    }
-
-
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
+
+    int process(int[] arr, int n) throws Exception
+    {
+        int[] smallerOnRight = getSmallerOnRight(arr, n);
+        int[] smallerOnLeft = getSmallerOnLeft(arr, n);
+        //hp.println(Arrays.toString(smallerOnLeft));
+        //hp.println(Arrays.toString(smallerOnRight));
+        int max = -1;
+        for(int i = 0; i < n; i++)
+        {
+            int area = (smallerOnRight[i] - smallerOnLeft[i] - 1) * arr[i];
+            max = Math.max(area, max);
+        }
+        return max;
+    }
+
+    int[] getSmallerOnRight(int[] arr, int n)
+    {
+        int[] ans = new int[n];
+        Arrays.fill(ans, n);
+        Stack<Integer> st = new Stack<>();
+
+        for(int i = 0; i < n; i++)
+        {
+            while(!st.isEmpty() && arr[i] < arr[st.peek()])
+            {
+                ans[st.pop()] = i;
+            }
+            st.push(i);
+        }
+        return ans;
+    }
+
+    int[] getSmallerOnLeft(int[] arr, int n)
+    {
+        int[] ans = new int[n];
+        Arrays.fill(ans, -1);
+        Stack<Integer> st = new Stack<>();
+        for(int i = n - 1; i >= 0; i--)
+        {
+            while(!st.isEmpty() && arr[i] < arr[st.peek()])
+                ans[st.pop()] = i;
+            st.push(i);
+        }
+        return ans;
+    }
+
 }
+
+
 
 class Pair implements Comparable<Pair>{
     int x;
@@ -103,7 +105,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 

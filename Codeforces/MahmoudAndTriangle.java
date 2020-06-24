@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class 
+public class MahmoudAndTriangle
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,9 +14,9 @@ public class
     }
 }
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/problemset/problem/1351/C
+//  javac -d ../../classes MahmoudAndTriangle.java
+//  java MahmoudAndTriangle
+//  problem link : https://codeforces.com/contest/1367/problem/0
 
 class Solver {
     final Helper hp;
@@ -24,15 +24,29 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            //int n = hp.nextInt();
-            char[] arr = hp.next().toCharArray();
-            int n = arr.length;
-            String ans = process(arr, n);
-            hp.println(ans);
+            int n = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
+            Arrays.sort(arr);
+            boolean flag = false;
+            for(int i = 0; i < n - 2; i++)
+            {
+                if(check(arr[i], arr[i + 1], arr[i + 2]))
+                {
+                    flag = true;
+                    hp.println("YES");
+                    break;
+                }
+            }
+            if(!flag)hp.print("NO");
         }
         hp.flush();
+    }
+
+    boolean check(int a, int b, int c)
+    {
+        return ((a + b > c) && (b + c > a) && (c + a) > b);
     }
 
     String process(char[] arr, int n)throws Exception

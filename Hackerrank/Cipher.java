@@ -4,87 +4,78 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-
-public class 
+public class Cipher
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/problemset/problem/1351/C
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes Cipher.java
+//  java Cipher
+//  https://www.hackerrank.com/challenges/cipher/problem
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            //int n = hp.nextInt();
-            char[] arr = hp.next().toCharArray();
-            int n = arr.length;
-            String ans = process(arr, n);
+            int n = hp.nextInt();
+            int k = hp.nextInt();
+            String str = hp.next();
+            //int zeros = n + k - 1 - str.length();
+            //while(zeros-- > 0)str = '0' + str;
+            char[] s = str.toCharArray();
+            int len = s.length;
+            StringBuilder sb = new StringBuilder();
+            StringBuilder ans = new StringBuilder();
+            for(int i  = 1; i < k; i++)
+                sb.append('0');
+            int xor = 0;
+            int ind = len - 1;
+            for(int i = 0; i < len - k + 1; i++)
+            {
+                int val = (xor ^ (int)(s[ind--] - '0'));
+                int toDel = (int)(sb.charAt(i) - '0');
+                xor = (toDel ^ xor ^ val);
+                ans.append(val);
+                sb.append(val);
+                //sb = sb.deleteCharAt(0);
+            }
+            ans = ans.reverse();
+        //    while(ans.charAt(0) == '0')
+        //        ans = ans.deleteCharAt(0);
             hp.println(ans);
         }
         hp.flush();
     }
 
-    String process(char[] arr, int n)throws Exception
+    int getVal(String str)
     {
-        int x = 0, y = 0, ans = 0;
-        HashSet<String> hs = new HashSet<>();
-        int tempy = 0, tempx = 0;
-        for(char ch : arr)
-        {
-            if(ch == 'N')
-                tempy = y + 1;
-            else if(ch == 'S')
-                tempy = y - 1;
-            else if(ch == 'E')
-                tempx = x + 1;
-            else if(ch == 'W')
-            {
-                tempx = x - 1;
-                //hp.println("x = " + x  );
-            }
+        int[] arr = new int[10];
+        for(int i = 0; i < str.length(); i++)
+            arr[str.charAt(i) - '0'] = 1;
+        int ans = 0;
+        String s = "";
+        for(int i = 0;i < 10; i++)
+            s += arr[i];
 
-
-//            String debug = ("x = " + x + " y = " + y +
-//                            " tempx = " + tempx + " tempy = " + tempy);
-            String k1 = x + " " + y + " to " + tempx + " " + tempy;
-            String k2 = tempx + " " + tempy + " to " + x + " " + y;
-
-
-/*
-            hp.println("at ch = " + ch);
-            hp.println(debug);
-            hp.println(k1 + "\n" + k2 + "\n");
-*/
-
-            if(hs.contains(k1) || hs.contains(k2))
-                ans += 1;
-            else
-            {
-                ans += 5;
-                hs.add(k1);
-                hs.add(k2);
-            }
-            x = tempx;
-            y = tempy;
-        }
-        return ans +"";
+        return Integer.parseInt(s, 2);
     }
 
+
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
+        //hp.initIO("../tests/SampleProblemTestInputs.txt", "../tests/SampleProblemTestOutputs");
     }
 }
 
@@ -103,7 +94,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 

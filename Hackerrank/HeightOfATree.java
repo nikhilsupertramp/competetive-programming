@@ -4,88 +4,117 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-
-public class 
+public class HeightOfATree
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/problemset/problem/1351/C
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes HeightOfATree.java
+//  java HeightOfATree
+//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-height-of-tree
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            //int n = hp.nextInt();
-            char[] arr = hp.next().toCharArray();
-            int n = arr.length;
-            String ans = process(arr, n);
-            hp.println(ans);
+            int n = hp.nextInt();
+            TreeNode root = new TreeNode(hp.nextInt());
+            for(int i = 1; i < n; i++)
+            {
+                root.insert(hp.nextInt());
+            }
+            hp.println(heightOfTree(root));
+
         }
         hp.flush();
     }
 
-    String process(char[] arr, int n)throws Exception
+    int heightOfTree(TreeNode root)
     {
-        int x = 0, y = 0, ans = 0;
-        HashSet<String> hs = new HashSet<>();
-        int tempy = 0, tempx = 0;
-        for(char ch : arr)
-        {
-            if(ch == 'N')
-                tempy = y + 1;
-            else if(ch == 'S')
-                tempy = y - 1;
-            else if(ch == 'E')
-                tempx = x + 1;
-            else if(ch == 'W')
-            {
-                tempx = x - 1;
-                //hp.println("x = " + x  );
-            }
+        if(root == null)return -1;
 
-
-//            String debug = ("x = " + x + " y = " + y +
-//                            " tempx = " + tempx + " tempy = " + tempy);
-            String k1 = x + " " + y + " to " + tempx + " " + tempy;
-            String k2 = tempx + " " + tempy + " to " + x + " " + y;
-
-
-/*
-            hp.println("at ch = " + ch);
-            hp.println(debug);
-            hp.println(k1 + "\n" + k2 + "\n");
-*/
-
-            if(hs.contains(k1) || hs.contains(k2))
-                ans += 1;
-            else
-            {
-                ans += 5;
-                hs.add(k1);
-                hs.add(k2);
-            }
-            x = tempx;
-            y = tempy;
-        }
-        return ans +"";
+        return 1 + Math.max(heightOfTree(root.left), heightOfTree(root.right));
     }
 
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
+}
+
+class TreeNode
+{
+    int val;
+    TreeNode left, right;
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
+    public TreeNode(int val)
+    {
+        hp = new Helper(MOD, MAXN);
+        this.val = val;
+        left = null;
+        right = null;
+    }
+
+
+    void insert(int x)
+    {
+        if(x <= val)
+        {
+            if(left == null)
+                left = new TreeNode(x);
+            else
+                left.insert(x);
+        }
+        else
+        {
+            if(right == null)
+                right = new TreeNode(x);
+            else
+                right.insert(x);
+        }
+    }
+
+    void inOrder()throws Exception
+    {
+        if(left != null)
+            left.inOrder();
+        hp.print(val + " " );
+        if(right != null)
+            right.inOrder();
+    }
+
+    void preOrder()throws Exception
+    {
+        hp.print(val + " ");
+        if(left != null)
+            left.preOrder();
+        if(right != null)
+            right.preOrder();
+    }
+
+    void postOrder()throws Exception
+    {
+
+        if(left != null)
+            left.postOrder();
+        if(right != null)
+            right.postOrder();
+        hp.print(val + " ");
+    }
+
 }
 
 class Pair implements Comparable<Pair>{
@@ -103,7 +132,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 

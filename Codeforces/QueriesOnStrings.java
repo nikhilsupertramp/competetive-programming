@@ -5,8 +5,7 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
-
-public class 
+public class QueriesOnStrings
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,73 +13,56 @@ public class
     }
 }
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/problemset/problem/1351/C
+//  javac -d ../../classes QueriesOnStrings.java
+//  java QueriesOnStrings
+//  https://codeforces.com/contest/598/problem/B
+/*
+    abACABa
+    abBACAa
+    abbacaa
+    ABBAcaa
+    AABBcaa
+    BAABcaa
+    baabcaa
 
+*/
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        char[] s = hp.next().toCharArray();
+        int n = hp.nextInt();
+        for(int i = 0; i < n; i++)
         {
-            //int n = hp.nextInt();
-            char[] arr = hp.next().toCharArray();
-            int n = arr.length;
-            String ans = process(arr, n);
-            hp.println(ans);
+            int l = hp.nextInt();
+            int r = hp.nextInt();
+            int k = hp.nextInt() % (r - l + 1);
+            process(s, l, r, k);
         }
+        for(char ch : s)
+            hp.print(ch);
+
         hp.flush();
     }
 
-    String process(char[] arr, int n)throws Exception
+    void process(char[] s, int l, int r, int k)throws Exception
     {
-        int x = 0, y = 0, ans = 0;
-        HashSet<String> hs = new HashSet<>();
-        int tempy = 0, tempx = 0;
-        for(char ch : arr)
-        {
-            if(ch == 'N')
-                tempy = y + 1;
-            else if(ch == 'S')
-                tempy = y - 1;
-            else if(ch == 'E')
-                tempx = x + 1;
-            else if(ch == 'W')
-            {
-                tempx = x - 1;
-                //hp.println("x = " + x  );
-            }
+        char[] arr = new char[r - l + 1];
+        //hp.println(Arrays.toString(s));
 
 
-//            String debug = ("x = " + x + " y = " + y +
-//                            " tempx = " + tempx + " tempy = " + tempy);
-            String k1 = x + " " + y + " to " + tempx + " " + tempy;
-            String k2 = tempx + " " + tempy + " to " + x + " " + y;
-
-
-/*
-            hp.println("at ch = " + ch);
-            hp.println(debug);
-            hp.println(k1 + "\n" + k2 + "\n");
-*/
-
-            if(hs.contains(k1) || hs.contains(k2))
-                ans += 1;
-            else
-            {
-                ans += 5;
-                hs.add(k1);
-                hs.add(k2);
-            }
-            x = tempx;
-            y = tempy;
-        }
-        return ans +"";
+        int i = r - k, j = 0;
+        for(; i < r; i++)
+            arr[j++] = s[i];
+        for(i = l - 1; i < r - k; i++)
+            arr[j++] = s[i];
+        j = 0;
+        //hp.println(Arrays.toString(s));
+        for(i = l - 1; i < r; i++)
+            s[i] = arr[j++];
     }
-
 
     Solver() {
         hp = new Helper(MOD, MAXN);

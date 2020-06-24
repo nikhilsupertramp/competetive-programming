@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class 
+public class VladikAndCourtesy
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,9 +14,9 @@ public class
     }
 }
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/problemset/problem/1351/C
+//  javac -d ../../classes VladikAndCourtesy.java
+//  java VladikAndCourtesy
+//  problem link : https://codeforces.com/contest/1367/problem/
 
 class Solver {
     final Helper hp;
@@ -24,15 +24,45 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            //int n = hp.nextInt();
-            char[] arr = hp.next().toCharArray();
-            int n = arr.length;
-            String ans = process(arr, n);
-            hp.println(ans);
+            int a = hp.nextInt();
+            int b = hp.nextInt();
+            boolean toggle = true;
+            int sqrt = 0;
+            int needByA = 1,needByB = 2;
+            int count = 0;
+            while(true)
+            {
+                if(toggle && a >= needByA)
+                {
+                    toggle = !toggle;
+                    a -= needByA;
+                    needByA += 2;
+
+                }
+                else if(!toggle && b >= needByB)
+                {
+                    toggle = !toggle;
+                    b -= needByB;
+                    needByB += 2;
+                }
+
+                else
+                    break;
+                //hp.println(a + " " + b);
+            }
+            if(toggle)
+                hp.println("Vladik");
+            else
+                hp.println("Valera");
         }
         hp.flush();
+    }
+
+    boolean check(int a, int b, int c)
+    {
+        return ((a + b > c) && (b + c > a) && (c + a) > b);
     }
 
     String process(char[] arr, int n)throws Exception

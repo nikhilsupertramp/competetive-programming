@@ -4,83 +4,126 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-
-public class 
+public class FunGame
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/problemset/problem/1351/C
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes FunGame.java
+//  java FunGame
+//  https://www.hackerrank.com/contests/cbbicr1/challenges/fun-game-1
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            //int n = hp.nextInt();
-            char[] arr = hp.next().toCharArray();
-            int n = arr.length;
-            String ans = process(arr, n);
-            hp.println(ans);
+            int n = hp.nextInt();
+            int[] a = hp.getIntArray(n);
+            int[] b = hp.getIntArray(n);
+
+            Pair[] A = new Pair[n];
+            Pair[] B = new Pair[n];
+
+            for(int i = 0; i < n; i++)
+            {
+                A[i] = new Pair(i, a[i]);
+                B[i] = new Pair(i, b[i]);
+            }
+            Arrays.sort(A);
+            Arrays.sort(B);
+            /*
+            printArr(A);
+            printArr(B);
+            */
+            int i = 0, j = 0, score_a = 0, score_b = 0;
+            HashSet<Integer> hs = new HashSet<>();
+
+            for(int itr = 0; itr < n; itr++)
+            {
+                if(itr % 2 == 0){
+                    while(hs.contains(A[i].x))i++;
+                    while(hs.contains(B[j].x))j++;
+                    //if(!hs.contains(A[i].x) && !hs.contains(B[j].x)) //&& (A[i].x != B[j].x))
+                    {
+                        {
+                            if(((score_a + A[i].y) - (score_b + B[j].y)) >=
+                                ((score_a + a[B[j].x]) - (score_b + b[A[i].x])))
+                            {
+                                    score_a += A[i].y;
+                                    hs.add(A[i].x);
+                                    i++;
+                            }
+                            else
+                            {
+                                score_a += a[B[j].x];
+                                hs.add(B[j].x);
+                                j++;
+                            }
+                        }
+                    }
+                }
+                else{
+                    while(hs.contains(A[i].x))i++;
+                    while(hs.contains(B[j].x))j++;
+                    if(((score_b + B[j].y) - (score_a + A[i].y)) >=
+                        ((score_b + b[A[i].x]) - (score_a + a[B[j].x])))
+                    {
+                            score_b += B[j].y;
+                            hs.add(B[j].x);
+                            j++;
+                    }
+                    else
+                    {
+                        score_b += b[A[i].x];
+                        hs.add(A[i].x);
+                        i++;
+                    }
+                }
+            }
+            if(score_a > score_b)
+            {
+                //hp.println(score_a + " " + score_b);
+                hp.println("First");
+            }
+            else if(score_a < score_b)
+            {
+                //hp.println(score_a + " " + score_b);
+                hp.println("Second");
+            }
+            else
+            {
+                //hp.println(score_a + " " + score_b);
+                hp.println("Tie");
+            }
         }
         hp.flush();
     }
 
-    String process(char[] arr, int n)throws Exception
+
+    void printArr(int[] arr)throws Exception
     {
-        int x = 0, y = 0, ans = 0;
-        HashSet<String> hs = new HashSet<>();
-        int tempy = 0, tempx = 0;
-        for(char ch : arr)
-        {
-            if(ch == 'N')
-                tempy = y + 1;
-            else if(ch == 'S')
-                tempy = y - 1;
-            else if(ch == 'E')
-                tempx = x + 1;
-            else if(ch == 'W')
-            {
-                tempx = x - 1;
-                //hp.println("x = " + x  );
-            }
-
-
-//            String debug = ("x = " + x + " y = " + y +
-//                            " tempx = " + tempx + " tempy = " + tempy);
-            String k1 = x + " " + y + " to " + tempx + " " + tempy;
-            String k2 = tempx + " " + tempy + " to " + x + " " + y;
-
-
-/*
-            hp.println("at ch = " + ch);
-            hp.println(debug);
-            hp.println(k1 + "\n" + k2 + "\n");
-*/
-
-            if(hs.contains(k1) || hs.contains(k2))
-                ans += 1;
-            else
-            {
-                ans += 5;
-                hs.add(k1);
-                hs.add(k2);
-            }
-            x = tempx;
-            y = tempy;
-        }
-        return ans +"";
+        for(int i : arr)
+            hp.print(i + " ");
+        hp.println();
     }
 
+    void printArr(Pair[] arr)throws Exception
+    {
+        for(Pair i : arr)
+            hp.print(i.x  + " - " + i.y + "\n ");
+        hp.println();
+    }
+
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);

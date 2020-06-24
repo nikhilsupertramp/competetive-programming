@@ -29,7 +29,7 @@ class Solver {
             int[] arr = hp.getIntArray(n);
             int[] type = hp.getIntArray(n);
             int[] dummy = new int[n];
-            
+
         }
         hp.flush();
     }

@@ -4,19 +4,19 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-
-public class 
+public class Anagram
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/problemset/problem/1351/C
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes Anagram.java
+//  java Anagram
+//  https://www.hackerrank.com/challenges/anagram/problem
 
 class Solver {
     final Helper hp;
@@ -24,61 +24,31 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
+        //int ;
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            //int n = hp.nextInt();
-            char[] arr = hp.next().toCharArray();
-            int n = arr.length;
-            String ans = process(arr, n);
-            hp.println(ans);
+            char[] s = hp.next().toCharArray();
+            int n = s.length;
+            if(n % 2 == 1){
+                hp.println(-1);
+                continue;
+            }
+            int k = n / 2;
+            int[] left = new int[26];
+            int[] right = new int[26];
+            for(int i = 0; i < k; i++)
+            {
+                left[s[i] -'a']++;
+                right[s[i + k] - 'a']++;
+            }
+            int ans = 0;
+            for(int i = 0; i < 26; i++)
+            {
+                ans += Math.abs(left[i] - right[i]);
+            }
+            hp.println(ans / 2);
         }
         hp.flush();
-    }
-
-    String process(char[] arr, int n)throws Exception
-    {
-        int x = 0, y = 0, ans = 0;
-        HashSet<String> hs = new HashSet<>();
-        int tempy = 0, tempx = 0;
-        for(char ch : arr)
-        {
-            if(ch == 'N')
-                tempy = y + 1;
-            else if(ch == 'S')
-                tempy = y - 1;
-            else if(ch == 'E')
-                tempx = x + 1;
-            else if(ch == 'W')
-            {
-                tempx = x - 1;
-                //hp.println("x = " + x  );
-            }
-
-
-//            String debug = ("x = " + x + " y = " + y +
-//                            " tempx = " + tempx + " tempy = " + tempy);
-            String k1 = x + " " + y + " to " + tempx + " " + tempy;
-            String k2 = tempx + " " + tempy + " to " + x + " " + y;
-
-
-/*
-            hp.println("at ch = " + ch);
-            hp.println(debug);
-            hp.println(k1 + "\n" + k2 + "\n");
-*/
-
-            if(hs.contains(k1) || hs.contains(k2))
-                ans += 1;
-            else
-            {
-                ans += 5;
-                hs.add(k1);
-                hs.add(k2);
-            }
-            x = tempx;
-            y = tempy;
-        }
-        return ans +"";
     }
 
 
@@ -103,7 +73,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 

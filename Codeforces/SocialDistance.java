@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class 
+public class SocialDistance
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,9 +14,9 @@ public class
     }
 }
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/problemset/problem/1351/C
+//  javac -d ../../classes SocialDistance.java
+//  java SocialDistance
+//  problem link : https://codeforces.com/contest/1367/problem/C
 
 class Solver {
     final Helper hp;
@@ -26,59 +26,82 @@ class Solver {
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            //int n = hp.nextInt();
+            int n = hp.nextInt();
+            int k = hp.nextInt();
             char[] arr = hp.next().toCharArray();
-            int n = arr.length;
-            String ans = process(arr, n);
+            //int[] arr = hp.getIntArray(n);
+
+            int ans = process(arr, n, k);
             hp.println(ans);
         }
         hp.flush();
     }
 
-    String process(char[] arr, int n)throws Exception
+    int process(char[] arr, int n, int k)throws Exception
     {
-        int x = 0, y = 0, ans = 0;
-        HashSet<String> hs = new HashSet<>();
-        int tempy = 0, tempx = 0;
-        for(char ch : arr)
+        int[] next = new int[n];
+        int[] before = new int[n];
+        if(arr[0] == '0')before[0] = Integer.MAX_VALUE / 2;
+        if(arr[n - 1] == '0')next[n - 1] = Integer.MAX_VALUE / 2;
+        for(int i = 1 ;i < n; i++)
         {
-            if(ch == 'N')
-                tempy = y + 1;
-            else if(ch == 'S')
-                tempy = y - 1;
-            else if(ch == 'E')
-                tempx = x + 1;
-            else if(ch == 'W')
-            {
-                tempx = x - 1;
-                //hp.println("x = " + x  );
-            }
-
-
-//            String debug = ("x = " + x + " y = " + y +
-//                            " tempx = " + tempx + " tempy = " + tempy);
-            String k1 = x + " " + y + " to " + tempx + " " + tempy;
-            String k2 = tempx + " " + tempy + " to " + x + " " + y;
-
-
-/*
-            hp.println("at ch = " + ch);
-            hp.println(debug);
-            hp.println(k1 + "\n" + k2 + "\n");
-*/
-
-            if(hs.contains(k1) || hs.contains(k2))
-                ans += 1;
+            if(arr[i] == '0')
+                before[i] = before[i - 1] + 1;
             else
-            {
-                ans += 5;
-                hs.add(k1);
-                hs.add(k2);
-            }
-            x = tempx;
-            y = tempy;
+                before[i] = 0;
         }
-        return ans +"";
+        for(int i = n - 2; i >= 0; i--)
+        {
+            if(arr[i] == '0')
+                next[i] = next[i  + 1] + 1;
+            else
+                next[i] = 0;
+        }
+        //hp.println(Arrays.toString(next));
+        //hp.println(Arrays.toString(before));
+        //int count = 0, lastupdate = -1;
+        int[] dummyN = new int[n];
+        int[] dummyB = new int[n];
+        for(int i = 0; i < n; i++)
+        {
+            dummyB[i] = before[i];
+            dummyN[i] = next[i];
+        }
+        int fromEnd = checkFromEnd(before, dummyN, k);
+        int fromBeg = checkFromBegin(before, dummyN, k);
+        return Math.max(fromBeg, fromEnd);
+        //return count;
+    }
+
+    int checkFromEnd(int[] before, int[] next,  int k)
+    {
+        int count = 0, lastupdate = -1, n = next.length;
+        for(int i = n - 1; i >= 0; i--)
+        {
+            if(lastupdate != -1)
+                next[i] = Math.min(next[i], lastupdate - i);
+            if(next[i] > k && before[i] > k){
+                count++;
+                //hp.println("at i = " + i);
+                lastupdate = i;
+            }
+        }
+        return count;
+    }
+    int checkFromBegin(int[] before, int[] next, int k)
+    {
+        int count = 0, lastupdate = -1, n = next.length;
+        for(int i = 0; i < n; i++)
+        {
+            if(lastupdate != -1)
+                before[i] = Math.min(before[i], i - lastupdate);
+            if(next[i] > k && before[i] > k){
+                count++;
+                //hp.println("at i = " + i);
+                lastupdate = i;
+            }
+        }
+        return count;
     }
 
 
@@ -87,6 +110,7 @@ class Solver {
         hp.initIO(System.in, System.out);
     }
 }
+
 
 class Pair implements Comparable<Pair>{
     int x;

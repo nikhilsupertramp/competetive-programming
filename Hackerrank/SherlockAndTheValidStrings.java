@@ -1,22 +1,22 @@
 /* @nikhil_supertramp */
 
-import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-
-public class 
+public class SherlockAndTheValidStrings
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/problemset/problem/1351/C
+
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes SherlockAndTheValidStrings.java
+//  java SherlockAndTheValidStrings
+//  https://www.hackerrank.com/challenges/sherlock-and-valid-string/problem
 
 class Solver {
     final Helper hp;
@@ -24,61 +24,53 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            //int n = hp.nextInt();
-            char[] arr = hp.next().toCharArray();
-            int n = arr.length;
-            String ans = process(arr, n);
-            hp.println(ans);
+            char[] s = hp.next().toCharArray();
+
+            int[] cnt = new int[26];
+
+            getCnt(s, s.length, cnt);
+            HashMap<Integer, Integer> hm = new HashMap<>();
+            //hp.println(Arrays.toString(cnt));
+            //int ans = 26;
+            for(int i = 0; i< 26; i++)
+            {
+                if(cnt[i] != 0)
+                hm.put(cnt[i], hm.getOrDefault(cnt[i], 0) + 1);
+            }
+            hp.println(hm);
+            boolean ans = check(hm);
+
+            hp.println(ans ? "YES" : "NO");
+
+
+
         }
         hp.flush();
     }
 
-    String process(char[] arr, int n)throws Exception
+    boolean check(HashMap<Integer, Integer> hm)
     {
-        int x = 0, y = 0, ans = 0;
-        HashSet<String> hs = new HashSet<>();
-        int tempy = 0, tempx = 0;
-        for(char ch : arr)
+        if(hm.size() > 2)return false;
+        if(hm.size() == 1)return true;
+        if(hm.size() == 2)
         {
-            if(ch == 'N')
-                tempy = y + 1;
-            else if(ch == 'S')
-                tempy = y - 1;
-            else if(ch == 'E')
-                tempx = x + 1;
-            else if(ch == 'W')
-            {
-                tempx = x - 1;
-                //hp.println("x = " + x  );
-            }
+            List<Integer> li = new ArrayList<>(hm.keySet());
+            int x= li.get(0);
+            int y = li.get(1);
+            if(Math.abs(x - y) == 1 && (hm.get(x)== 1 || hm.get(y) == 1))return true;
 
-
-//            String debug = ("x = " + x + " y = " + y +
-//                            " tempx = " + tempx + " tempy = " + tempy);
-            String k1 = x + " " + y + " to " + tempx + " " + tempy;
-            String k2 = tempx + " " + tempy + " to " + x + " " + y;
-
-
-/*
-            hp.println("at ch = " + ch);
-            hp.println(debug);
-            hp.println(k1 + "\n" + k2 + "\n");
-*/
-
-            if(hs.contains(k1) || hs.contains(k2))
-                ans += 1;
-            else
-            {
-                ans += 5;
-                hs.add(k1);
-                hs.add(k2);
-            }
-            x = tempx;
-            y = tempy;
         }
-        return ans +"";
+        return false;
+    }
+
+    void getCnt(char[] s, int n, int[] arr)
+    {
+        for(int i = 0; i < n; i++)
+        {
+            arr[s[i] - 'a']++;
+        }
     }
 
 
@@ -103,7 +95,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 

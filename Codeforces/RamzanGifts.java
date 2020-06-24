@@ -6,17 +6,13 @@ import java.math.*;
 import java.util.*;
 
 
-public class 
+public class RamzanGifts
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/problemset/problem/1351/C
 
 class Solver {
     final Helper hp;
@@ -24,69 +20,51 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            //int n = hp.nextInt();
-            char[] arr = hp.next().toCharArray();
-            int n = arr.length;
-            String ans = process(arr, n);
-            hp.println(ans);
+            int n1 = hp.nextInt();
+            int n2 = hp.nextInt();
+            int x = hp.nextInt();
+            int y = hp.nextInt();
+            hp.println(process(n1, n2, x, y));
         }
         hp.flush();
     }
 
-    String process(char[] arr, int n)throws Exception
+    long process(int n1, int n2, int x, int y)
     {
-        int x = 0, y = 0, ans = 0;
-        HashSet<String> hs = new HashSet<>();
-        int tempy = 0, tempx = 0;
-        for(char ch : arr)
+        long high = (long)1e18, low = n1 + n2;
+        long ans = -1;
+        while(high >= low)
         {
-            if(ch == 'N')
-                tempy = y + 1;
-            else if(ch == 'S')
-                tempy = y - 1;
-            else if(ch == 'E')
-                tempx = x + 1;
-            else if(ch == 'W')
+            long mid = (high + low) / 2;
+            if(isValid(n1, n2, x, y, mid))
             {
-                tempx = x - 1;
-                //hp.println("x = " + x  );
+                ans = mid;
+                high = mid - 1;
             }
-
-
-//            String debug = ("x = " + x + " y = " + y +
-//                            " tempx = " + tempx + " tempy = " + tempy);
-            String k1 = x + " " + y + " to " + tempx + " " + tempy;
-            String k2 = tempx + " " + tempy + " to " + x + " " + y;
-
-
-/*
-            hp.println("at ch = " + ch);
-            hp.println(debug);
-            hp.println(k1 + "\n" + k2 + "\n");
-*/
-
-            if(hs.contains(k1) || hs.contains(k2))
-                ans += 1;
             else
-            {
-                ans += 5;
-                hs.add(k1);
-                hs.add(k2);
-            }
-            x = tempx;
-            y = tempy;
+                low = mid + 1;
         }
-        return ans +"";
+        return ans;
     }
 
+    boolean isValid(int n1, int n2, int x, int y, long n)
+    {
+        long integersForFirstBrother = n - (n / x);
+        long integersForSecondBrother = n - (n / y);
+        long integersForAnyOneOfBrothers = n - (n / (y * x));
+        return (integersForAnyOneOfBrothers >= (n1 + n2)) &&
+                (integersForFirstBrother >= n1) &&
+                (integersForSecondBrother >= n2);
+    }
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
 }
+
 
 class Pair implements Comparable<Pair>{
     int x;

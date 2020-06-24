@@ -4,83 +4,58 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-
-public class 
+public class GameOfSquares
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/problemset/problem/1351/C
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes GameOfSquares.java
+//  java GameOfSquares
 
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
+    //List<String> li = new ArrayList<Integer>();
     void solve() throws Exception
     {
+        int Max = 1000 * 100 + 10;
+        boolean[] arr = new boolean[Max];
+        //int n = arr.length;
+        int sqrt = (int)Math.ceil(Math.sqrt(Max));
+
+        for(int i = 1; i < Max; i++)
+        {
+            int j = 1;boolean temp = false;
+            while(j * j <= i)
+            {
+                int index = i - (j * j);
+                if(!arr[index])
+                {
+                    temp = true;
+                    break;
+                }
+                j++;
+            }
+            arr[i] = temp;
+        }
+
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            //int n = hp.nextInt();
-            char[] arr = hp.next().toCharArray();
-            int n = arr.length;
-            String ans = process(arr, n);
-            hp.println(ans);
+            int k = hp.nextInt();
+            if(arr[k])
+                hp.println("Win");
+            else
+                hp.println("Lose");
         }
+
         hp.flush();
     }
-
-    String process(char[] arr, int n)throws Exception
-    {
-        int x = 0, y = 0, ans = 0;
-        HashSet<String> hs = new HashSet<>();
-        int tempy = 0, tempx = 0;
-        for(char ch : arr)
-        {
-            if(ch == 'N')
-                tempy = y + 1;
-            else if(ch == 'S')
-                tempy = y - 1;
-            else if(ch == 'E')
-                tempx = x + 1;
-            else if(ch == 'W')
-            {
-                tempx = x - 1;
-                //hp.println("x = " + x  );
-            }
-
-
-//            String debug = ("x = " + x + " y = " + y +
-//                            " tempx = " + tempx + " tempy = " + tempy);
-            String k1 = x + " " + y + " to " + tempx + " " + tempy;
-            String k2 = tempx + " " + tempy + " to " + x + " " + y;
-
-
-/*
-            hp.println("at ch = " + ch);
-            hp.println(debug);
-            hp.println(k1 + "\n" + k2 + "\n");
-*/
-
-            if(hs.contains(k1) || hs.contains(k2))
-                ans += 1;
-            else
-            {
-                ans += 5;
-                hs.add(k1);
-                hs.add(k2);
-            }
-            x = tempx;
-            y = tempy;
-        }
-        return ans +"";
-    }
-
 
     Solver() {
         hp = new Helper(MOD, MAXN);
@@ -103,7 +78,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 

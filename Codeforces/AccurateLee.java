@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class 
+public class AccurateLee
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,9 +14,10 @@ public class
     }
 }
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/problemset/problem/1351/C
+//  javac -d ../../classes AccurateLee.java
+//  java AccurateLee
+//  problem link : https://codeforces.com/contest/1369/problem/B
+
 
 class Solver {
     final Helper hp;
@@ -26,59 +27,38 @@ class Solver {
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            //int n = hp.nextInt();
-            char[] arr = hp.next().toCharArray();
-            int n = arr.length;
-            String ans = process(arr, n);
-            hp.println(ans);
+            int n = hp.nextInt();
+            char[] s = hp.next().toCharArray();
+            if(check(s))
+            {
+                StringBuilder sb = new StringBuilder();int i = 0;
+                while(s[i] != '1'){
+                    sb.append(s[i]);
+                    i++;
+                }
+                sb.append('0');
+                i = n - 1;
+                while(s[i] != '0'){
+                    sb.append(s[i]);
+                    i--;
+                }
+                hp.println(sb.toString());
+            }
+            else
+            {
+                hp.println(new String(s));
+            }
         }
         hp.flush();
     }
 
-    String process(char[] arr, int n)throws Exception
+    boolean check(char[] s)
     {
-        int x = 0, y = 0, ans = 0;
-        HashSet<String> hs = new HashSet<>();
-        int tempy = 0, tempx = 0;
-        for(char ch : arr)
-        {
-            if(ch == 'N')
-                tempy = y + 1;
-            else if(ch == 'S')
-                tempy = y - 1;
-            else if(ch == 'E')
-                tempx = x + 1;
-            else if(ch == 'W')
-            {
-                tempx = x - 1;
-                //hp.println("x = " + x  );
-            }
-
-
-//            String debug = ("x = " + x + " y = " + y +
-//                            " tempx = " + tempx + " tempy = " + tempy);
-            String k1 = x + " " + y + " to " + tempx + " " + tempy;
-            String k2 = tempx + " " + tempy + " to " + x + " " + y;
-
-
-/*
-            hp.println("at ch = " + ch);
-            hp.println(debug);
-            hp.println(k1 + "\n" + k2 + "\n");
-*/
-
-            if(hs.contains(k1) || hs.contains(k2))
-                ans += 1;
-            else
-            {
-                ans += 5;
-                hs.add(k1);
-                hs.add(k2);
-            }
-            x = tempx;
-            y = tempy;
-        }
-        return ans +"";
+        int n = s.length;
+        for(int i = 0; i < n - 1; i++)
+            if(s[i] == '1' && s[i + 1] == '0')
+                return true;
+        return false;
     }
 
 

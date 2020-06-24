@@ -4,19 +4,19 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-
-public class 
+public class SubsequenceSum
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/problemset/problem/1351/C
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes SubsequenceSum.java
+//  java SubsequenceSum
+//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-subsequence-sum
 
 class Solver {
     final Helper hp;
@@ -26,61 +26,109 @@ class Solver {
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            //int n = hp.nextInt();
-            char[] arr = hp.next().toCharArray();
-            int n = arr.length;
-            String ans = process(arr, n);
+            int n = hp.nextInt();
+            int A = hp.nextInt();
+            int B = hp.nextInt();
+            int[] arr =hp.getIntArray(n);
+
+            int act = bruteforceSolver(arr, n, A, B);
+            hp.print(act + " ");
+
+
+            int ls = (1 << (n >> 1));
+            int rs = (1 << (n - (n >> 1)));
+            int[] left =  new int[ls];
+            int[] right =  new int[rs];
+
+            getAllSubSetSums(arr, left, 0, n / 2);
+            getAllSubSetSums(arr, right, n / 2, n - (n >> 1));
+            //Arrays.sort(left);
+            Arrays.sort(right);
+            long ans = 0;
+            for(int element : left)
+            {
+                int lb = A - element;
+                int ub = B - element;
+                int l = lbBinarySearch(right, lb);
+                ///finding index from wherre all ememnets greater than or equal to lb
+                int r = ubBinarySearch(right, ub);
+                ///finding index from where all elements are less than or equal to rb
+                if(l < r)
+                {
+                    ans += (r - l - 1);
+                }
+            }
             hp.println(ans);
         }
         hp.flush();
     }
 
-    String process(char[] arr, int n)throws Exception
+    int bruteforceSolver(int[] arr, int n, int a, int b)
     {
-        int x = 0, y = 0, ans = 0;
-        HashSet<String> hs = new HashSet<>();
-        int tempy = 0, tempx = 0;
-        for(char ch : arr)
+        int count = 0;
+        for(int i = 0; i < (1 << n); i++)
         {
-            if(ch == 'N')
-                tempy = y + 1;
-            else if(ch == 'S')
-                tempy = y - 1;
-            else if(ch == 'E')
-                tempx = x + 1;
-            else if(ch == 'W')
+            int sum = 0;
+            for(int j = 0; j < n; j++)
             {
-                tempx = x - 1;
-                //hp.println("x = " + x  );
+                if((i & (1 << j)) > 0)
+                    sum += arr[j];
             }
-
-
-//            String debug = ("x = " + x + " y = " + y +
-//                            " tempx = " + tempx + " tempy = " + tempy);
-            String k1 = x + " " + y + " to " + tempx + " " + tempy;
-            String k2 = tempx + " " + tempy + " to " + x + " " + y;
-
-
-/*
-            hp.println("at ch = " + ch);
-            hp.println(debug);
-            hp.println(k1 + "\n" + k2 + "\n");
-*/
-
-            if(hs.contains(k1) || hs.contains(k2))
-                ans += 1;
-            else
-            {
-                ans += 5;
-                hs.add(k1);
-                hs.add(k2);
-            }
-            x = tempx;
-            y = tempy;
+            if(sum >= a && sum <= b)
+                count++;
         }
-        return ans +"";
+        return count;
     }
 
+    int lbBinarySearch(int[] arr, int lb)
+    {
+        int high = arr.length - 1, low = 0;
+        int ans = high;
+        while(low <= high)
+        {
+            int mid = (high + low) / 2;
+            if(arr[mid] >= lb)
+            {
+                ans = mid;
+                high = mid - 1;
+            }
+            else
+                low  = mid + 1;
+        }
+        return ans - 1;
+    }
+
+    int ubBinarySearch(int[] arr, int ub)
+    {
+        int high = arr.length - 1, low = 0;
+        int ans = low;
+        while(low <= high)
+        {
+            int mid = (high + low) / 2;
+            if(arr[mid] <= ub)
+            {
+                ans = mid;
+                low = mid + 1;
+            }
+            else
+                high = mid - 1;
+        }
+        return ans + 1;
+    }
+
+    void getAllSubSetSums(int[] arr, int x[], int start , int n)
+    {
+        for(int i = 0; i < (1 << n); i++)
+        {
+            int sum = 0;
+            for(int j = 0; j < n; j++)
+            {
+                if((i & (1 << j)) > 0)
+                    sum += arr[j + start];
+            }
+            x[i] = sum;
+        }
+    }
 
     Solver() {
         hp = new Helper(MOD, MAXN);
@@ -103,7 +151,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 

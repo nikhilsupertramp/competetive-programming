@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class 
+public class XXXXX
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,9 +14,9 @@ public class
     }
 }
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/problemset/problem/1351/C
+//  javac -d ../../classes XXXXX.java
+//  java XXXXX
+//  problem link : https://codeforces.com/contest/1367/problem/0
 
 class Solver {
     final Helper hp;
@@ -26,11 +26,18 @@ class Solver {
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            //int n = hp.nextInt();
-            char[] arr = hp.next().toCharArray();
-            int n = arr.length;
-            String ans = process(arr, n);
-            hp.println(ans);
+            int n = hp.nextInt();
+            int x = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
+            int sums[] = new int[n];
+            sum[0] = arr[0];
+            for(int i = 1 ; i < n; i++)sum[i] += arr[i] + sum[i - 1];
+
+            for(int i = 0 ; i < n; i++)
+            {
+
+            }
+
         }
         hp.flush();
     }

@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class 
+public class FlyingSort
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,9 +14,9 @@ public class
     }
 }
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/problemset/problem/1351/C
+//  javac -d ../../classes FlyingSort.java
+//  java FlyingSort
+//  problem link : https://codeforces.com/contest/1367/problem/F1
 
 class Solver {
     final Helper hp;
@@ -26,60 +26,53 @@ class Solver {
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            //int n = hp.nextInt();
-            char[] arr = hp.next().toCharArray();
-            int n = arr.length;
-            String ans = process(arr, n);
+            int n = hp.nextInt();
+            int[] arr =hp.getIntArray(n);
+            int ans = n - LongestIncreasingSubsequenceLength(arr, n);
             hp.println(ans);
         }
         hp.flush();
     }
 
-    String process(char[] arr, int n)throws Exception
-    {
-        int x = 0, y = 0, ans = 0;
-        HashSet<String> hs = new HashSet<>();
-        int tempy = 0, tempx = 0;
-        for(char ch : arr)
-        {
-            if(ch == 'N')
-                tempy = y + 1;
-            else if(ch == 'S')
-                tempy = y - 1;
-            else if(ch == 'E')
-                tempx = x + 1;
-            else if(ch == 'W')
-            {
-                tempx = x - 1;
-                //hp.println("x = " + x  );
-            }
+    int CeilIndex(int A[], int l, int r, int key)
+     {
+         while (r - l > 1) {
+             int m = l + (r - l) / 2;
+             if (A[m] >= key)
+                 r = m;
+             else
+                 l = m;
+         }
 
+         return r;
+     }
 
-//            String debug = ("x = " + x + " y = " + y +
-//                            " tempx = " + tempx + " tempy = " + tempy);
-            String k1 = x + " " + y + " to " + tempx + " " + tempy;
-            String k2 = tempx + " " + tempy + " to " + x + " " + y;
+     int LongestIncreasingSubsequenceLength(int A[], int size)
+     {
+         // Add boundary case, when array size is one
 
+         int[] tailTable = new int[size];
+         int len; // always points empty slot
 
-/*
-            hp.println("at ch = " + ch);
-            hp.println(debug);
-            hp.println(k1 + "\n" + k2 + "\n");
-*/
+         tailTable[0] = A[0];
+         len = 1;
+         for (int i = 1; i < size; i++) {
+             if (A[i] < tailTable[0])
+                 // new smallest value
+                 tailTable[0] = A[i];
 
-            if(hs.contains(k1) || hs.contains(k2))
-                ans += 1;
-            else
-            {
-                ans += 5;
-                hs.add(k1);
-                hs.add(k2);
-            }
-            x = tempx;
-            y = tempy;
-        }
-        return ans +"";
-    }
+             else if (A[i] > tailTable[len - 1])
+                 // A[i] wants to extend largest subsequence
+                 tailTable[len++] = A[i];
+
+             else
+                 // A[i] wants to be current end candidate of an existing
+                 // subsequence. It will replace ceil value in tailTable
+                 tailTable[CeilIndex(tailTable, -1, len - 1, A[i])] = A[i];
+         }
+
+         return len;
+     }
 
 
     Solver() {
@@ -87,6 +80,7 @@ class Solver {
         hp.initIO(System.in, System.out);
     }
 }
+
 
 class Pair implements Comparable<Pair>{
     int x;

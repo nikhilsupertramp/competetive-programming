@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class 
+public class WordCorrection
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,9 +14,9 @@ public class
     }
 }
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes
-//  java
-//  problem link : https://codeforces.com/problemset/problem/1351/C
+//  javac -d ../../classes WordCorrection.java
+//  java WordCorrection
+//  problem link : https://codeforces.com/contest/1367/problem/0
 
 class Solver {
     final Helper hp;
@@ -24,15 +24,27 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            //int n = hp.nextInt();
-            char[] arr = hp.next().toCharArray();
-            int n = arr.length;
-            String ans = process(arr, n);
-            hp.println(ans);
+            int n = hp.nextInt();
+            char[] s = hp.next().toCharArray();
+            StringBuilder sb = new StringBuilder();
+            sb.append(s[0]);
+            for(int i = 1; i < n ; i++)
+            {
+                if(isVowel(s[i]) && isVowel(sb.charAt(sb.length() - 1)))
+                    continue;
+                else
+                    sb.append(s[i]);
+            }
+            hp.println(sb.toString());
         }
         hp.flush();
+    }
+
+    boolean isVowel(char s)
+    {
+        return (s=='a' || s == 'e' || s=='i' || s== 'o' ||s=='u' || s == 'y');
     }
 
     String process(char[] arr, int n)throws Exception
