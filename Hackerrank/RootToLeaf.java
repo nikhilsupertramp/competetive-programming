@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class VerticalOrderTree
+public class RootToLeaf
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,14 +14,14 @@ public class VerticalOrderTree
     }
 }
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes VerticalOrderTree.java
-//  java VerticalOrderTree
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-vertical-order-of-tree
+//  javac -d ../../classes RootToLeaf.java
+//  java RootToLeaf
+//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-sum-of-numbers-from-root-to-leaf-paths/problem
 
 class Solver {
 
-    int[] horizontalDistances = new int[100 *100 + 1];
-
+    long sum;
+    int[] depths = new int[100 *100 + 1] ;
     void solve() throws Exception
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
@@ -36,40 +36,36 @@ class Solver {
                 arr[i] = hp.nextInt();
                 root.insert(arr[i]);
             }
-            Arrays.fill(horizontalDistances, Integer.MAX_VALUE);
-            verticalOrderTree(root, 0);
-            makeMapAndPrint();
-            hp.println();
+            sum = 0;
+            long currentSum = 0;
+            dfs(root, 0, MOD);
+            hp.println(sum);
 
         }
         hp.flush();
     }
 
-    void makeMapAndPrint()throws Exception
+    void dfs(TreeNode root, long currSum, long MOD)
     {
-        TreeMap<Integer, ArrayList<Integer>> hm = new TreeMap<>();
-        for(int i = 0; i < horizontalDistances.length; i++)
-        {
-            if(horizontalDistances[i] != Integer.MAX_VALUE)
-            {
-                if(hm.containsKey(horizontalDistances[i]))
-                    hm.get(horizontalDistances[i]).add(i);
-                else
-                {
-                    hm.put(horizontalDistances[i], new ArrayList<Integer>());
-                    hm.get(horizontalDistances[i]).add(i);
-                }
-            }
+        if(root == null)return;
+        int val = root.val;
+        long toBeMultipliedWith = getTenPowNoOfDigits(val);
+        currSum = ((currSum * toBeMultipliedWith) + val)%MOD;
+        if(root.left == null && root.right == null)sum = (sum + currSum) % MOD;
+        dfs(root.left, currSum, MOD);
+        dfs(root.right, currSum, MOD);
+    }
 
-        }
-        for(int key : hm.keySet())
+    long getTenPowNoOfDigits(int n)
+    {
+        if(n == 0)return 10;
+        long ans = 1;
+        while(n > 0)
         {
-            ArrayList<Integer> li = hm.get(key);
-            Collections.sort(li);
-            for(int i : li)
-                hp.print(i + " ");
-            hp.println();
+            n /= 10;
+            ans *= 10;
         }
+        return ans;
     }
 
     final Helper hp;
@@ -81,11 +77,43 @@ class Solver {
         hp.initIO(System.in, System.out);
     }
 
-    void verticalOrderTree(TreeNode root, int hd)throws Exception
+    void levelOrderTraversal(TreeNode root)throws Exception
     {
-        horizontalDistances[root.val] = hd;
-        if(root.right != null)verticalOrderTree(root.right, hd + 1);
-        if(root.left != null)verticalOrderTree(root.left, hd - 1);
+        if(root == null)return;
+        Queue<TreeNode> q = new LinkedList<>();
+        q.offer(root);
+        int now = 1, later = 0;
+        boolean printed = false;
+        int prev = -1;
+        while(!q.isEmpty())
+        {
+            TreeNode temp  = q.poll();
+            //if(!printed){
+                //hp.print(temp.val + " ");
+                printed = true;
+                prev = temp.val;
+            //}
+            now--;
+            if(temp.left != null)
+            {
+                later++;
+                q.offer(temp.left);
+            }
+            if(temp.right != null)
+            {
+                later++;
+                q.offer(temp.right);
+            }
+
+            if(now == 0)
+            {
+                hp.print(prev + " ");
+                printed = false;
+                now = later;
+                later = 0;
+            }
+        }
+
     }
 }
 

@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class VerticalOrderTree
+public class IsBalanced
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,14 +14,13 @@ public class VerticalOrderTree
     }
 }
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes VerticalOrderTree.java
-//  java VerticalOrderTree
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-vertical-order-of-tree
+//  javac -d ../../classes IsBalanced.java
+//  java IsBalanced
+//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-is-balanced-tree
 
 class Solver {
 
-    int[] horizontalDistances = new int[100 *100 + 1];
-
+    int[] depths = new int[100 *100 + 1] ;
     void solve() throws Exception
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
@@ -36,40 +35,33 @@ class Solver {
                 arr[i] = hp.nextInt();
                 root.insert(arr[i]);
             }
-            Arrays.fill(horizontalDistances, Integer.MAX_VALUE);
-            verticalOrderTree(root, 0);
-            makeMapAndPrint();
-            hp.println();
+            if(isBalanced(root))
+                hp.println("Yes");
+            else
+                hp.println("No");
 
         }
         hp.flush();
     }
 
-    void makeMapAndPrint()throws Exception
+    boolean isBalanced(TreeNode root)
     {
-        TreeMap<Integer, ArrayList<Integer>> hm = new TreeMap<>();
-        for(int i = 0; i < horizontalDistances.length; i++)
-        {
-            if(horizontalDistances[i] != Integer.MAX_VALUE)
-            {
-                if(hm.containsKey(horizontalDistances[i]))
-                    hm.get(horizontalDistances[i]).add(i);
-                else
-                {
-                    hm.put(horizontalDistances[i], new ArrayList<Integer>());
-                    hm.get(horizontalDistances[i]).add(i);
-                }
-            }
+        if(checkBalance(root) == -1)return false;
+        return true;
+    }
 
-        }
-        for(int key : hm.keySet())
-        {
-            ArrayList<Integer> li = hm.get(key);
-            Collections.sort(li);
-            for(int i : li)
-                hp.print(i + " ");
-            hp.println();
-        }
+
+    int checkBalance(TreeNode root)
+    {
+        if(root == null)return 0;
+
+        int leftHeight = checkBalance(root.left);
+        if(leftHeight == -1)return -1;
+        int rightHeight = checkBalance(root.right);
+        if(rightHeight == -1)return -1;
+
+        if(Math.abs(leftHeight - rightHeight) > 1)return -1;
+        return Math.max(leftHeight, rightHeight) + 1;
     }
 
     final Helper hp;
@@ -81,12 +73,7 @@ class Solver {
         hp.initIO(System.in, System.out);
     }
 
-    void verticalOrderTree(TreeNode root, int hd)throws Exception
-    {
-        horizontalDistances[root.val] = hd;
-        if(root.right != null)verticalOrderTree(root.right, hd + 1);
-        if(root.left != null)verticalOrderTree(root.left, hd - 1);
-    }
+
 }
 
 class TreeNode

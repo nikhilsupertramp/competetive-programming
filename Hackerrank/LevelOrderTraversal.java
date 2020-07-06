@@ -57,10 +57,16 @@ class Solver {
         Queue<TreeNode> q = new LinkedList<>();
         q.offer(root);
         int now = 1, later = 0;
+        boolean printed = false;
+        int prev = -1;
         while(!q.isEmpty())
         {
             TreeNode temp  = q.poll();
-            hp.print(temp.val + " ");
+            //if(!printed){
+                //hp.print(temp.val + " ");
+                printed = true;
+                prev = temp.val;
+            //}
             now--;
             if(temp.left != null)
             {
@@ -75,7 +81,8 @@ class Solver {
 
             if(now == 0)
             {
-                hp.println();
+                hp.print(prev + " ");
+                printed = false;
                 now = later;
                 later = 0;
             }

@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class VerticalOrderTree
+public class NoPrefixSet
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,144 +14,97 @@ public class VerticalOrderTree
     }
 }
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes VerticalOrderTree.java
-//  java VerticalOrderTree
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-vertical-order-of-tree
+//  javac -d ../../classes NoPrefixSet.java
+//  java NoPrefixSet
+//  https://www.hackerrank.com/challenges/no-prefix-set/problem
 
 class Solver {
-
-    int[] horizontalDistances = new int[100 *100 + 1];
-
-    void solve() throws Exception
-    {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
-        {
-            int n = hp.nextInt();
-            int[] arr = new int[n];
-            arr[0] = hp.nextInt();
-            TreeNode root = new TreeNode(arr[0]);
-
-            for(int i = 1; i < n; i++)
-            {
-                arr[i] = hp.nextInt();
-                root.insert(arr[i]);
-            }
-            Arrays.fill(horizontalDistances, Integer.MAX_VALUE);
-            verticalOrderTree(root, 0);
-            makeMapAndPrint();
-            hp.println();
-
-        }
-        hp.flush();
-    }
-
-    void makeMapAndPrint()throws Exception
-    {
-        TreeMap<Integer, ArrayList<Integer>> hm = new TreeMap<>();
-        for(int i = 0; i < horizontalDistances.length; i++)
-        {
-            if(horizontalDistances[i] != Integer.MAX_VALUE)
-            {
-                if(hm.containsKey(horizontalDistances[i]))
-                    hm.get(horizontalDistances[i]).add(i);
-                else
-                {
-                    hm.put(horizontalDistances[i], new ArrayList<Integer>());
-                    hm.get(horizontalDistances[i]).add(i);
-                }
-            }
-
-        }
-        for(int key : hm.keySet())
-        {
-            ArrayList<Integer> li = hm.get(key);
-            Collections.sort(li);
-            for(int i : li)
-                hp.print(i + " ");
-            hp.println();
-        }
-    }
-
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
+    void solve() throws Exception
+    {
+        Trie root = new Trie();
+        int n = hp.nextInt();
+        Trie  base = root;
+        String[] arr = new String[n];
+        boolean flag = true;
+        for(int i = 0; i < n; i++)
+        {
+            arr[i] =  hp.next();
+            if(!root.insert(arr[i].toCharArray(), base))
+            {
+               hp.println("BAD SET");
+               hp.println(arr[i]);
+               flag = false;
+               break;
+           }
+
+        }
+        if(flag)
+            hp.println("GOOD SET");
+
+
+        hp.flush();
+    }
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-
-    void verticalOrderTree(TreeNode root, int hd)throws Exception
-    {
-        horizontalDistances[root.val] = hd;
-        if(root.right != null)verticalOrderTree(root.right, hd + 1);
-        if(root.left != null)verticalOrderTree(root.left, hd - 1);
-    }
 }
 
-class TreeNode
+class Trie
 {
-    int val;
-    TreeNode left, right;
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
-    public TreeNode(int val)
+    final int n = 10;
+    Trie[] arr = new Trie[n];
+    boolean end, next;
+    public Trie()
     {
-        hp = new Helper(MOD, MAXN);
-        this.val = val;
-        left = null;
-        right = null;
+        end = false;
+        next = false;
+        for(int i = 0;i < n; i++)
+            arr[i] = null;
     }
 
 
-    void insert(int x)
+    boolean insert(char[] s, Trie rootM)
     {
-        if(x <= val)
+        int len = s.length, pos;
+        int itr;
+        Trie root = rootM;
+        for(pos = 0; pos < len; pos++)
         {
-            if(left == null)
-                left = new TreeNode(x);
+            /*
+                just handle 2 conditions
+                1.if longer eement comes after prefix - if(root.arr[itr].end && pos < n -1)
+                2. if longer elemnt comes before prefix if pos == len - 1 && root.arr[attr].next = true
+
+            */
+            itr = s[pos] - 'a';
+            if(root.arr[itr] == null)
+            {
+                root.arr[itr] = new Trie();
+                root.arr[itr].next = true;
+            }
             else
-                left.insert(x);
+            {
+                if(root.arr[itr].end && pos < len -1)
+                    return false;
+                else if(pos == len - 1 && root.arr[itr].next)
+                    return false;
+            }
+            root = root.arr[itr];
         }
-        else
-        {
-            if(right == null)
-                right = new TreeNode(x);
-            else
-                right.insert(x);
-        }
+        root.end = true;
+        return true;
     }
 
-    void inOrder()throws Exception
-    {
-        if(left != null)
-            left.inOrder();
-        hp.print(val + " " );
-        if(right != null)
-            right.inOrder();
-    }
 
-    void preOrder()throws Exception
-    {
-        hp.print(val + " ");
-        if(left != null)
-            left.preOrder();
-        if(right != null)
-            right.preOrder();
-    }
-
-    void postOrder()throws Exception
-    {
-
-        if(left != null)
-            left.postOrder();
-        if(right != null)
-            right.postOrder();
-        hp.print(val + " ");
-    }
 
 }
+
+
 
 class Pair implements Comparable<Pair>{
     int x;

@@ -4,153 +4,105 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
-import java.util.ArrayList;
 
-public class VerticalOrderTree
+
+public class ReplaceByMex
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes VerticalOrderTree.java
-//  java VerticalOrderTree
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-vertical-order-of-tree
+//  cd competetive-programming/src/Codeforces
+//  javac -d ../../classes ReplaceByMex.java
+//  java ReplaceByMex
+//  problem link : https://codeforces.com/contest/1375/problem/D
 
 class Solver {
-
-    int[] horizontalDistances = new int[100 *100 + 1];
-
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
+    HashMap<Integer, Integer> hm;
     void solve() throws Exception
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            int[] arr = new int[n];
-            arr[0] = hp.nextInt();
-            TreeNode root = new TreeNode(arr[0]);
-
-            for(int i = 1; i < n; i++)
+            int[] arr = hp.getIntArray(n);
+            hm = new HashMap<Integer, Integer>();
+            for(int i = 0; i <= n; i++)
             {
-                arr[i] = hp.nextInt();
-                root.insert(arr[i]);
+                hm.put(i, 0);
             }
-            Arrays.fill(horizontalDistances, Integer.MAX_VALUE);
-            verticalOrderTree(root, 0);
-            makeMapAndPrint();
-            hp.println();
+            //int count = 0;
+            for(int i : arr)
+                hm.put(i, hm.get(i) + 1);
+            int[] end = new int[n];
+            for(int i = 0; i < n; i++)
+            {
+                end[i] = i + 1;
+            }
+            int count = 0;
+            StringBuilder sb = new StringBuilder();
 
+            while(true)
+            {
+                //hp.println(Arrays.toString(arr));
+                if(Arrays.equals(end, arr))break;
+
+                int mex = getMEX();
+                if(mex == 0)
+                {
+                    int pos = getLastUnsortedPos(arr);
+                    //if(pos != -1)
+                    {
+                        hm.put(arr[pos], hm.get(arr[pos]) - 1);
+                        hm.put(mex, 1);
+                        arr[pos] = mex;
+                        sb.append((pos + 1) + " ");
+                        count++;
+                    }
+                }
+                else
+                {
+                    hm.put(mex, 1);
+                    hm.put(arr[mex - 1] , hm.get(arr[mex - 1]) - 1);
+                    arr[mex - 1] = mex;
+                    sb.append(mex + " ");
+                    count++;
+                }
+
+            }
+            sb.insert(0 , count + "\n");
+            //hp.println(Arrays.toString(arr));
+            hp.println(sb);
+            //hp.println();
         }
         hp.flush();
     }
 
-    void makeMapAndPrint()throws Exception
+    int getLastUnsortedPos(int[] arr)
     {
-        TreeMap<Integer, ArrayList<Integer>> hm = new TreeMap<>();
-        for(int i = 0; i < horizontalDistances.length; i++)
+        int n = arr.length;
+        for(int i = 0; i < n; i++)
         {
-            if(horizontalDistances[i] != Integer.MAX_VALUE)
-            {
-                if(hm.containsKey(horizontalDistances[i]))
-                    hm.get(horizontalDistances[i]).add(i);
-                else
-                {
-                    hm.put(horizontalDistances[i], new ArrayList<Integer>());
-                    hm.get(horizontalDistances[i]).add(i);
-                }
-            }
-
+            if(arr[i] != i + 1)return i;
         }
-        for(int key : hm.keySet())
-        {
-            ArrayList<Integer> li = hm.get(key);
-            Collections.sort(li);
-            for(int i : li)
-                hp.print(i + " ");
-            hp.println();
-        }
+        return -1;
     }
 
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+    int getMEX()
+    {
+        for(int i : hm.keySet())
+            if(hm.get(i) == 0)return i;
+
+        return hm.size();
+    }
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-
-    void verticalOrderTree(TreeNode root, int hd)throws Exception
-    {
-        horizontalDistances[root.val] = hd;
-        if(root.right != null)verticalOrderTree(root.right, hd + 1);
-        if(root.left != null)verticalOrderTree(root.left, hd - 1);
-    }
-}
-
-class TreeNode
-{
-    int val;
-    TreeNode left, right;
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
-    public TreeNode(int val)
-    {
-        hp = new Helper(MOD, MAXN);
-        this.val = val;
-        left = null;
-        right = null;
-    }
-
-
-    void insert(int x)
-    {
-        if(x <= val)
-        {
-            if(left == null)
-                left = new TreeNode(x);
-            else
-                left.insert(x);
-        }
-        else
-        {
-            if(right == null)
-                right = new TreeNode(x);
-            else
-                right.insert(x);
-        }
-    }
-
-    void inOrder()throws Exception
-    {
-        if(left != null)
-            left.inOrder();
-        hp.print(val + " " );
-        if(right != null)
-            right.inOrder();
-    }
-
-    void preOrder()throws Exception
-    {
-        hp.print(val + " ");
-        if(left != null)
-            left.preOrder();
-        if(right != null)
-            right.preOrder();
-    }
-
-    void postOrder()throws Exception
-    {
-
-        if(left != null)
-            left.postOrder();
-        if(right != null)
-            right.postOrder();
-        hp.print(val + " ");
-    }
-
 }
 
 class Pair implements Comparable<Pair>{
@@ -168,7 +120,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return y - p.y;
+        return p.y - y;
     }
 }
 

@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class VerticalOrderTree
+public class DiameterOfATree
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,63 +14,47 @@ public class VerticalOrderTree
     }
 }
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes VerticalOrderTree.java
-//  java VerticalOrderTree
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-vertical-order-of-tree
+//  javac -d ../../classes DiameterOfATree.java
+//  java DiameterOfATree
+//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-height-of-tree
 
 class Solver {
-
-    int[] horizontalDistances = new int[100 *100 + 1];
 
     void solve() throws Exception
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
+            max = 0;
             int n = hp.nextInt();
-            int[] arr = new int[n];
-            arr[0] = hp.nextInt();
-            TreeNode root = new TreeNode(arr[0]);
-
+            //int q = hp.nextInt();
+            TreeNode root = new TreeNode(hp.nextInt());
             for(int i = 1; i < n; i++)
             {
-                arr[i] = hp.nextInt();
-                root.insert(arr[i]);
+                root.insert(hp.nextInt());
             }
-            Arrays.fill(horizontalDistances, Integer.MAX_VALUE);
-            verticalOrderTree(root, 0);
-            makeMapAndPrint();
-            hp.println();
+            getAns(root);
+
+            hp.println(max);
+
 
         }
         hp.flush();
     }
-
-    void makeMapAndPrint()throws Exception
+    int max;
+    int getAns(TreeNode root)
     {
-        TreeMap<Integer, ArrayList<Integer>> hm = new TreeMap<>();
-        for(int i = 0; i < horizontalDistances.length; i++)
-        {
-            if(horizontalDistances[i] != Integer.MAX_VALUE)
-            {
-                if(hm.containsKey(horizontalDistances[i]))
-                    hm.get(horizontalDistances[i]).add(i);
-                else
-                {
-                    hm.put(horizontalDistances[i], new ArrayList<Integer>());
-                    hm.get(horizontalDistances[i]).add(i);
-                }
-            }
+        if(root == null)return 0;
 
-        }
-        for(int key : hm.keySet())
-        {
-            ArrayList<Integer> li = hm.get(key);
-            Collections.sort(li);
-            for(int i : li)
-                hp.print(i + " ");
-            hp.println();
-        }
+        int ld = getAns(root.left);
+        int rd = getAns(root.right);
+
+        int temp = Math.max(ld, rd) + 1;
+        int ans = ld + rd + 1;
+        max = Math.max(max, ans);
+        return temp;
     }
+
+
 
     final Helper hp;
     final int MAXN = 1000_006;
@@ -79,13 +63,6 @@ class Solver {
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
-    }
-
-    void verticalOrderTree(TreeNode root, int hd)throws Exception
-    {
-        horizontalDistances[root.val] = hd;
-        if(root.right != null)verticalOrderTree(root.right, hd + 1);
-        if(root.left != null)verticalOrderTree(root.left, hd - 1);
     }
 }
 
@@ -232,7 +209,7 @@ class Helper {
         int[] ar = new int[size];
         for (int i = 0; i < size; ++i) ar[i] = nextInt();
         return ar;
-	}
+    }
 
     public int[] getIntArray(String s)throws Exception
     {
@@ -246,7 +223,7 @@ class Helper {
         return arr;
     }
 
-	public long gcd(long a, long b) {
+    public long gcd(long a, long b) {
         return b == 0 ? a : gcd(b, a % b);
     }
 

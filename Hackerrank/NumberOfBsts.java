@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class VerticalOrderTree
+public class NumberOfBsts
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,63 +14,60 @@ public class VerticalOrderTree
     }
 }
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes VerticalOrderTree.java
-//  java VerticalOrderTree
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-vertical-order-of-tree
+//  javac -d ../../classes NumberOfBsts.java
+//  java NumberOfBsts
+//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-number-of-bsts
 
 class Solver {
-
-    int[] horizontalDistances = new int[100 *100 + 1];
-
+    int num;
     void solve() throws Exception
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            int[] arr = new int[n];
-            arr[0] = hp.nextInt();
-            TreeNode root = new TreeNode(arr[0]);
-
-            for(int i = 1; i < n; i++)
-            {
-                arr[i] = hp.nextInt();
-                root.insert(arr[i]);
-            }
-            Arrays.fill(horizontalDistances, Integer.MAX_VALUE);
-            verticalOrderTree(root, 0);
-            makeMapAndPrint();
-            hp.println();
-
+            int arr[] = hp.getIntArray(n);
+            TreeNode root = buildTree(arr, 1);
+            num = 0;
+            //root.inOrder();
+            isBst(root);
+            hp.println(num);
         }
         hp.flush();
     }
 
-    void makeMapAndPrint()throws Exception
-    {
-        TreeMap<Integer, ArrayList<Integer>> hm = new TreeMap<>();
-        for(int i = 0; i < horizontalDistances.length; i++)
-        {
-            if(horizontalDistances[i] != Integer.MAX_VALUE)
-            {
-                if(hm.containsKey(horizontalDistances[i]))
-                    hm.get(horizontalDistances[i]).add(i);
-                else
-                {
-                    hm.put(horizontalDistances[i], new ArrayList<Integer>());
-                    hm.get(horizontalDistances[i]).add(i);
-                }
-            }
 
-        }
-        for(int key : hm.keySet())
+    BSTAndRange isBst(TreeNode root)
+    {
+        boolean leftGuy = true;
+        boolean rightGuy = true;
+        BSTAndRange range = new BSTAndRange(root.val, root.val);
+        if(root.left != null)
         {
-            ArrayList<Integer> li = hm.get(key);
-            Collections.sort(li);
-            for(int i : li)
-                hp.print(i + " ");
-            hp.println();
+            BSTAndRange leftAns = isBst(root.left);
+            leftGuy = (leftAns.isBST && leftAns.max < root.val);
+            range.min = leftAns.min;
         }
+        if(root.right != null)
+        {
+            BSTAndRange rightAns = isBst(root.right);
+            rightGuy = (rightAns.isBST && rightAns.min > root.val);
+            range.max = rightAns.max;
+        }
+
+        if(leftGuy && rightGuy)num++;
+        range.isBST = (leftGuy && rightGuy);
+        return range;
     }
+
+    TreeNode buildTree(int[] arr, int ind)
+    {
+        if(ind > arr.length)return null;
+        TreeNode root = new TreeNode(arr[ind - 1]);
+        root.left = buildTree(arr, 2 * ind);
+        root.right = buildTree(arr, 2 * ind + 1);
+        return root;
+    }
+
 
     final Helper hp;
     final int MAXN = 1000_006;
@@ -81,11 +78,17 @@ class Solver {
         hp.initIO(System.in, System.out);
     }
 
-    void verticalOrderTree(TreeNode root, int hd)throws Exception
+}
+
+class BSTAndRange
+{
+    int max, min;
+    boolean isBST;
+    public BSTAndRange(int min, int max)
     {
-        horizontalDistances[root.val] = hd;
-        if(root.right != null)verticalOrderTree(root.right, hd + 1);
-        if(root.left != null)verticalOrderTree(root.left, hd - 1);
+        isBST = true;
+        this.max = max;
+        this.min = min;
     }
 }
 
@@ -105,6 +108,7 @@ class TreeNode
     }
 
 
+
     void insert(int x)
     {
         if(x <= val)
@@ -122,6 +126,7 @@ class TreeNode
                 right.insert(x);
         }
     }
+
 
     void inOrder()throws Exception
     {

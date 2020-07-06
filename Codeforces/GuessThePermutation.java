@@ -4,154 +4,77 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
-import java.util.ArrayList;
 
-public class VerticalOrderTree
+
+public class GuessThePermutation
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes VerticalOrderTree.java
-//  java VerticalOrderTree
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-vertical-order-of-tree
+//  cd competetive-programming/src/Codeforces
+//  javac -d ../../classes GuessThePermutation.java
+//  java GuessThePermutation
+
 
 class Solver {
-
-    int[] horizontalDistances = new int[100 *100 + 1];
-
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            int[] arr = new int[n];
-            arr[0] = hp.nextInt();
-            TreeNode root = new TreeNode(arr[0]);
-
-            for(int i = 1; i < n; i++)
+            int[] ans = new int[n];
+            Arrays.fill(ans, Integer.MIN_VALUE);
+            boolean nminus1 = false;
+            for(int i = 0; i < n; i++)
             {
-                arr[i] = hp.nextInt();
-                root.insert(arr[i]);
-            }
-            Arrays.fill(horizontalDistances, Integer.MAX_VALUE);
-            verticalOrderTree(root, 0);
-            makeMapAndPrint();
-            hp.println();
+                int[] arr = hp.getIntArray(n);
+                //hp.println(Arrays.toString(arr));
+                HashSet<Integer> hs = new HashSet<>();
+                for(int element : arr)
+                {
+                    if(element != 0)
+                        hs.add(element);
+                }
 
+                if(hs.size() < n)
+                {
+                    if(hs.size() == n - 1 && !nminus1)
+                        nminus1 = true;
+                    else if(hs.size() == n - 1 && nminus1)
+                        continue;
+                    ans[i] = hs.size();
+
+
+                    //hp.println("at " + i + " = " + hs.size());
+                }
+            }
+            for(int i = 0; i < n; i++)
+                if(ans[i] == Integer.MIN_VALUE)
+                    ans[i] = n;
+
+            for(int i = 0; i < n; i++){
+                hp.print(ans[i] + " ");
+                //hp.print("hi");
+            }
         }
         hp.flush();
     }
 
-    void makeMapAndPrint()throws Exception
-    {
-        TreeMap<Integer, ArrayList<Integer>> hm = new TreeMap<>();
-        for(int i = 0; i < horizontalDistances.length; i++)
-        {
-            if(horizontalDistances[i] != Integer.MAX_VALUE)
-            {
-                if(hm.containsKey(horizontalDistances[i]))
-                    hm.get(horizontalDistances[i]).add(i);
-                else
-                {
-                    hm.put(horizontalDistances[i], new ArrayList<Integer>());
-                    hm.get(horizontalDistances[i]).add(i);
-                }
-            }
 
-        }
-        for(int key : hm.keySet())
-        {
-            ArrayList<Integer> li = hm.get(key);
-            Collections.sort(li);
-            for(int i : li)
-                hp.print(i + " ");
-            hp.println();
-        }
-    }
-
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-
-    void verticalOrderTree(TreeNode root, int hd)throws Exception
-    {
-        horizontalDistances[root.val] = hd;
-        if(root.right != null)verticalOrderTree(root.right, hd + 1);
-        if(root.left != null)verticalOrderTree(root.left, hd - 1);
-    }
 }
 
-class TreeNode
-{
-    int val;
-    TreeNode left, right;
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
-    public TreeNode(int val)
-    {
-        hp = new Helper(MOD, MAXN);
-        this.val = val;
-        left = null;
-        right = null;
-    }
 
 
-    void insert(int x)
-    {
-        if(x <= val)
-        {
-            if(left == null)
-                left = new TreeNode(x);
-            else
-                left.insert(x);
-        }
-        else
-        {
-            if(right == null)
-                right = new TreeNode(x);
-            else
-                right.insert(x);
-        }
-    }
-
-    void inOrder()throws Exception
-    {
-        if(left != null)
-            left.inOrder();
-        hp.print(val + " " );
-        if(right != null)
-            right.inOrder();
-    }
-
-    void preOrder()throws Exception
-    {
-        hp.print(val + " ");
-        if(left != null)
-            left.preOrder();
-        if(right != null)
-            right.preOrder();
-    }
-
-    void postOrder()throws Exception
-    {
-
-        if(left != null)
-            left.postOrder();
-        if(right != null)
-            right.postOrder();
-        hp.print(val + " ");
-    }
-
-}
 
 class Pair implements Comparable<Pair>{
     int x;
@@ -168,7 +91,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return y - p.y;
+        return p.y - y;
     }
 }
 

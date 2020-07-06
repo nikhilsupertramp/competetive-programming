@@ -4,172 +4,122 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
-import java.util.ArrayList;
 
-public class VerticalOrderTree
+
+class  QueriesAboutNumbers
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes VerticalOrderTree.java
-//  java VerticalOrderTree
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-vertical-order-of-tree
+
+//  cd competetive-programming/src/Codechef
+//  javac -d ../../classes QueriesAboutNumbers.java
+//  java QueriesAboutNumbers
+//  https://www.codechef.com/problems/QNUMBER
 
 class Solver {
-
-    int[] horizontalDistances = new int[100 *100 + 1];
-
+    HashMap<Long, Integer> hm;
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n = hp.nextInt();
-            int[] arr = new int[n];
-            arr[0] = hp.nextInt();
-            TreeNode root = new TreeNode(arr[0]);
+            long n = hp.nextLong();
+            int q = hp.nextInt();
+            hm = new HashMap<>();
 
-            for(int i = 1; i < n; i++)
+            primeFactorize(n);
+            long allDivisorsOfN = 1;
+            for(long key : hm.keySet())
             {
-                arr[i] = hp.nextInt();
-                root.insert(arr[i]);
+                allDivisorsOfN *= (hm.get(key) + 1);
             }
-            Arrays.fill(horizontalDistances, Integer.MAX_VALUE);
-            verticalOrderTree(root, 0);
-            makeMapAndPrint();
-            hp.println();
 
+            for(int i = 0; i < q; i++)
+            {
+                int type = hp.nextInt();
+                long k = hp.nextLong();
+                if(type == 1){
+
+                    long ans = findDivByBothNums(k);
+                    hp.println(ans);
+                }
+                else if(type == 2){
+                    long ans = findDivisorsOfNDivisibleByK(n, k);
+                    hp.println(ans);
+                }
+                else{
+                    long ans =  findDivisorsOfNDivisibleByK(n, k);
+                    hp.println(allDivisorsOfN - ans);
+                }
+            }
         }
         hp.flush();
     }
 
-    void makeMapAndPrint()throws Exception
+    long findDivByBothNums(long k)throws Exception
     {
-        TreeMap<Integer, ArrayList<Integer>> hm = new TreeMap<>();
-        for(int i = 0; i < horizontalDistances.length; i++)
+        long ans = 1;
+        for(long key : hm.keySet())
         {
-            if(horizontalDistances[i] != Integer.MAX_VALUE)
+            long count = 0;
+            while(k % key == 0)
             {
-                if(hm.containsKey(horizontalDistances[i]))
-                    hm.get(horizontalDistances[i]).add(i);
-                else
-                {
-                    hm.put(horizontalDistances[i], new ArrayList<Integer>());
-                    hm.get(horizontalDistances[i]).add(i);
-                }
+                k /= key;
+                count++;
             }
+            ans *= (Math.min(count, hm.get(key)) + 1);
+        }
+        return (ans);
+    }
 
-        }
-        for(int key : hm.keySet())
+    long findDivisorsOfNDivisibleByK(long n, long k)throws Exception
+    {
+        if(n % k == 0)return (findDivByBothNums(n / k));
+        return 0;
+
+    }
+
+    void primeFactorize(long n)
+    {
+        while(n % 2 == 0)
         {
-            ArrayList<Integer> li = hm.get(key);
-            Collections.sort(li);
-            for(int i : li)
-                hp.print(i + " ");
-            hp.println();
+            n /= 2;
+            hm.put(2L, hm.getOrDefault(2L, 0) + 1);
         }
+        for(long i = 3; i * i<= n; i += 2)
+        {
+            while(n % i == 0)
+            {
+                n /= i;
+                hm.put(i, hm.getOrDefault(i, 0) + 1);
+            }
+        }
+
+        if(n > 2)
+            hm.put(n, 1);
+    }
+
+    boolean check(int n)
+    {
+        char[] s = (n + "").toCharArray();
+        int count  = 0;
+        for(int i = 0; i < s.length; i++)
+            if(s[i] == '3')count++;
+        return count >= 3;
     }
 
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
+
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
 
-    void verticalOrderTree(TreeNode root, int hd)throws Exception
-    {
-        horizontalDistances[root.val] = hd;
-        if(root.right != null)verticalOrderTree(root.right, hd + 1);
-        if(root.left != null)verticalOrderTree(root.left, hd - 1);
-    }
-}
-
-class TreeNode
-{
-    int val;
-    TreeNode left, right;
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
-    public TreeNode(int val)
-    {
-        hp = new Helper(MOD, MAXN);
-        this.val = val;
-        left = null;
-        right = null;
-    }
-
-
-    void insert(int x)
-    {
-        if(x <= val)
-        {
-            if(left == null)
-                left = new TreeNode(x);
-            else
-                left.insert(x);
-        }
-        else
-        {
-            if(right == null)
-                right = new TreeNode(x);
-            else
-                right.insert(x);
-        }
-    }
-
-    void inOrder()throws Exception
-    {
-        if(left != null)
-            left.inOrder();
-        hp.print(val + " " );
-        if(right != null)
-            right.inOrder();
-    }
-
-    void preOrder()throws Exception
-    {
-        hp.print(val + " ");
-        if(left != null)
-            left.preOrder();
-        if(right != null)
-            right.preOrder();
-    }
-
-    void postOrder()throws Exception
-    {
-
-        if(left != null)
-            left.postOrder();
-        if(right != null)
-            right.postOrder();
-        hp.print(val + " ");
-    }
-
-}
-
-class Pair implements Comparable<Pair>{
-    int x;
-    int y;//long z;
-
-    public Pair(int x, int y)
-    {
-        this.x = x;
-        this.y = y;
-        //this.z = z;
-    }
-    @Override
-    public int compareTo(Pair p)
-    {
-        if(p.y == y)
-        return x - p.x;
-        return y - p.y;
-    }
 }
 
 class Helper {

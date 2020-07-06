@@ -4,153 +4,99 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
-import java.util.ArrayList;
 
-public class VerticalOrderTree
+
+public class NeighbourGrid
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes VerticalOrderTree.java
-//  java VerticalOrderTree
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-vertical-order-of-tree
+//  cd competetive-programming/src/Codeforces
+//  javac -d ../../classes NeighbourGrid.java
+//  java NeighbourGrid
+//  problem link : https://codeforces.com/contest/1375/problem/B
 
 class Solver {
-
-    int[] horizontalDistances = new int[100 *100 + 1];
-
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            int[] arr = new int[n];
-            arr[0] = hp.nextInt();
-            TreeNode root = new TreeNode(arr[0]);
-
-            for(int i = 1; i < n; i++)
+            int m = hp.nextInt();
+            int[][] arr = new int[n][m];
+            for(int i = 0;i < n; i++)
+                arr[i] = hp.getIntArray(m);
+            boolean flag = makeNeighborsGreat(arr, n, m);
+            if(flag)
             {
-                arr[i] = hp.nextInt();
-                root.insert(arr[i]);
+                hp.println("YES");
+                for(int i = 0;i < n; i++)
+                    hp.println(Arrays.toString(arr[i]));
             }
-            Arrays.fill(horizontalDistances, Integer.MAX_VALUE);
-            verticalOrderTree(root, 0);
-            makeMapAndPrint();
-            hp.println();
+            else
+            {
+                hp.println("NO");
+            }
 
         }
         hp.flush();
     }
 
-    void makeMapAndPrint()throws Exception
+    boolean makeNeighborsGreat(int[][] arr, int n, int m)
     {
-        TreeMap<Integer, ArrayList<Integer>> hm = new TreeMap<>();
-        for(int i = 0; i < horizontalDistances.length; i++)
+        for(int i = 0; i < n; i++)
         {
-            if(horizontalDistances[i] != Integer.MAX_VALUE)
+            for(int j = 0; j < m; j++)
             {
-                if(hm.containsKey(horizontalDistances[i]))
-                    hm.get(horizontalDistances[i]).add(i);
-                else
-                {
-                    hm.put(horizontalDistances[i], new ArrayList<Integer>());
-                    hm.get(horizontalDistances[i]).add(i);
-                }
+                if(arr[i][j] > 4)return false;
+                if(!check(arr, i, j, m, n))return false;
             }
-
         }
-        for(int key : hm.keySet())
-        {
-            ArrayList<Integer> li = hm.get(key);
-            Collections.sort(li);
-            for(int i : li)
-                hp.print(i + " ");
-            hp.println();
-        }
+        return true;
     }
 
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+    boolean check(int[][] arr, int i, int j , int n, int m)
+    {
+        int count = 0;
+        boolean checkL = true, checkR = true, checkT = true, checkB = true;
+        if(i - 1 >= 0)
+        {
+            count++;
+            arr[i - 1][j] = ((arr[i - 1][j]) > 0) ? arr[i - 1][j] : arr[i - 1][j] + 1;
+            checkT = check(arr, i - 1, j, n, m);
+        }
+        if(j - 1 >= 0)
+        {
+            count++;
+            arr[i][j - 1] = (arr[i][j - 1] > 0) ? arr[i][j - 1] : arr[i][j - 1] + 1;
+            checkL =  check(arr, i , j - 1, n, m);
+        }
+        if(j + 1 > m)
+        {
+            count++;
+            arr[i][j + 1] = (arr[i][j + 1] > 0) ? arr[i][j + 1] : arr[i][j + 1] + 1;
+            checkR = check(arr, i, j + 1, n, m);
+        }
+        if(i + 1 > n)
+        {
+            count++;
+            arr[i + 1][j] = ((arr[i + 1][j]) > 0) ? arr[i + 1][j] : arr[i + 1][j] + 1;
+            checkB = check(arr, i + 1, j, n, m);
+        }
+        return ((count > arr[i][j]) && checkL && checkB && checkR && checkT);
+
+    }
+
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-
-    void verticalOrderTree(TreeNode root, int hd)throws Exception
-    {
-        horizontalDistances[root.val] = hd;
-        if(root.right != null)verticalOrderTree(root.right, hd + 1);
-        if(root.left != null)verticalOrderTree(root.left, hd - 1);
-    }
-}
-
-class TreeNode
-{
-    int val;
-    TreeNode left, right;
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
-    public TreeNode(int val)
-    {
-        hp = new Helper(MOD, MAXN);
-        this.val = val;
-        left = null;
-        right = null;
-    }
-
-
-    void insert(int x)
-    {
-        if(x <= val)
-        {
-            if(left == null)
-                left = new TreeNode(x);
-            else
-                left.insert(x);
-        }
-        else
-        {
-            if(right == null)
-                right = new TreeNode(x);
-            else
-                right.insert(x);
-        }
-    }
-
-    void inOrder()throws Exception
-    {
-        if(left != null)
-            left.inOrder();
-        hp.print(val + " " );
-        if(right != null)
-            right.inOrder();
-    }
-
-    void preOrder()throws Exception
-    {
-        hp.print(val + " ");
-        if(left != null)
-            left.preOrder();
-        if(right != null)
-            right.preOrder();
-    }
-
-    void postOrder()throws Exception
-    {
-
-        if(left != null)
-            left.postOrder();
-        if(right != null)
-            right.postOrder();
-        hp.print(val + " ");
-    }
-
 }
 
 class Pair implements Comparable<Pair>{
@@ -168,7 +114,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return y - p.y;
+        return p.y - y;
     }
 }
 

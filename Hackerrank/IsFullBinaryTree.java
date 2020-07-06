@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class VerticalOrderTree
+public class IsFullBinaryTree
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,13 +14,13 @@ public class VerticalOrderTree
     }
 }
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes VerticalOrderTree.java
-//  java VerticalOrderTree
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-vertical-order-of-tree
+//  javac -d ../../classes IsFullBinaryTree.java
+//  java IsFullBinaryTree
+//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-is-full-binary-tree
 
 class Solver {
 
-    int[] horizontalDistances = new int[100 *100 + 1];
+    int[] children = new int[100];
 
     void solve() throws Exception
     {
@@ -36,41 +36,108 @@ class Solver {
                 arr[i] = hp.nextInt();
                 root.insert(arr[i]);
             }
-            Arrays.fill(horizontalDistances, Integer.MAX_VALUE);
-            verticalOrderTree(root, 0);
-            makeMapAndPrint();
-            hp.println();
+            hp.println(isCompleteBinaryTree(root) ? "Yes" : "No");
+
 
         }
         hp.flush();
     }
 
-    void makeMapAndPrint()throws Exception
+    boolean isFullBinaryTree(TreeNode node)
     {
-        TreeMap<Integer, ArrayList<Integer>> hm = new TreeMap<>();
-        for(int i = 0; i < horizontalDistances.length; i++)
+        if(node == null)
+            return true;
+        if(node.left == null && node.right == null)return true;
+        if((node.left!=null) && (node.right!=null))
+            return (isFullBinaryTree(node.left) && isFullBinaryTree(node.right));
+        return false;
+        /*
+        fillChildrenArray(root);
+        for(int i = 0; i < arr.length; i++)
         {
-            if(horizontalDistances[i] != Integer.MAX_VALUE)
+            if(children[arr[i]] == 1)return false;
+        }
+        return true;
+        */
+    }
+
+    /*
+    boolean isCompleteBinaryTree(TreeNode root)
+    {
+        Queue<TreeNode> q = new LinkedList<>();
+        boolean flag = false;
+        q.offer(root);
+        while(!q.isEmpty())
+        {
+            TreeNode node = q.poll();
+            if(node.left != null)
             {
-                if(hm.containsKey(horizontalDistances[i]))
-                    hm.get(horizontalDistances[i]).add(i);
-                else
-                {
-                    hm.put(horizontalDistances[i], new ArrayList<Integer>());
-                    hm.get(horizontalDistances[i]).add(i);
+                if(flag)return false;
+                q.offer(node.left);
+
+            }
+            else
+                flag = true;
+            if(node.right != null)
+            {
+                if(flag)return false;
+                q.offer(root.right);
+
+            }
+            else
+                flag = true;
+        }
+        return true;
+    }
+    */
+
+    boolean isCompleteBinaryTree(TreeNode root) {
+        if(root==null) return true;
+        boolean lastLevel = false;
+        Queue<TreeNode> q = new LinkedList<>();
+        q.offer(root);
+        q.offer(null);
+        while(!q.isEmpty()) {
+            TreeNode cur = q.poll();
+            if(cur==null) {
+                if(!q.isEmpty()) {
+                    q.offer(null);
+                }
+            } else {
+                if(lastLevel) {
+                    if(cur.left!=null || cur.right!=null) {
+                        return false;
+                    }
+                } else {
+                    if(cur.left==null && cur.right!=null) {
+                        return false;
+                    }
+                    if(cur.right==null) {
+                        lastLevel=true;
+                    }
+                }
+                if(cur.left!=null) {
+                    q.offer(cur.left);
+                }
+                if(cur.right!=null) {
+                    q.offer(cur.right);
                 }
             }
-
         }
-        for(int key : hm.keySet())
-        {
-            ArrayList<Integer> li = hm.get(key);
-            Collections.sort(li);
-            for(int i : li)
-                hp.print(i + " ");
-            hp.println();
-        }
+        return true;
     }
+
+    void fillChildrenArray(TreeNode root)
+    {
+        if(root.right != null && root.left != null)children[root.val] = 2;
+        else if(root.right != null || root.left != null)children[root.val] = 1;
+
+        if(root.right != null)
+            fillChildrenArray(root.right);
+        if(root.left != null)
+            fillChildrenArray(root.left);
+    }
+
 
     final Helper hp;
     final int MAXN = 1000_006;
@@ -79,13 +146,6 @@ class Solver {
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
-    }
-
-    void verticalOrderTree(TreeNode root, int hd)throws Exception
-    {
-        horizontalDistances[root.val] = hd;
-        if(root.right != null)verticalOrderTree(root.right, hd + 1);
-        if(root.left != null)verticalOrderTree(root.left, hd - 1);
     }
 }
 

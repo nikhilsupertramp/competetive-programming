@@ -6,71 +6,97 @@ import java.math.*;
 import java.util.*;
 import java.util.ArrayList;
 
-public class VerticalOrderTree
+public class Waiter
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
+
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes VerticalOrderTree.java
-//  java VerticalOrderTree
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-vertical-order-of-tree
+//  javac -d ../../classes Waiter.java
+//  java Waiter
+//  https://www.hackerrank.com/challenges/waiter/problem
 
 class Solver {
 
-    int[] horizontalDistances = new int[100 *100 + 1];
+    int[] children = new int[100];
 
+    Stack<Integer> div;
+    Stack<Integer> nondiv;// = new Stack<>();
+    Stack<Integer> data;// = new Stack<>();
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            int[] arr = new int[n];
-            arr[0] = hp.nextInt();
-            TreeNode root = new TreeNode(arr[0]);
-
-            for(int i = 1; i < n; i++)
-            {
-                arr[i] = hp.nextInt();
-                root.insert(arr[i]);
-            }
-            Arrays.fill(horizontalDistances, Integer.MAX_VALUE);
-            verticalOrderTree(root, 0);
-            makeMapAndPrint();
-            hp.println();
-
+            int k = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
+            preprocess(arr);
+            process(k);
         }
         hp.flush();
     }
 
-    void makeMapAndPrint()throws Exception
+    void preprocess(int[] arr)
     {
-        TreeMap<Integer, ArrayList<Integer>> hm = new TreeMap<>();
-        for(int i = 0; i < horizontalDistances.length; i++)
-        {
-            if(horizontalDistances[i] != Integer.MAX_VALUE)
-            {
-                if(hm.containsKey(horizontalDistances[i]))
-                    hm.get(horizontalDistances[i]).add(i);
-                else
-                {
-                    hm.put(horizontalDistances[i], new ArrayList<Integer>());
-                    hm.get(horizontalDistances[i]).add(i);
-                }
-            }
-
-        }
-        for(int key : hm.keySet())
-        {
-            ArrayList<Integer> li = hm.get(key);
-            Collections.sort(li);
-            for(int i : li)
-                hp.print(i + " ");
-            hp.println();
-        }
+        data = new Stack<Integer>();
+        div = new Stack<Integer>();
+        nondiv = new Stack<Integer>();
+        for(int i : arr)
+            data.push(i);
     }
+
+    void process(int q)throws Exception
+    {
+        int itr = q;
+        int currNum = 0, prime = 2;
+        while(itr-- > 0)
+        {
+            nondiv.clear();
+            while(!data.isEmpty())
+            {
+                currNum = data.pop();
+                if(currNum % prime == 0)
+                    div.push(currNum);
+                else
+                    nondiv.push(currNum);
+            }
+            prime = nextPrime(prime);
+            printDiv();
+            data = (Stack<Integer>)nondiv.clone();
+        }
+        while(!data.isEmpty())
+            hp.println(data.pop() + " ");
+
+    }
+
+
+
+    private int  nextPrime(int current)
+    {
+        int prime = current;
+        for(int i = prime + 1;; i++)
+        {
+            if(isPrime(i))return i;
+        }
+        //return -1;
+    }
+
+    private boolean isPrime(int n)
+    {
+        for(int i = 2; i < n; i++)
+            if(n % i == 0)return false;
+        return true;
+    }
+
+    void printDiv()throws Exception
+    {
+        while(!div.isEmpty())
+            hp.println(div.pop() + "");
+    }
+
 
     final Helper hp;
     final int MAXN = 1000_006;
@@ -79,13 +105,6 @@ class Solver {
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
-    }
-
-    void verticalOrderTree(TreeNode root, int hd)throws Exception
-    {
-        horizontalDistances[root.val] = hd;
-        if(root.right != null)verticalOrderTree(root.right, hd + 1);
-        if(root.left != null)verticalOrderTree(root.left, hd - 1);
     }
 }
 

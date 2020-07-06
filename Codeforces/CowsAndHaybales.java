@@ -4,171 +4,105 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
-import java.util.ArrayList;
 
-public class VerticalOrderTree
+
+public class CowsAndHaybales
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes VerticalOrderTree.java
-//  java VerticalOrderTree
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-vertical-order-of-tree
+//  cd competetive-programming/src/Codeforces
+//  javac -d ../../classes CowsAndHaybales.java
+//  java CowsAndHaybales
+
+
 
 class Solver {
-
-    int[] horizontalDistances = new int[100 *100 + 1];
-
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
-            int[] arr = new int[n];
-            arr[0] = hp.nextInt();
-            TreeNode root = new TreeNode(arr[0]);
+            int m = hp.nextInt();
+            String[] arr = new String[n];
+            boolean[] taken = new boolean[n];
 
-            for(int i = 1; i < n; i++)
+            String str = "";
+
+            for(int i = 0; i < n; i ++)
+                arr[i] = hp.next();
+
+
+            for(int  i = 0; i < n; i++)
             {
-                arr[i] = hp.nextInt();
-                root.insert(arr[i]);
+                if(taken[i])continue;
+                String rev = rev(arr[i]);
+                for(int j = i + 1; j < n; j++)
+                {
+                    if(taken[j])continue;
+                    if(rev.equals(arr[j])){
+                        str = arr[i] + str + arr[j];
+                        taken[i] = true;
+                        taken[j] = true;
+                        break;
+                    }
+                }
             }
-            Arrays.fill(horizontalDistances, Integer.MAX_VALUE);
-            verticalOrderTree(root, 0);
-            makeMapAndPrint();
-            hp.println();
+
+
+            for(int i = 0; i < n; i++)
+            {
+                if(!taken[i] && (rev(arr[i]).equals(arr[i])))
+                {
+                    int len = str.length();
+                    int half = len / 2;
+                    str = str.substring(0, half) + arr[i] + str.substring(half);
+                    break;
+                }
+            }
+            hp.println(str.length());
+            hp.println(str);
 
         }
         hp.flush();
     }
 
-    void makeMapAndPrint()throws Exception
+    String rev(String s)
     {
-        TreeMap<Integer, ArrayList<Integer>> hm = new TreeMap<>();
-        for(int i = 0; i < horizontalDistances.length; i++)
-        {
-            if(horizontalDistances[i] != Integer.MAX_VALUE)
-            {
-                if(hm.containsKey(horizontalDistances[i]))
-                    hm.get(horizontalDistances[i]).add(i);
-                else
-                {
-                    hm.put(horizontalDistances[i], new ArrayList<Integer>());
-                    hm.get(horizontalDistances[i]).add(i);
-                }
-            }
+        StringBuilder sb = new StringBuilder(s);
+        return sb.reverse().toString();
 
-        }
-        for(int key : hm.keySet())
-        {
-            ArrayList<Integer> li = hm.get(key);
-            Collections.sort(li);
-            for(int i : li)
-                hp.print(i + " ");
-            hp.println();
-        }
     }
-
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
 
-    void verticalOrderTree(TreeNode root, int hd)throws Exception
-    {
-        horizontalDistances[root.val] = hd;
-        if(root.right != null)verticalOrderTree(root.right, hd + 1);
-        if(root.left != null)verticalOrderTree(root.left, hd - 1);
-    }
-}
-
-class TreeNode
-{
-    int val;
-    TreeNode left, right;
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
-    public TreeNode(int val)
-    {
-        hp = new Helper(MOD, MAXN);
-        this.val = val;
-        left = null;
-        right = null;
-    }
-
-
-    void insert(int x)
-    {
-        if(x <= val)
-        {
-            if(left == null)
-                left = new TreeNode(x);
-            else
-                left.insert(x);
-        }
-        else
-        {
-            if(right == null)
-                right = new TreeNode(x);
-            else
-                right.insert(x);
-        }
-    }
-
-    void inOrder()throws Exception
-    {
-        if(left != null)
-            left.inOrder();
-        hp.print(val + " " );
-        if(right != null)
-            right.inOrder();
-    }
-
-    void preOrder()throws Exception
-    {
-        hp.print(val + " ");
-        if(left != null)
-            left.preOrder();
-        if(right != null)
-            right.preOrder();
-    }
-
-    void postOrder()throws Exception
-    {
-
-        if(left != null)
-            left.postOrder();
-        if(right != null)
-            right.postOrder();
-        hp.print(val + " ");
-    }
-
 }
 
 class Pair implements Comparable<Pair>{
-    int x;
-    int y;//long z;
+    int t;
+    int a;//long z;
+    int b;
 
-    public Pair(int x, int y)
+
+    public Pair(int t, int a, int b)
     {
-        this.x = x;
-        this.y = y;
+        this.t = t;
+        this.a = a;
+        this.b = b;
         //this.z = z;
     }
     @Override
     public int compareTo(Pair p)
     {
-        if(p.y == y)
-        return x - p.x;
-        return y - p.y;
+        return t - p.t;
     }
 }
 
