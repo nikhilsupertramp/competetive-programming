@@ -6,62 +6,94 @@ import java.math.*;
 import java.util.*;
 
 
-public class Birthday
+class MaxRangeQueries
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes Birthday.java
-//  java Birthday
+
+//  cd competetive-programming/src/Codechef
+//  javac -d ../../classes MaxRangeQueries.java
+//  java MaxRangeQueries
+//  https://www.codechef.com/COOK103A/problems/MAXREMOV
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n  = hp.nextInt();
-            int[][] arr = new int[n + 1][2];
-            for(int i = 1; i <= 2 * n; i++)
+            int n = 100010;
+            int queries = hp.nextInt();
+            int k = hp.nextInt();
+
+            //[000000000]
+            //[011111000]
+            //[011222222]
+            //[122322222]
+
+            int cakes[] = new int[n];
+            Pair[] operations = new Pair[queries];
+            //scan line
+            for(int i = 0; i < queries; i++){
+                operations[i] = new Pair(hp.nextInt(), hp.nextInt());
+                cakes[operations[i].x]++;
+                cakes[operations[i].y + 1]--;
+            }
+
+            for(int i = 1; i  < n; i++)
             {
-                int x = hp.nextInt();
-                if(arr[x][0] == 0)
-                    arr[x][0] = i;
-                else
-                    arr[x][1] = i;
+                cakes[i] += cakes[i - 1];
             }
-            arr[0][0] = arr[0][1] = 1;
-            long sum = 0;
-            for(int i = 1; i <= n; i++){
-                int curr = minDist(arr[i - 1][0], arr[i - 1][1], arr[i][0], arr[i][1]);
-                sum += curr;
-                //hp.println(curr);
+
+            int[] numberOfCakesEqualToK = new int[n];
+            int[] numberOfCakesEqualToKPlusOne = new int[n];
+
+            for(int i = 1; i < n; i++)
+            {
+                numberOfCakesEqualToK[i] = numberOfCakesEqualToK[i - 1];
+                numberOfCakesEqualToKPlusOne[i] = numberOfCakesEqualToKPlusOne[i - 1];
+                if(cakes[i] == k)
+                {
+                    numberOfCakesEqualToK[i]++;
+                }
+                if(cakes[i] == k + 1)
+                    numberOfCakesEqualToKPlusOne[i]++;
+
             }
-            hp.println(sum);
+            int max = 0;
+
+            for(int i = 0; i < queries; i++)
+            {
+                int x = operations[i].x;
+                int y = operations[i].y;
+                int a = numberOfCakesEqualToK[x - 1];
+                int b = numberOfCakesEqualToKPlusOne[y] - numberOfCakesEqualToKPlusOne[x - 1];
+                int c = numberOfCakesEqualToK[n - 1] - numberOfCakesEqualToK[y];
+                int total = a + b + c;
+                max = Math.max(max, total);
+            }
+            hp.println(max);
 
         }
         hp.flush();
     }
 
-    int minDist(int prevPos1, int prevPos2, int pos1, int pos2)
-    {
-        int bothCost1 = Math.abs(pos1 - prevPos1) + Math.abs(pos2 - prevPos2);
-        int bothCost2 = Math.abs(pos2 - prevPos1) + Math.abs(pos1 - prevPos2);
-        return Math.min(bothCost1, bothCost2);
-    }
 
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
+
 }
+
 
 class Pair implements Comparable<Pair>{
     int x;
@@ -78,9 +110,10 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
+
 
 class Helper {
     final long MOD;

@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class Birthday
+public class OmkarAndBaseBall
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,48 +14,90 @@ public class Birthday
     }
 }
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes Birthday.java
-//  java Birthday
+//  javac -d ../../classes OmkarAndBaseBall.java
+//  java OmkarAndBaseBall
+//  problem link : https://codeforces.com/contest/1372/problem/C
 
 class Solver {
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
+    HashMap<Integer, Integer> hm;
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n  = hp.nextInt();
-            int[][] arr = new int[n + 1][2];
-            for(int i = 1; i <= 2 * n; i++)
+            int n = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
+            hm = new HashMap<Integer, Integer>();
+            for(int i = 0; i <= n; i++)
             {
-                int x = hp.nextInt();
-                if(arr[x][0] == 0)
-                    arr[x][0] = i;
-                else
-                    arr[x][1] = i;
+                hm.put(i, 0);
             }
-            arr[0][0] = arr[0][1] = 1;
-            long sum = 0;
-            for(int i = 1; i <= n; i++){
-                int curr = minDist(arr[i - 1][0], arr[i - 1][1], arr[i][0], arr[i][1]);
-                sum += curr;
-                //hp.println(curr);
+            //int count = 0;
+            for(int i : arr)
+                hm.put(i, hm.get(i) + 1);
+            int[] end = new int[n];
+            for(int i = 0; i < n; i++)
+            {
+                end[i] = i + 1;
             }
-            hp.println(sum);
+            int count = 0;
+            StringBuilder sb = new StringBuilder();
 
+            while(true)
+            {
+                //hp.println(Arrays.toString(arr));
+                if(Arrays.equals(end, arr))break;
+
+                int mex = getMEX();
+                if(mex == 0)
+                {
+                    int pos = getLastUnsortedPos(arr);
+                    //if(pos != -1)
+                    {
+                        hm.put(arr[pos], hm.get(arr[pos]) - 1);
+                        hm.put(mex, 1);
+                        arr[pos] = mex;
+                        sb.append((pos + 1) + " ");
+                        count++;
+                    }
+                }
+                else
+                {
+                    hm.put(mex, 1);
+                    hm.put(arr[mex - 1] , hm.get(arr[mex - 1]) - 1);
+                    arr[mex - 1] = mex;
+                    sb.append(mex + " ");
+                    count++;
+                }
+
+            }
+            sb.insert(0 , count + "\n");
+            //hp.println(Arrays.toString(arr));
+            hp.println(sb);
+            //hp.println();
         }
         hp.flush();
     }
 
-    int minDist(int prevPos1, int prevPos2, int pos1, int pos2)
+    int getLastUnsortedPos(int[] arr)
     {
-        int bothCost1 = Math.abs(pos1 - prevPos1) + Math.abs(pos2 - prevPos2);
-        int bothCost2 = Math.abs(pos2 - prevPos1) + Math.abs(pos1 - prevPos2);
-        return Math.min(bothCost1, bothCost2);
+        int n = arr.length;
+        for(int i = 0; i < n; i++)
+        {
+            if(arr[i] != i + 1)return i;
+        }
+        return -1;
     }
 
+    int getMEX()
+    {
+        for(int i : hm.keySet())
+            if(hm.get(i) == 0)return i;
 
+        return hm.size();
+    }
 
     Solver() {
         hp = new Helper(MOD, MAXN);

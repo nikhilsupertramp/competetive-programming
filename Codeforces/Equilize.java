@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class Birthday
+public class Equilize
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,8 +14,8 @@ public class Birthday
     }
 }
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes Birthday.java
-//  java Birthday
+//  javac -d ../../classes Equilize.java
+//  java Equilize
 
 class Solver {
     final Helper hp;
@@ -25,37 +25,31 @@ class Solver {
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n  = hp.nextInt();
-            int[][] arr = new int[n + 1][2];
-            for(int i = 1; i <= 2 * n; i++)
+            int n = hp.nextInt();
+            char[] a = hp.next().toCharArray();
+            char[] b = hp.next().toCharArray();
+            int count = 0;
+            for(int i = 1; i < n; i++)
             {
-                int x = hp.nextInt();
-                if(arr[x][0] == 0)
-                    arr[x][0] = i;
-                else
-                    arr[x][1] = i;
+                if((a[i] == '0' && b[i] == '1') && (a[i - 1] == '1' && b[i - 1] == '0')){
+                    a[i] = '1';
+                    a[i - 1] = '0';
+                    count++;
+                }
+                if((a[i] == '1' && b[i] == '0') && (a[i - 1] == '0' && b[i - 1] == '1')){
+                    a[i] = '0';
+                    a[i - 1] = '1';
+                    count++;
+                }
             }
-            arr[0][0] = arr[0][1] = 1;
-            long sum = 0;
-            for(int i = 1; i <= n; i++){
-                int curr = minDist(arr[i - 1][0], arr[i - 1][1], arr[i][0], arr[i][1]);
-                sum += curr;
-                //hp.println(curr);
+            for(int i = 0; i < n; i++)
+            {
+                if(a[i] != b[i])count++;
             }
-            hp.println(sum);
-
+            hp.println(count);
         }
         hp.flush();
     }
-
-    int minDist(int prevPos1, int prevPos2, int pos1, int pos2)
-    {
-        int bothCost1 = Math.abs(pos1 - prevPos1) + Math.abs(pos2 - prevPos2);
-        int bothCost2 = Math.abs(pos2 - prevPos1) + Math.abs(pos1 - prevPos2);
-        return Math.min(bothCost1, bothCost2);
-    }
-
-
 
     Solver() {
         hp = new Helper(MOD, MAXN);

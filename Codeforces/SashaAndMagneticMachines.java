@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class Birthday
+public class SashaAndMagneticMachines
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,8 +14,8 @@ public class Birthday
     }
 }
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes Birthday.java
-//  java Birthday
+//  javac -d ../../classes SashaAndMagneticMachines.java
+//  java SashaAndMagneticMachines
 
 class Solver {
     final Helper hp;
@@ -26,23 +26,23 @@ class Solver {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n  = hp.nextInt();
-            int[][] arr = new int[n + 1][2];
-            for(int i = 1; i <= 2 * n; i++)
+            int[] arr = hp.getIntArray(n);
+            int sum = (int)hp.sum(arr);
+            int min = sum;
+            Arrays.sort(arr);
+            for(int i = 1; i < n; i++)
             {
-                int x = hp.nextInt();
-                if(arr[x][0] == 0)
-                    arr[x][0] = i;
-                else
-                    arr[x][1] = i;
+                for(int j = 2; j <= arr[i]; j++)
+                {
+                    if(arr[i] % j== 0)
+                    {
+                        min = Math.min(min, sum - arr[0] - arr[i] + (arr[i] / j) + (arr[0] * j));
+
+                    }
+                }
             }
-            arr[0][0] = arr[0][1] = 1;
-            long sum = 0;
-            for(int i = 1; i <= n; i++){
-                int curr = minDist(arr[i - 1][0], arr[i - 1][1], arr[i][0], arr[i][1]);
-                sum += curr;
-                //hp.println(curr);
-            }
-            hp.println(sum);
+            hp.println(min);
+
 
         }
         hp.flush();

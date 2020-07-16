@@ -6,80 +6,51 @@ import java.math.*;
 import java.util.*;
 
 
-public class Birthday
+class ChefAndParty
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes Birthday.java
-//  java Birthday
+
+//  cd competetive-programming/src/Codechef
+//  javac -d ../../classes ChefAndParty.java
+//  java ChefAndParty
+//  https://www.codechef.com/COOK103A/problems/CHFPARTY
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n  = hp.nextInt();
-            int[][] arr = new int[n + 1][2];
-            for(int i = 1; i <= 2 * n; i++)
+            int n = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
+            Arrays.sort(arr);
+            int i;
+            for(i = 0; i < n; i++)
             {
-                int x = hp.nextInt();
-                if(arr[x][0] == 0)
-                    arr[x][0] = i;
-                else
-                    arr[x][1] = i;
+                if(arr[i] > i)
+                    break;
             }
-            arr[0][0] = arr[0][1] = 1;
-            long sum = 0;
-            for(int i = 1; i <= n; i++){
-                int curr = minDist(arr[i - 1][0], arr[i - 1][1], arr[i][0], arr[i][1]);
-                sum += curr;
-                //hp.println(curr);
-            }
-            hp.println(sum);
+            hp.println(i);
 
         }
         hp.flush();
     }
 
-    int minDist(int prevPos1, int prevPos2, int pos1, int pos2)
-    {
-        int bothCost1 = Math.abs(pos1 - prevPos1) + Math.abs(pos2 - prevPos2);
-        int bothCost2 = Math.abs(pos2 - prevPos1) + Math.abs(pos1 - prevPos2);
-        return Math.min(bothCost1, bothCost2);
-    }
 
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
-}
 
-class Pair implements Comparable<Pair>{
-    int x;
-    int y;//long z;
-
-    public Pair(int x, int y)
-    {
-        this.x = x;
-        this.y = y;
-        //this.z = z;
-    }
-    @Override
-    public int compareTo(Pair p)
-    {
-        if(p.y == y)
-        return x - p.x;
-        return p.y - y;
-    }
 }
 
 class Helper {

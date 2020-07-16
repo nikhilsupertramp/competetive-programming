@@ -1,61 +1,69 @@
 /* @nikhil_supertramp */
 
-import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
 
-
-public class Birthday
+public class CoinChangeProblem
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes Birthday.java
-//  java Birthday
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes CoinChangeProblem.java
+//  java CoinChangeProblem
+//  https://www.hackerrank.com/challenges/coin-change/problem
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+    long[][] dp;
     void solve() throws Exception
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n  = hp.nextInt();
-            int[][] arr = new int[n + 1][2];
-            for(int i = 1; i <= 2 * n; i++)
-            {
-                int x = hp.nextInt();
-                if(arr[x][0] == 0)
-                    arr[x][0] = i;
-                else
-                    arr[x][1] = i;
-            }
-            arr[0][0] = arr[0][1] = 1;
-            long sum = 0;
-            for(int i = 1; i <= n; i++){
-                int curr = minDist(arr[i - 1][0], arr[i - 1][1], arr[i][0], arr[i][1]);
-                sum += curr;
-                //hp.println(curr);
-            }
-            hp.println(sum);
+            int k = hp.nextInt();
+            int n = hp.nextInt();
+            int[] arr = new int[n + 1];
+            for(int i = 1; i <= n; i++)
+                arr[i] = hp.nextInt();
 
+            dp = new long[k + 1][n + 1];
+            for(int i = 0;i <= k; i++)
+                Arrays.fill(dp[i], -1);
+
+            long ans = recurseDown(arr, 1, k);
+            hp.println(ans);
         }
         hp.flush();
     }
 
-    int minDist(int prevPos1, int prevPos2, int pos1, int pos2)
+    long bottomUp(int[] arr, int index, int k)
     {
-        int bothCost1 = Math.abs(pos1 - prevPos1) + Math.abs(pos2 - prevPos2);
-        int bothCost2 = Math.abs(pos2 - prevPos1) + Math.abs(pos1 - prevPos2);
-        return Math.min(bothCost1, bothCost2);
+        int n = arr.length;
+        int[][] memo = new memo[k + 1][n + 1]
+
+    }
+
+    long recurseDown(int[] arr, int index, int k)
+    {
+        if(k == 0)return dp[k][index] = 1;
+        if(k < 0)return 0;
+
+        long sum = 0;
+        if(dp[k][index] != -1)return dp[k][index];
+
+        for(int i = index; i < arr.length; i++)
+        {
+            sum += recurseDown(arr, i, k - arr[i]);
+        }
+        return dp[k][index] = sum;
     }
 
 
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);
@@ -78,7 +86,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 

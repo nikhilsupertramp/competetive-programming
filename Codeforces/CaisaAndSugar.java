@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class Birthday
+public class CaisaAndSugar
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,8 +14,9 @@ public class Birthday
     }
 }
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes Birthday.java
-//  java Birthday
+//  javac -d ../../classes CaisaAndSugar.java
+//  java CaisaAndSugar
+
 
 class Solver {
     final Helper hp;
@@ -25,42 +26,43 @@ class Solver {
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n  = hp.nextInt();
-            int[][] arr = new int[n + 1][2];
-            for(int i = 1; i <= 2 * n; i++)
+            int n = hp.nextInt();
+            int s = hp.nextInt();
+            Pair[] sweets = new Pair[n];
+            for(int i = 0; i < n; i++)
             {
-                int x = hp.nextInt();
-                if(arr[x][0] == 0)
-                    arr[x][0] = i;
-                else
-                    arr[x][1] = i;
+                int d = hp.nextInt();
+                int cents = hp.nextInt();
+                cents = (cents == 0) ? 100 : cents;
+                sweets[i] = new Pair(d, cents);
             }
-            arr[0][0] = arr[0][1] = 1;
-            long sum = 0;
-            for(int i = 1; i <= n; i++){
-                int curr = minDist(arr[i - 1][0], arr[i - 1][1], arr[i][0], arr[i][1]);
-                sum += curr;
-                //hp.println(curr);
-            }
-            hp.println(sum);
 
+            Arrays.sort(sweets);
+            boolean flag = false;
+            for(int i = 0; i < n; i++)
+            {
+                if(sweets[i].x + ((sweets[i].y == 100) ? 0 : 1) <= s)
+                {
+                    flag = true;
+                    hp.println(100 - sweets[i].y);
+                    break;
+                }
+            }
+            if(!flag)
+            {
+                hp.println(-1);
+            }
         }
+
         hp.flush();
     }
-
-    int minDist(int prevPos1, int prevPos2, int pos1, int pos2)
-    {
-        int bothCost1 = Math.abs(pos1 - prevPos1) + Math.abs(pos2 - prevPos2);
-        int bothCost2 = Math.abs(pos2 - prevPos1) + Math.abs(pos1 - prevPos2);
-        return Math.min(bothCost1, bothCost2);
-    }
-
 
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
+
 }
 
 class Pair implements Comparable<Pair>{
@@ -78,7 +80,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 

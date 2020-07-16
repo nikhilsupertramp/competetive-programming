@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class Birthday
+public class OmkarAndLastClassOfMath
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,8 +14,10 @@ public class Birthday
     }
 }
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes Birthday.java
-//  java Birthday
+//  javac -d ../../classes OmkarAndLastClassOfMath.java
+//  java OmkarAndLastClassOfMath
+//  https://codeforces.com/contest/1375/problem/B
+
 
 class Solver {
     final Helper hp;
@@ -23,44 +25,66 @@ class Solver {
     final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n  = hp.nextInt();
-            int[][] arr = new int[n + 1][2];
-            for(int i = 1; i <= 2 * n; i++)
+            int n = hp.nextInt();
+            //nt n = tc;
+            //int arr[] = hp.getIntArray(n);
+            //int arr[] = hp.getIntArray(n);
+            //bruteforce(n);
+
+
+            if(n % 2 == 0)
+                hp.println((n / 2) + " " + (n / 2));
+            else
             {
-                int x = hp.nextInt();
-                if(arr[x][0] == 0)
-                    arr[x][0] = i;
+                int max = -1;
+                for(int i = 3; i * i <= n; i += 2)
+                {
+                    if(n % i == 0)
+                    {
+                        max = Math.max(i , n / i);
+                    }
+                }
+                if(max == -1)
+                    hp.println((n - 1)+ " " + 1);
                 else
-                    arr[x][1] = i;
+                    hp.println(max + " " + ((((n / max) - 1) * max)));
             }
-            arr[0][0] = arr[0][1] = 1;
-            long sum = 0;
-            for(int i = 1; i <= n; i++){
-                int curr = minDist(arr[i - 1][0], arr[i - 1][1], arr[i][0], arr[i][1]);
-                sum += curr;
-                //hp.println(curr);
-            }
-            hp.println(sum);
+
+            //hp.println();
+            //hp.println();
+
 
         }
+
         hp.flush();
     }
 
-    int minDist(int prevPos1, int prevPos2, int pos1, int pos2)
+    void bruteforce(int n)throws Exception
     {
-        int bothCost1 = Math.abs(pos1 - prevPos1) + Math.abs(pos2 - prevPos2);
-        int bothCost2 = Math.abs(pos2 - prevPos1) + Math.abs(pos1 - prevPos2);
-        return Math.min(bothCost1, bothCost2);
+        int min = Integer.MAX_VALUE;
+        int minA = -1, minB = -1;
+        for(int i = 1; i < n; i++)
+        {
+            int lcm = i * (n - i) / hp.gcd(i, n - i);
+            min = Math.min(lcm, min);
+            //hp.println(lcm);
+            if(min == lcm)
+            {
+                minA = i;
+                minB = n - i;
+            }
+        }
+        hp.println(minB + " " + minA + " " + min);
     }
-
 
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
+
 }
 
 class Pair implements Comparable<Pair>{

@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class Birthday
+public class VityaInTheCountrySide
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,8 +14,9 @@ public class Birthday
     }
 }
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes Birthday.java
-//  java Birthday
+//  javac -d ../../classes VityaInTheCountrySide.java
+//  java VityaInTheCountrySide
+
 
 class Solver {
     final Helper hp;
@@ -25,42 +26,34 @@ class Solver {
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n  = hp.nextInt();
-            int[][] arr = new int[n + 1][2];
-            for(int i = 1; i <= 2 * n; i++)
-            {
-                int x = hp.nextInt();
-                if(arr[x][0] == 0)
-                    arr[x][0] = i;
-                else
-                    arr[x][1] = i;
-            }
-            arr[0][0] = arr[0][1] = 1;
-            long sum = 0;
-            for(int i = 1; i <= n; i++){
-                int curr = minDist(arr[i - 1][0], arr[i - 1][1], arr[i][0], arr[i][1]);
-                sum += curr;
-                //hp.println(curr);
-            }
-            hp.println(sum);
+            int n = hp.nextInt();
+            int arr[] = hp.getIntArray(n);
+            int days[] =
+                { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+                     14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
+            if(arr[n - 1] == 15)
+                hp.println("DOWN");
+            else if(arr[n - 1] == 0)
+                hp.println("UP");
+            else if(n == 1)hp.println(-1);
+            else
+            {
+                if(arr[n - 2] < arr[n - 1])
+                    hp.println("UP");
+                else if(arr[n - 2] > arr[n - 1])hp.println("DOWN");
+            }
         }
+
         hp.flush();
     }
-
-    int minDist(int prevPos1, int prevPos2, int pos1, int pos2)
-    {
-        int bothCost1 = Math.abs(pos1 - prevPos1) + Math.abs(pos2 - prevPos2);
-        int bothCost2 = Math.abs(pos2 - prevPos1) + Math.abs(pos1 - prevPos2);
-        return Math.min(bothCost1, bothCost2);
-    }
-
 
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
+
 }
 
 class Pair implements Comparable<Pair>{

@@ -1,65 +1,146 @@
 /* @nikhil_supertramp */
 
-import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
 
-
-public class Birthday
+public class MaxPairSumsOfArrays
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes Birthday.java
-//  java Birthday
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes MaxPairSumsOfArrays.java
+//  java MaxPairSumsOfArrays
+//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-max-pair-sums-of-2-arrays
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n  = hp.nextInt();
-            int[][] arr = new int[n + 1][2];
-            for(int i = 1; i <= 2 * n; i++)
+            int n = hp.nextInt();
+            int k = hp.nextInt();
+
+            Integer[] A = new Integer[n];
+            Integer[] B = new Integer[n];
+            for(int i = 0; i < n; i++)A[i] = hp.nextInt();
+            for(int i = 0; i < n; i++)B[i] = hp.nextInt();
+
+            Arrays.sort(A, Collections.reverseOrder());
+            Arrays.sort(B, Collections.reverseOrder());
+
+            String op = (optimizedSolver(A, B, k));
+            //String bf = (bruteForceSolver(A, B, k));
+
+            hp.println(op);
+
+            /*
+            if(!op.equals(bf))
             {
-                int x = hp.nextInt();
-                if(arr[x][0] == 0)
-                    arr[x][0] = i;
-                else
-                    arr[x][1] = i;
+                hp.println(Arrays.toString(A));
+                hp.println(Arrays.toString(B));
+                hp.println(op);
+                hp.println(bf);
+
             }
-            arr[0][0] = arr[0][1] = 1;
-            long sum = 0;
-            for(int i = 1; i <= n; i++){
-                int curr = minDist(arr[i - 1][0], arr[i - 1][1], arr[i][0], arr[i][1]);
-                sum += curr;
-                //hp.println(curr);
-            }
-            hp.println(sum);
+            hp.println();
+            */
 
         }
         hp.flush();
     }
 
-    int minDist(int prevPos1, int prevPos2, int pos1, int pos2)
-    {
-        int bothCost1 = Math.abs(pos1 - prevPos1) + Math.abs(pos2 - prevPos2);
-        int bothCost2 = Math.abs(pos2 - prevPos1) + Math.abs(pos1 - prevPos2);
-        return Math.min(bothCost1, bothCost2);
-    }
-
-
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
+        //hp.initIO("../tests/SampleInput.txt", "../tests/SampleOutput.txt");
+    }
+
+    String optimizedSolver(Integer[] A, Integer[] B, int k)throws Exception
+    {
+        int n = A.length;
+        PriorityQueue<Tuple> heap = new PriorityQueue<>(new Comparator<Tuple>(){
+            public int compare(Tuple p1, Tuple p2){
+                return p2.sum - p1.sum;
+            }
+        });
+        HashSet<String> hs = new HashSet<>();
+        StringBuilder sb = new StringBuilder();
+
+        heap.offer(new Tuple(A[0] + B[0], 0, 0));
+        hs.add(0 + " " + 0);
+
+        for(int i = 0; i < k; i++)
+        {
+            Tuple max = heap.poll();
+            int maxSum = max.sum;
+            int p1 = max.p1;
+            int p2 = max.p2;
+
+            sb.append(maxSum + " ");
+            //hp.println(maxSum + " " + " " + p1 + " " + p2 + "\n");
+
+
+            int next1 = p1 + 1;
+            int next2 = p2;
+
+            if(!hs.contains(next1 + " " + next2) && next1 < n && next2 < n)
+            {
+                hs.add(next1 + " " + next2);
+                int sum = A[next1] + B[next2];
+                heap.offer(new Tuple(sum, next1, next2));
+            }
+
+            next1 = p1;
+            next2 = p2 + 1;
+
+            if(!hs.contains(next1 + " " + next2) && next1 < n && next2 < n)
+            {
+                hs.add(next1 + " " + next2);
+                int sum = A[next1] + B[next2];
+                heap.offer(new Tuple(sum, next1, next2));
+            }
+        }
+        return sb.toString();
+    }
+
+    public String bruteForceSolver(Integer[] A, Integer[] B, int k)
+    {
+        int n = A.length;
+        Integer[] arr = new Integer[n * n];
+        int p = 0;
+        for(int i = 0; i < n; i++)
+        {
+            for(int j = 0; j < n; j++)
+            {
+                arr[p++] = A[i] + B[j];
+            }
+        }
+        Arrays.sort(arr, Collections.reverseOrder());
+
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < k; i++)
+            sb.append(arr[i] + " ");
+        return sb.toString();
+    }
+}
+
+class Tuple
+{
+    int sum;
+    int p1, p2;
+    public Tuple(int sum, int p1, int p2)
+    {
+        this.sum = sum;
+        this.p1 = p1;
+        this.p2 = p2;
     }
 }
 
@@ -78,7 +159,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 

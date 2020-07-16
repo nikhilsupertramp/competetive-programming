@@ -6,41 +6,75 @@ import java.math.*;
 import java.util.*;
 
 
-public class Birthday
+class ICPCTrainers
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes Birthday.java
-//  java Birthday
+
+//  cd competetive-programming/src/Codechef
+//  javac -d ../../classes ICPCTrainers.java
+//  java ICPCTrainers
+//  https://www.codechef.com/JULY17/problems/IPCTRAIN
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n  = hp.nextInt();
-            int[][] arr = new int[n + 1][2];
-            for(int i = 1; i <= 2 * n; i++)
+            int n = hp.nextInt();
+            int days = hp.nextInt();
+            PriorityQueue<Trainer> heap = new PriorityQueue<>(new Comparator<Trainer>(){
+                public int compare(Trainer t1, Trainer t2)
+                {
+                    return (int)(t2.sadnessFactor - t1.sadnessFactor);
+                }
+            });
+
+            Trainer[] arr = new Trainer[n];
+            for(int i = 0; i < n; i++)
             {
-                int x = hp.nextInt();
-                if(arr[x][0] == 0)
-                    arr[x][0] = i;
-                else
-                    arr[x][1] = i;
+                long arrivalDate = hp.nextInt();
+                long numberOfDays = hp.nextInt();
+                long sadnessFactor = hp.nextInt();
+                arr[i] = (new Trainer(arrivalDate, numberOfDays, sadnessFactor));
             }
-            arr[0][0] = arr[0][1] = 1;
+            Arrays.sort(arr, new Comparator<Trainer>(){
+                public int compare(Trainer t1, Trainer t2)
+                {
+                    return (int)(t1.arrivalDate - t2.arrivalDate);
+                }
+            } );
+
+
+            int k = 1, i = 0;
+            while(k <=  days)
+            {
+                while(i < n && arr[i].arrivalDate == k)
+                {
+                    heap.add(arr[i++]);
+                }
+                k++;
+                if(!heap.isEmpty())
+                {
+                    Trainer currentGuy = heap.poll();
+                    long numberOfDays1 = currentGuy.numberOfDays - 1;
+                    if(numberOfDays1 > 0)
+                        heap.offer(new Trainer(currentGuy.arrivalDate,numberOfDays1, currentGuy.sadnessFactor));
+
+                }
+
+            }
+
             long sum = 0;
-            for(int i = 1; i <= n; i++){
-                int curr = minDist(arr[i - 1][0], arr[i - 1][1], arr[i][0], arr[i][1]);
-                sum += curr;
-                //hp.println(curr);
+            while(!heap.isEmpty())
+            {
+                Trainer t = heap.poll();
+                sum += t.sadnessFactor * t.numberOfDays;
+
             }
             hp.println(sum);
 
@@ -48,38 +82,29 @@ class Solver {
         hp.flush();
     }
 
-    int minDist(int prevPos1, int prevPos2, int pos1, int pos2)
-    {
-        int bothCost1 = Math.abs(pos1 - prevPos1) + Math.abs(pos2 - prevPos2);
-        int bothCost2 = Math.abs(pos2 - prevPos1) + Math.abs(pos1 - prevPos2);
-        return Math.min(bothCost1, bothCost2);
-    }
-
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
+
 }
 
-class Pair implements Comparable<Pair>{
-    int x;
-    int y;//long z;
+class Trainer
+{
+    long arrivalDate, numberOfDays, sadnessFactor;
 
-    public Pair(int x, int y)
+    public Trainer(long arrivalDate, long numberOfDays, long sadnessFactor)
     {
-        this.x = x;
-        this.y = y;
-        //this.z = z;
+        this.arrivalDate = arrivalDate;
+        this.numberOfDays = numberOfDays;
+        this.sadnessFactor = sadnessFactor;
     }
-    @Override
-    public int compareTo(Pair p)
-    {
-        if(p.y == y)
-        return x - p.x;
-        return p.y - y;
-    }
+
 }
 
 class Helper {

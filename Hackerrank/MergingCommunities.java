@@ -4,58 +4,71 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-
-public class Birthday
+public class MergingCommunities
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes Birthday.java
-//  java Birthday
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes MergingCommunities.java
+//  java MergingCommunities
+//  https://www.hackerrank.com/challenges/merging-communities/problem
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n  = hp.nextInt();
-            int[][] arr = new int[n + 1][2];
-            for(int i = 1; i <= 2 * n; i++)
+            int n = hp.nextInt();
+            int[] arr = new int[n + 1];
+            int[] size = new int[n + 1];
+            int q = hp.nextInt();
+            for(int i = 0; i <= n; i++){
+                arr[i] = i;
+                size[i] = 1;
+            }
+            for(int i = 0; i < q; i++)
             {
-                int x = hp.nextInt();
-                if(arr[x][0] == 0)
-                    arr[x][0] = i;
-                else
-                    arr[x][1] = i;
+                char ch = hp.next().charAt(0);
+                if(ch == 'Q')
+                    hp.println(size[hp.nextInt()]);
+                if(ch == 'M')
+                {
+                    int a = hp.nextInt();
+                    int b = hp.nextInt();
+                    arr[a] = b;
+
+                }
             }
-            arr[0][0] = arr[0][1] = 1;
-            long sum = 0;
-            for(int i = 1; i <= n; i++){
-                int curr = minDist(arr[i - 1][0], arr[i - 1][1], arr[i][0], arr[i][1]);
-                sum += curr;
-                //hp.println(curr);
-            }
-            hp.println(sum);
+
+
+            hp.println();
 
         }
         hp.flush();
     }
 
-    int minDist(int prevPos1, int prevPos2, int pos1, int pos2)
+    class DisjointSet
     {
-        int bothCost1 = Math.abs(pos1 - prevPos1) + Math.abs(pos2 - prevPos2);
-        int bothCost2 = Math.abs(pos2 - prevPos1) + Math.abs(pos1 - prevPos2);
-        return Math.min(bothCost1, bothCost2);
+        int parent[];
+        public DisjointSet(int n)
+        {
+            parent = new parent[n + 1];
+            for(int i = 0; i <= n; i++)
+                parent[i] = i;
+            
+        }
     }
 
 
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);
@@ -78,7 +91,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 

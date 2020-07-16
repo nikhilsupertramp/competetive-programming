@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class Birthday
+public class USBvsPS2
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,8 +14,8 @@ public class Birthday
     }
 }
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes Birthday.java
-//  java Birthday
+//  javac -d ../../classes USBvsPS2.java
+//  java USBvsPS2
 
 class Solver {
     final Helper hp;
@@ -25,37 +25,81 @@ class Solver {
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n  = hp.nextInt();
-            int[][] arr = new int[n + 1][2];
-            for(int i = 1; i <= 2 * n; i++)
+            int a = hp.nextInt();
+            int b = hp.nextInt();
+            int c = hp.nextInt();
+            int m = hp.nextInt();
+            ArrayList<Integer> usbs = new ArrayList<>();
+            ArrayList<Integer> ps2 = new ArrayList<>();
+            for(int i = 0; i < m; i++)
             {
-                int x = hp.nextInt();
-                if(arr[x][0] == 0)
-                    arr[x][0] = i;
+                int key = hp.nextInt();
+                String s = hp.next();
+                if(s.equals("USB"))
+                    usbs.add(key);
                 else
-                    arr[x][1] = i;
+                    ps2.add(key);
             }
-            arr[0][0] = arr[0][1] = 1;
+            Collections.sort(usbs, Collections.reverseOrder());
+            Collections.sort(ps2, Collections.reverseOrder());
+            int p1 = usbs.size() - 1;
+            int p2 = ps2.size() - 1;
             long sum = 0;
-            for(int i = 1; i <= n; i++){
-                int curr = minDist(arr[i - 1][0], arr[i - 1][1], arr[i][0], arr[i][1]);
-                sum += curr;
-                //hp.println(curr);
+            int count = 0;
+            for(int i = 0; i < a && p1 >= 0; i++)
+            {
+                sum += usbs.get(p1--);
+                count++;
             }
-            hp.println(sum);
+
+            for(int i = 0; i < b && p2 >= 0; i++)
+            {
+                sum += ps2.get(p2--);
+                count++;
+            }
+            while(p1 >= 0 && p2 >= 0 && c > 0)
+            {
+                if( ps2.get(p2) > usbs.get(p1))
+                    sum += usbs.get(p1--);
+                else
+                    sum += ps2.get(p2--);
+                count++;
+                c--;
+            }
+            if(c > 0)
+            {
+                while(p1 >=  0 && c > 0)
+                {
+                    count++;
+                    sum += usbs.get(p1--);
+                    c--;
+                }
+                while(p2 >= 0 && c > 0)
+                {
+                    count++;
+                    sum += ps2.get(p2--);
+                    c--;
+                }
+            }
+            hp.print(count + " "+ sum);
 
         }
         hp.flush();
     }
 
-    int minDist(int prevPos1, int prevPos2, int pos1, int pos2)
+    boolean check(int k1, int k2, int k3)
     {
-        int bothCost1 = Math.abs(pos1 - prevPos1) + Math.abs(pos2 - prevPos2);
-        int bothCost2 = Math.abs(pos2 - prevPos1) + Math.abs(pos1 - prevPos2);
-        return Math.min(bothCost1, bothCost2);
+        if(k1 == 1 || k2 == 1 || k3 == 1)return true;
+
+        if((k1 == 2 && k2 == 2) || (k2 == 2) && (k3 == 2) || (k3 == 2 && k1 == 2))return true;
+
+        if(k1 == 3 && k2 == 3 && k3 == 3)return true;
+
+        if((k1 == 2 && k2 == 4 && k3 == 4) ||
+           (k1 == 4 && k2 == 2 && k3 == 4) ||
+           (k1 == 4 && k2 == 4 && k3 == 2))return true;
+        return false;
     }
-
-
 
     Solver() {
         hp = new Helper(MOD, MAXN);

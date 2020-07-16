@@ -4,58 +4,64 @@ import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-
-public class Birthday
+public class AnytimeMedian
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes Birthday.java
-//  java Birthday
+//  cd competetive-programming/src/Hackerrank
+//  javac -d ../../classes AnytimeMedian.java
+//  java AnytimeMedian
+//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-anytime-median
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n  = hp.nextInt();
-            int[][] arr = new int[n + 1][2];
-            for(int i = 1; i <= 2 * n; i++)
+            int n = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
+
+            PriorityQueue<Integer> smallNums = new PriorityQueue<>(Collections.reverseOrder());
+            PriorityQueue<Integer> bigNums = new PriorityQueue<>();
+
+            for(int i = 0; i < n; i++)
             {
-                int x = hp.nextInt();
-                if(arr[x][0] == 0)
-                    arr[x][0] = i;
-                else
-                    arr[x][1] = i;
+                addNumber(arr[i], smallNums, bigNums);
+                rebalance(smallNums, bigNums);
+                hp.print((smallNums.size() >= bigNums.size()) ? smallNums.peek() + " " : bigNums.peek() + " ");
             }
-            arr[0][0] = arr[0][1] = 1;
-            long sum = 0;
-            for(int i = 1; i <= n; i++){
-                int curr = minDist(arr[i - 1][0], arr[i - 1][1], arr[i][0], arr[i][1]);
-                sum += curr;
-                //hp.println(curr);
-            }
-            hp.println(sum);
+            hp.println();
 
         }
         hp.flush();
     }
 
-    int minDist(int prevPos1, int prevPos2, int pos1, int pos2)
+    void rebalance(PriorityQueue<Integer> smallNums, PriorityQueue<Integer> bigNums)
     {
-        int bothCost1 = Math.abs(pos1 - prevPos1) + Math.abs(pos2 - prevPos2);
-        int bothCost2 = Math.abs(pos2 - prevPos1) + Math.abs(pos1 - prevPos2);
-        return Math.min(bothCost1, bothCost2);
+         PriorityQueue<Integer> biggerGuy = (smallNums.size() > bigNums.size()) ? smallNums : bigNums;
+         PriorityQueue<Integer> smallGuy = (smallNums.size() > bigNums.size()) ? bigNums : smallNums;
+
+         if(biggerGuy.size() - smallGuy.size() >= 2)
+            smallGuy.offer(biggerGuy.poll());
     }
 
+    void addNumber(int num, PriorityQueue<Integer> smallNums, PriorityQueue<Integer> bigNums)
+    {
+        if(smallNums.size() == 0 || num < smallNums.peek())
+            smallNums.offer (num);
+        else
+            bigNums.offer(num);
+    }
 
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
     Solver() {
         hp = new Helper(MOD, MAXN);
@@ -78,7 +84,7 @@ class Pair implements Comparable<Pair>{
     {
         if(p.y == y)
         return x - p.x;
-        return p.y - y;
+        return y - p.y;
     }
 }
 

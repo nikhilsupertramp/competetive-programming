@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class Birthday
+public class GreenAndBlackTea
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,8 +14,8 @@ public class Birthday
     }
 }
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes Birthday.java
-//  java Birthday
+//  javac -d ../../classes GreenAndBlackTea.java
+//  java GreenAndBlackTea
 
 class Solver {
     final Helper hp;
@@ -25,37 +25,66 @@ class Solver {
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n  = hp.nextInt();
-            int[][] arr = new int[n + 1][2];
-            for(int i = 1; i <= 2 * n; i++)
+            int n = hp.nextInt();
+            int k = hp.nextInt();
+            int a = hp.nextInt();
+            int b = hp.nextInt();
+
+            boolean flag = true;
+            char[] s = new char[n];
+            if(a > b)
             {
-                int x = hp.nextInt();
-                if(arr[x][0] == 0)
-                    arr[x][0] = i;
-                else
-                    arr[x][1] = i;
+                flag = fill(s, a, b, k, 'G', 'B');
             }
-            arr[0][0] = arr[0][1] = 1;
-            long sum = 0;
-            for(int i = 1; i <= n; i++){
-                int curr = minDist(arr[i - 1][0], arr[i - 1][1], arr[i][0], arr[i][1]);
-                sum += curr;
-                //hp.println(curr);
-            }
-            hp.println(sum);
+            else
+                flag = fill(s, b, a, k, 'B', 'G');
+            if(flag)hp.println(new String(s));
+            else hp.print("NO");
 
         }
         hp.flush();
     }
 
-    int minDist(int prevPos1, int prevPos2, int pos1, int pos2)
+    boolean fill(char[] s, int a, int b, int k, char p, char q)
     {
-        int bothCost1 = Math.abs(pos1 - prevPos1) + Math.abs(pos2 - prevPos2);
-        int bothCost2 = Math.abs(pos2 - prevPos1) + Math.abs(pos1 - prevPos2);
-        return Math.min(bothCost1, bothCost2);
+        boolean alternate = true;
+        int i = 0, j = 0;
+        while(i < s.length)
+        {
+            if(a > b && j < k)
+            {
+                s[i++] = p;
+                a--;
+                j++;
+                alternate = true;
+            }
+            else if(b > a && j < k)
+
+                s[i++] = q;
+                b--;
+                j++;
+                alternate = false;
+            }
+            if(j == k)
+            {
+                if(alternate && b == 0 || (!alternate && a == 0))
+                    return false;
+                if(alternate)
+                {
+                    s[i++] = q;
+                    alternate = !alternate;
+                    j = 1;
+                }
+                else
+                {
+                    s[i++] = p;
+                    alternate = !alternate;
+                    j = 1;
+                }
+            }
+        }
+        return true;
     }
-
-
 
     Solver() {
         hp = new Helper(MOD, MAXN);

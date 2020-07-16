@@ -6,7 +6,7 @@ import java.math.*;
 import java.util.*;
 
 
-public class Birthday
+public class ThreeGarlands
 {
     public static void main(String[] args)throws Exception
     {
@@ -14,8 +14,8 @@ public class Birthday
     }
 }
 //  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes Birthday.java
-//  java Birthday
+//  javac -d ../../classes ThreeGarlands.java
+//  java ThreeGarlands
 
 class Solver {
     final Helper hp;
@@ -25,37 +25,29 @@ class Solver {
     {
         //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n  = hp.nextInt();
-            int[][] arr = new int[n + 1][2];
-            for(int i = 1; i <= 2 * n; i++)
-            {
-                int x = hp.nextInt();
-                if(arr[x][0] == 0)
-                    arr[x][0] = i;
-                else
-                    arr[x][1] = i;
-            }
-            arr[0][0] = arr[0][1] = 1;
-            long sum = 0;
-            for(int i = 1; i <= n; i++){
-                int curr = minDist(arr[i - 1][0], arr[i - 1][1], arr[i][0], arr[i][1]);
-                sum += curr;
-                //hp.println(curr);
-            }
-            hp.println(sum);
-
+            int k1 = hp.nextInt();
+            int k2 = hp.nextInt();
+            int k3 = hp.nextInt();
+            if(check(k1, k2, k3))   hp.println("YES");
+            else
+                hp.println("NO");
         }
         hp.flush();
     }
 
-    int minDist(int prevPos1, int prevPos2, int pos1, int pos2)
+    boolean check(int k1, int k2, int k3)
     {
-        int bothCost1 = Math.abs(pos1 - prevPos1) + Math.abs(pos2 - prevPos2);
-        int bothCost2 = Math.abs(pos2 - prevPos1) + Math.abs(pos1 - prevPos2);
-        return Math.min(bothCost1, bothCost2);
+        if(k1 == 1 || k2 == 1 || k3 == 1)return true;
+
+        if((k1 == 2 && k2 == 2) || (k2 == 2) && (k3 == 2) || (k3 == 2 && k1 == 2))return true;
+
+        if(k1 == 3 && k2 == 3 && k3 == 3)return true;
+
+        if((k1 == 2 && k2 == 4 && k3 == 4) ||
+           (k1 == 4 && k2 == 2 && k3 == 4) ||
+           (k1 == 4 && k2 == 4 && k3 == 2))return true;
+        return false;
     }
-
-
 
     Solver() {
         hp = new Helper(MOD, MAXN);

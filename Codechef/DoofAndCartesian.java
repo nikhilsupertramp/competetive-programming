@@ -6,79 +6,66 @@ import java.math.*;
 import java.util.*;
 
 
-public class Birthday
+class DoofAndCartesian
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes Birthday.java
-//  java Birthday
+
+//  cd competetive-programming/src/Codechef
+//  javac -d ../../classes DoofAndCartesian.java
+//  java DoofAndCartesian
+//  https://www.codechef.com/COLE2020/problems/CLPNT
 
 class Solver {
-    final Helper hp;
-    final int MAXN = 1000_006;
-    final long MOD = (long) 1e9 + 7;
+
     void solve() throws Exception
     {
-        //for(int tc = hp.nextInt(); tc > 0; tc--)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n  = hp.nextInt();
-            int[][] arr = new int[n + 1][2];
-            for(int i = 1; i <= 2 * n; i++)
+            int n = hp.nextInt();
+            int[] arr = hp.getIntArray(n);
+            Arrays.sort(arr);
+            int q = hp.nextInt();
+            for(int i = 0; i < q; i++)
             {
                 int x = hp.nextInt();
-                if(arr[x][0] == 0)
-                    arr[x][0] = i;
+                int y = hp.nextInt();
+                int sum = x + y;
+                int pos = Arrays.binarySearch(arr, sum);
+                if(pos>= 0)
+                    hp.println(-1);
                 else
-                    arr[x][1] = i;
+                    hp.println(Math.abs(pos) - 1);
             }
-            arr[0][0] = arr[0][1] = 1;
-            long sum = 0;
-            for(int i = 1; i <= n; i++){
-                int curr = minDist(arr[i - 1][0], arr[i - 1][1], arr[i][0], arr[i][1]);
-                sum += curr;
-                //hp.println(curr);
-            }
-            hp.println(sum);
 
         }
         hp.flush();
     }
 
-    int minDist(int prevPos1, int prevPos2, int pos1, int pos2)
-    {
-        int bothCost1 = Math.abs(pos1 - prevPos1) + Math.abs(pos2 - prevPos2);
-        int bothCost2 = Math.abs(pos2 - prevPos1) + Math.abs(pos1 - prevPos2);
-        return Math.min(bothCost1, bothCost2);
-    }
-
+    final Helper hp;
+    final int MAXN = 1000_006;
+    final long MOD = (long) 1e9 + 7;
 
 
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
     }
+
 }
 
-class Pair implements Comparable<Pair>{
-    int x;
-    int y;//long z;
+class Trainer
+{
+    int arrivalDate, numberOfDays, sadnessFactor;
 
-    public Pair(int x, int y)
+    public Trainer(int arrivalDate, int numberOfDays, int sadnessFactor)
     {
-        this.x = x;
-        this.y = y;
-        //this.z = z;
-    }
-    @Override
-    public int compareTo(Pair p)
-    {
-        if(p.y == y)
-        return x - p.x;
-        return p.y - y;
+        this.arrivalDate = arrivalDate;
+        this.numberOfDays = numberOfDays;
+        this.sadnessFactor = sadnessFactor;
     }
 }
 
