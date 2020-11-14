@@ -1,10 +1,12 @@
 /* @nikhil_supertramp */
 
+import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-public class MaximumXOR
+class GalactickFootball
 {
     public static void main(String[] args)throws Exception
     {
@@ -12,32 +14,123 @@ public class MaximumXOR
     }
 }
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes MaximumXOR.java
-//  java MaximumXOR
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-maximum-xor
+//  javac -d ../../classes GalactickFootball.java
+//  java GalactickFootball
+//  https://www.codechef.com/problems/GALACTIK
 
 class Solver {
+
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        //for(int tc = hp.nextInt(); tc > 0; tc--)
         {
             int n = hp.nextInt();
+            int m = hp.nextInt();
 
-            Integer[] A = new Integer[n];
+            DisjointSet ds = new DisjointSet(n);
 
-            for(int i = 0; i < n; i++)A[i] = hp.nextInt();
+            int[][] connections = new int[m][2];
+            for(int i = 0; i < m; i++)
+            {
+                int p = hp.nextInt();
+                int q = hp.nextInt();
+                connections[i][0] = p;
+                connections[i][1] = q;
+            }
 
+            //int[] cost = new int[n];
+            for(int i = 1; i <= n; i++){
+                int weight = hp.nextInt();
+                ds.size[i] = (weight > 0) ? weight : Integer.MAX_VALUE;
+            }
 
-            String op = (optimizedSolver(A));
+            for(int i = 0; i < m; i++)
+            {
+                ds.merge(connections[i][0], connections[i][1]);
+            }
 
-            //String bf = (bruteForceSolver(A, B, k));
+            int[] costs = ds.size;
+            int[] parent = ds.parent;
+            ArrayList<Pair> li = new ArrayList<>();
+            int j = 0, minIndex = -1, min = Integer.MAX_VALUE;
 
-            hp.println(op);
+            for(int i = 1; i <= n; i++){
+                if(parent[i] == i){
+                    li.add(new Pair(i, costs[i]));
+                    if(costs[i] < min) {
+                        min = costs[i];
+                        minIndex = j;
+                    }
+                    j++;
+                }
+            }
 
+            boolean flag = true;
+            long cost = 0;
+
+            for(int i = 0; i < li.size(); i++){
+
+                if(minIndex == -1 || li.get(i).y == Integer.MAX_VALUE){
+                    flag = false;
+                    hp.println(-1);
+                    break;
+                }
+
+                if(i != minIndex){
+                    cost += (li.get(i).y + li.get(minIndex).y);
+                }
+
+            }
+            if(flag)
+            hp.println(cost);
 
         }
         hp.flush();
     }
+
+    class DisjointSet
+    {
+        int parent[];
+        int[] size;
+
+        public DisjointSet(int n)
+        {
+            parent = new int[n + 1];
+            size = new int[n + 1];
+            for(int i = 0; i <= n; i++){
+                parent[i] = i;
+            }
+        }
+
+        int findParent(int a)
+        {
+            if(a == parent[a])
+                return a;
+            return findParent(parent[a]);
+        }
+
+        void merge(int a, int b)
+        {
+            //System.out.println("merging a and b)" + a + " " + b);
+            a = findParent(a);
+            b = findParent(b);
+            if(a == b)return;
+
+            if(size[b] < size[a]){
+                parent[a] = b;
+            }
+            else{
+                parent[b] = a;
+            }
+
+            //System.out.println("parent of " + b + " is " + parent[b]);
+            //System.out.println("size of " + b + " is " + size[parent[b]]);
+            //System.out.println("parent of " + a + " is " + parent[a]);
+            //System.out.println("size of " + a + " is " + size[parent[b]]);
+
+        }
+    }
+
 
     final Helper hp;
     final int MAXN = 1000_006;
@@ -46,87 +139,7 @@ class Solver {
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
-        //hp.initIO("../tests/SampleInput.txt", "../tests/SampleOutput.txt");
     }
-
-    String optimizedSolver(Integer[] A)throws Exception
-    {
-        TrieNode root = new TrieNode();
-        int n = A.length;
-        StringBuilder sb = new StringBuilder();
-        for(int i : A)
-        {
-            TrieNode base = root;
-            root.insert(i, base);
-        }
-        int maxValue = 0;
-        for(int i = 0; i < n; i++)
-        {
-            int value = A[i];
-            TrieNode head = root;
-            int currXor = 0;
-            for(int j = 21; j >= 0; j--)
-            {
-                int val = (value >> j) & 1;
-                if(val == 0)
-                {
-                    if(head.one != null)
-                    {
-                        currXor += (1 << j);
-                        head = head.one;
-                    }
-                    else
-                        head = head.zero;
-                }
-                else
-                {
-                    if(head.zero != null){
-                        currXor += (1 << j);
-                        head = head.zero;
-                    }
-                    else
-                        head = head.one;
-                }
-
-            }
-            maxValue = Math.max(currXor, maxValue);
-        }
-
-
-        return (maxValue + "");
-    }
-}
-
-class TrieNode
-{
-    TrieNode one, zero;
-    public TrieNode()
-    {
-        zero = null;
-        one = null;
-    }
-
-    public void insert(int n, TrieNode root)
-    {
-
-        for(int i = 21; i >= 0; i--)
-        {
-            int val = (n >> i) & 1;
-            if(val == 0)
-            {
-                if(root.zero == null)
-                    root.zero = new TrieNode();
-                root = root.zero;
-            }
-            else
-            {
-                if(root.one == null)
-                    root.one = new TrieNode();
-                root = root.one;
-            }
-        }
-    }
-
 }
 
 class Pair implements Comparable<Pair>{

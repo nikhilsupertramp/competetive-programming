@@ -4,7 +4,7 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
-public class MaximumXOR
+public class TheKnapsackProblem
 {
     public static void main(String[] args)throws Exception
     {
@@ -12,32 +12,75 @@ public class MaximumXOR
     }
 }
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes MaximumXOR.java
-//  java MaximumXOR
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-maximum-xor
+//  javac -d ../../classes TheKnapsackProblem.java
+//  java TheKnapsackProblem
+//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-the-knapsack-problem
+
 
 class Solver {
+    long[][] dp;
     void solve() throws Exception
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
+            int k = hp.nextInt();
             int n = hp.nextInt();
+            int[] weights = new int[n + 1];
+            int[] values = new int[n + 1];
 
-            Integer[] A = new Integer[n];
+            for(int i = 1; i <= n; i++){
+                weights[i] = hp.nextInt();
+                values[i] = hp.nextInt();
+            }
 
-            for(int i = 0; i < n; i++)A[i] = hp.nextInt();
+            dp = new long[n + 1][k + 1];
+
+            for(int i = 0;i <= n; i++)
+                Arrays.fill(dp[i], -1);
 
 
-            String op = (optimizedSolver(A));
-
-            //String bf = (bruteForceSolver(A, B, k));
-
-            hp.println(op);
-
-
+            //long ans = recurseDown(weights, values, n,  k);
+            long ans = bottomUp(weights, values, n,  k);
+            hp.println(ans);
         }
         hp.flush();
     }
+
+    long bottomUp(int[] weights, int[] values, int n, int k){
+        long[][] memo = new long[n + 1][k + 1];
+        for(int i = 1; i <= n; i++)
+        {
+            for(int j = 1; j <= k; j++)
+            {
+
+                memo[i][j] = Math.max(memo[i - 1][j],
+                    ((j >= weights[i]) ? (memo[i - 1][j - weights[i]] + values[i]) : 0));
+            }
+        }
+        return memo[n][k];
+
+    }
+
+
+
+    long recurseDown(int[] weights, int[] values, int n, int k)
+    {
+        if(k < 0)return 0;
+        if(n == 0 || k == 0)return dp[n][k] = 0;
+
+
+        if(dp[n - 1][k] == -1)
+            dp[n - 1][k] = recurseDown(weights, values, n - 1, k);
+        if(weights[n] <= k && dp[n - 1][k - weights[n]] == -1)
+            dp[n - 1][k - weights[n]] = recurseDown(weights, values, n - 1, k - weights[n]);
+
+        if(weights[n] > k)return dp[n][k] = dp[n - 1][k];
+
+
+        return dp[n][k] = Math.max(dp[n - 1][k],
+                                    dp[n - 1][k - weights[n]] + values[n]);
+    }
+
 
     final Helper hp;
     final int MAXN = 1000_006;
@@ -46,87 +89,7 @@ class Solver {
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
-        //hp.initIO("../tests/SampleInput.txt", "../tests/SampleOutput.txt");
     }
-
-    String optimizedSolver(Integer[] A)throws Exception
-    {
-        TrieNode root = new TrieNode();
-        int n = A.length;
-        StringBuilder sb = new StringBuilder();
-        for(int i : A)
-        {
-            TrieNode base = root;
-            root.insert(i, base);
-        }
-        int maxValue = 0;
-        for(int i = 0; i < n; i++)
-        {
-            int value = A[i];
-            TrieNode head = root;
-            int currXor = 0;
-            for(int j = 21; j >= 0; j--)
-            {
-                int val = (value >> j) & 1;
-                if(val == 0)
-                {
-                    if(head.one != null)
-                    {
-                        currXor += (1 << j);
-                        head = head.one;
-                    }
-                    else
-                        head = head.zero;
-                }
-                else
-                {
-                    if(head.zero != null){
-                        currXor += (1 << j);
-                        head = head.zero;
-                    }
-                    else
-                        head = head.one;
-                }
-
-            }
-            maxValue = Math.max(currXor, maxValue);
-        }
-
-
-        return (maxValue + "");
-    }
-}
-
-class TrieNode
-{
-    TrieNode one, zero;
-    public TrieNode()
-    {
-        zero = null;
-        one = null;
-    }
-
-    public void insert(int n, TrieNode root)
-    {
-
-        for(int i = 21; i >= 0; i--)
-        {
-            int val = (n >> i) & 1;
-            if(val == 0)
-            {
-                if(root.zero == null)
-                    root.zero = new TrieNode();
-                root = root.zero;
-            }
-            else
-            {
-                if(root.one == null)
-                    root.one = new TrieNode();
-                root = root.one;
-            }
-        }
-    }
-
 }
 
 class Pair implements Comparable<Pair>{

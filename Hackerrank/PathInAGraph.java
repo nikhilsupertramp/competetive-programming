@@ -4,7 +4,7 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
-public class MaximumXOR
+public class PathInAGraph
 {
     public static void main(String[] args)throws Exception
     {
@@ -12,31 +12,82 @@ public class MaximumXOR
     }
 }
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes MaximumXOR.java
-//  java MaximumXOR
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-maximum-xor
+//  javac -d ../../classes PathInAGraph.java
+//  java PathInAGraph
+//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-path-in-a-graph
 
 class Solver {
     void solve() throws Exception
     {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
+        int tcs = hp.nextInt();
+        for(int tc = 1; tc <= tcs; tc++)
         {
+            hp.println("Test Case #" + tc + ":");
+            ArrayList<ArrayList<Integer>> li = new ArrayList<>();
             int n = hp.nextInt();
+            int m = hp.nextInt();
+            for(int i = 0; i <= n; i++)
+                li.add(new ArrayList<>());
 
-            Integer[] A = new Integer[n];
+            for(int i = 0; i < m; i++)
+            {
+                int u = hp.nextInt();
+                int v = hp.nextInt();
+                li.get(u).add(v);
+                li.get(v).add(u);
+            }
+            boolean[] visited;
 
-            for(int i = 0; i < n; i++)A[i] = hp.nextInt();
-
-
-            String op = (optimizedSolver(A));
-
-            //String bf = (bruteForceSolver(A, B, k));
-
-            hp.println(op);
-
+            int q = hp.nextInt();
+            for(int i = 0; i < q; i++)
+            {
+                int source = hp.nextInt();
+                int destination = hp.nextInt();
+                visited = new boolean[n + 1];
+                checkPathDFS(li, visited, source, destination);
+                //hp.println(Arrays.toString(visited));
+                hp.println(visited[destination] ? "Yes" : "No");
+            }
 
         }
         hp.flush();
+    }
+
+    boolean checkPathDFS(ArrayList<ArrayList<Integer>> li,
+                        boolean[] visited, int u, int v)
+    {
+
+        if(visited[u])return false;
+        visited[u] = true;
+        if(u == v)return true;
+        for(int i : li.get(u)){
+            if(!visited[i])
+                if(checkPathDFS(li, visited, i, v))
+                    return true;
+        }
+        return false;
+    }
+
+    boolean checkPathBFS(ArrayList<ArrayList<Integer>> li,
+                        boolean[] visited, int u, int v)throws Exception
+    {
+        Queue<Integer> q = new LinkedList<>();
+        q.offer(u);
+        visited[u] = true;
+        while(!q.isEmpty())
+        {
+            int item = q.poll();
+            if(item == v)return true;
+
+            for(int i : li.get(item))
+            {
+                if(!visited[i])
+                    q.offer(i);
+                visited[i] = true;
+            }
+        }
+        return false;
+
     }
 
     final Helper hp;
@@ -46,87 +97,7 @@ class Solver {
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
-        //hp.initIO("../tests/SampleInput.txt", "../tests/SampleOutput.txt");
     }
-
-    String optimizedSolver(Integer[] A)throws Exception
-    {
-        TrieNode root = new TrieNode();
-        int n = A.length;
-        StringBuilder sb = new StringBuilder();
-        for(int i : A)
-        {
-            TrieNode base = root;
-            root.insert(i, base);
-        }
-        int maxValue = 0;
-        for(int i = 0; i < n; i++)
-        {
-            int value = A[i];
-            TrieNode head = root;
-            int currXor = 0;
-            for(int j = 21; j >= 0; j--)
-            {
-                int val = (value >> j) & 1;
-                if(val == 0)
-                {
-                    if(head.one != null)
-                    {
-                        currXor += (1 << j);
-                        head = head.one;
-                    }
-                    else
-                        head = head.zero;
-                }
-                else
-                {
-                    if(head.zero != null){
-                        currXor += (1 << j);
-                        head = head.zero;
-                    }
-                    else
-                        head = head.one;
-                }
-
-            }
-            maxValue = Math.max(currXor, maxValue);
-        }
-
-
-        return (maxValue + "");
-    }
-}
-
-class TrieNode
-{
-    TrieNode one, zero;
-    public TrieNode()
-    {
-        zero = null;
-        one = null;
-    }
-
-    public void insert(int n, TrieNode root)
-    {
-
-        for(int i = 21; i >= 0; i--)
-        {
-            int val = (n >> i) & 1;
-            if(val == 0)
-            {
-                if(root.zero == null)
-                    root.zero = new TrieNode();
-                root = root.zero;
-            }
-            else
-            {
-                if(root.one == null)
-                    root.one = new TrieNode();
-                root = root.one;
-            }
-        }
-    }
-
 }
 
 class Pair implements Comparable<Pair>{

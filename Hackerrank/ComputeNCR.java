@@ -1,42 +1,91 @@
 /* @nikhil_supertramp */
 
+import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-public class MaximumXOR
-{
-    public static void main(String[] args)throws Exception
-    {
+public class ComputeNCR{
+
+    public static void main(String[] args)throws Exception{
+
         new Solver().solve();
+
     }
 }
+
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes MaximumXOR.java
-//  java MaximumXOR
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-maximum-xor
+//  javac -d ../../classes ComputeNCR.java
+//  java ComputeNCR
+//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-compute-ncr
 
 class Solver {
-    void solve() throws Exception
-    {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
-        {
+
+    //ArrayList<String> li;
+    void solve() throws Exception{
+        long[][] arr = new long[2001][2001];
+        computeNCR(arr, 2001, 2001);
+        for(int tc = hp.nextInt(); tc > 0; tc--){
+
             int n = hp.nextInt();
-
-            Integer[] A = new Integer[n];
-
-            for(int i = 0; i < n; i++)A[i] = hp.nextInt();
-
-
-            String op = (optimizedSolver(A));
-
-            //String bf = (bruteForceSolver(A, B, k));
-
-            hp.println(op);
-
+            int r = hp.nextInt();
+            hp.println(arr[n][r]);
 
         }
         hp.flush();
+
+    }
+
+    void computeNCR(long[][] arr, int n, int r){
+
+        for(int i = 0; i < n; i++)
+            arr[i][0] = 1;
+
+        for(int i = 1; i < n; i++){
+            for(int j = 1; j < n; j++) {
+                arr[i][j] = (arr[i - 1][j] + arr[i - 1][j - 1]) % MOD;
+            }
+        }
+    }
+
+    class DisjointSet {
+        int parent[];
+        int[] size;
+
+        public DisjointSet(int n) {
+            parent = new int[n + 1];
+            size = new int[n + 1];
+            for(int i = 0; i <= n; i++){
+                parent[i] = i;
+            }
+        }
+
+        int findParent(int a) {
+            if(a == parent[a])
+                return a;
+            return findParent(parent[a]);
+        }
+
+        void merge(int a, int b){
+            //System.out.println("merging a and b)" + a + " " + b);
+            a = findParent(a);
+            b = findParent(b);
+            if(a == b)return;
+
+            if(size[b] < size[a]){
+                parent[a] = b;
+            }
+            else{
+                parent[b] = a;
+            }
+
+            //System.out.println("parent of " + b + " is " + parent[b]);
+            //System.out.println("size of " + b + " is " + size[parent[b]]);
+            //System.out.println("parent of " + a + " is " + parent[a]);
+            //System.out.println("size of " + a + " is " + size[parent[b]]);
+
+        }
     }
 
     final Helper hp;
@@ -46,87 +95,7 @@ class Solver {
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
-        //hp.initIO("../tests/SampleInput.txt", "../tests/SampleOutput.txt");
     }
-
-    String optimizedSolver(Integer[] A)throws Exception
-    {
-        TrieNode root = new TrieNode();
-        int n = A.length;
-        StringBuilder sb = new StringBuilder();
-        for(int i : A)
-        {
-            TrieNode base = root;
-            root.insert(i, base);
-        }
-        int maxValue = 0;
-        for(int i = 0; i < n; i++)
-        {
-            int value = A[i];
-            TrieNode head = root;
-            int currXor = 0;
-            for(int j = 21; j >= 0; j--)
-            {
-                int val = (value >> j) & 1;
-                if(val == 0)
-                {
-                    if(head.one != null)
-                    {
-                        currXor += (1 << j);
-                        head = head.one;
-                    }
-                    else
-                        head = head.zero;
-                }
-                else
-                {
-                    if(head.zero != null){
-                        currXor += (1 << j);
-                        head = head.zero;
-                    }
-                    else
-                        head = head.one;
-                }
-
-            }
-            maxValue = Math.max(currXor, maxValue);
-        }
-
-
-        return (maxValue + "");
-    }
-}
-
-class TrieNode
-{
-    TrieNode one, zero;
-    public TrieNode()
-    {
-        zero = null;
-        one = null;
-    }
-
-    public void insert(int n, TrieNode root)
-    {
-
-        for(int i = 21; i >= 0; i--)
-        {
-            int val = (n >> i) & 1;
-            if(val == 0)
-            {
-                if(root.zero == null)
-                    root.zero = new TrieNode();
-                root = root.zero;
-            }
-            else
-            {
-                if(root.one == null)
-                    root.one = new TrieNode();
-                root = root.one;
-            }
-        }
-    }
-
 }
 
 class Pair implements Comparable<Pair>{

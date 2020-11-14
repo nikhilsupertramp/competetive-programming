@@ -4,7 +4,7 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
-public class MaximumXOR
+public class Abbreviation
 {
     public static void main(String[] args)throws Exception
     {
@@ -12,31 +12,71 @@ public class MaximumXOR
     }
 }
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes MaximumXOR.java
-//  java MaximumXOR
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-maximum-xor
+//  javac -d ../../classes Abbreviation.java
+//  java Abbreviation
+//  https://www.hackerrank.com/challenges/abbr/problem
 
 class Solver {
+    HashSet<String> hs;
+    boolean possible;
     void solve() throws Exception
     {
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            int n = hp.nextInt();
+            //int n = hp.nextInt();
+            //StringBuilder A = new StringBuilder(hp.next());
+            //StringBuilder B = new StringBuilder(hp.next());
+            String A = hp.next();
+            String B = hp.next();
 
-            Integer[] A = new Integer[n];
-
-            for(int i = 0; i < n; i++)A[i] = hp.nextInt();
-
-
-            String op = (optimizedSolver(A));
-
-            //String bf = (bruteForceSolver(A, B, k));
-
-            hp.println(op);
-
+            hs = new HashSet<>();
+            possible = false;
+            recurse(A, B);
+            hp.println(possible ? "YES" : "NO");
 
         }
         hp.flush();
+    }
+
+
+    void recurse(String A, String B)throws Exception
+    {
+        int aLength = A.length();
+        int bLength = B.length();
+        //hp.println(A + " " + B);
+        if(possible || aLength < bLength)return;
+
+        if(bLength == 0 && isAllLowerCase(A))
+        {
+            possible = true;
+            return;
+        }
+
+        String str = A + "$" + B;
+
+        if(hs.contains(str))return;
+        hs.add(str);
+
+        char ch = A.charAt(aLength - 1);
+        A = A.substring(0, aLength - 1);
+        //A.deleteCharAt(aLength - 1);
+        if(ch >= 'a' && ch <= 'z')recurse(A, B);
+
+
+        ch = (ch >= 'A' && ch <= 'Z') ? ch : (char)(ch - 32);
+
+        if(ch != B.charAt(bLength - 1))return;
+        B = B.substring(0, bLength - 1);
+        recurse(A, B);
+
+    }
+
+
+    boolean isAllLowerCase(String sb)
+    {
+        for(int i = 0; i < sb.length(); i++)
+            if(sb.charAt(i) <= 'Z' && sb.charAt(i) >= 'A')return false;
+        return true;
     }
 
     final Helper hp;
@@ -46,87 +86,7 @@ class Solver {
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
-        //hp.initIO("../tests/SampleInput.txt", "../tests/SampleOutput.txt");
     }
-
-    String optimizedSolver(Integer[] A)throws Exception
-    {
-        TrieNode root = new TrieNode();
-        int n = A.length;
-        StringBuilder sb = new StringBuilder();
-        for(int i : A)
-        {
-            TrieNode base = root;
-            root.insert(i, base);
-        }
-        int maxValue = 0;
-        for(int i = 0; i < n; i++)
-        {
-            int value = A[i];
-            TrieNode head = root;
-            int currXor = 0;
-            for(int j = 21; j >= 0; j--)
-            {
-                int val = (value >> j) & 1;
-                if(val == 0)
-                {
-                    if(head.one != null)
-                    {
-                        currXor += (1 << j);
-                        head = head.one;
-                    }
-                    else
-                        head = head.zero;
-                }
-                else
-                {
-                    if(head.zero != null){
-                        currXor += (1 << j);
-                        head = head.zero;
-                    }
-                    else
-                        head = head.one;
-                }
-
-            }
-            maxValue = Math.max(currXor, maxValue);
-        }
-
-
-        return (maxValue + "");
-    }
-}
-
-class TrieNode
-{
-    TrieNode one, zero;
-    public TrieNode()
-    {
-        zero = null;
-        one = null;
-    }
-
-    public void insert(int n, TrieNode root)
-    {
-
-        for(int i = 21; i >= 0; i--)
-        {
-            int val = (n >> i) & 1;
-            if(val == 0)
-            {
-                if(root.zero == null)
-                    root.zero = new TrieNode();
-                root = root.zero;
-            }
-            else
-            {
-                if(root.one == null)
-                    root.one = new TrieNode();
-                root = root.one;
-            }
-        }
-    }
-
 }
 
 class Pair implements Comparable<Pair>{

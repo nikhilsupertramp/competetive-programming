@@ -4,7 +4,7 @@ import java.io.*;
 import java.math.*;
 import java.util.*;
 
-public class MaximumXOR
+public class BinaryStringsWithNoAdjacentOnes
 {
     public static void main(String[] args)throws Exception
     {
@@ -12,29 +12,24 @@ public class MaximumXOR
     }
 }
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes MaximumXOR.java
-//  java MaximumXOR
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-maximum-xor
+//  javac -d ../../classes BinaryStringsWithNoAdjacentOnes.java
+//  java BinaryStringsWithNoAdjacentOnes
+//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-binary-strings-with-no-adjacent-1s
 
 class Solver {
     void solve() throws Exception
     {
+        long[] arr = new long[MAXN];
+        arr[0] = 1;
+        arr[1] = 2;
+        for(int i = 2; i < MAXN; i++)
+            arr[i] = (arr[i - 1] + arr[i - 2]) % MOD;
+
         for(int tc = hp.nextInt(); tc > 0; tc--)
         {
+
             int n = hp.nextInt();
-
-            Integer[] A = new Integer[n];
-
-            for(int i = 0; i < n; i++)A[i] = hp.nextInt();
-
-
-            String op = (optimizedSolver(A));
-
-            //String bf = (bruteForceSolver(A, B, k));
-
-            hp.println(op);
-
-
+            hp.println(arr[n]);
         }
         hp.flush();
     }
@@ -49,84 +44,24 @@ class Solver {
         //hp.initIO("../tests/SampleInput.txt", "../tests/SampleOutput.txt");
     }
 
-    String optimizedSolver(Integer[] A)throws Exception
+    String optimizedSolver(Integer[] A, Integer[] B)throws Exception
     {
-        TrieNode root = new TrieNode();
         int n = A.length;
-        StringBuilder sb = new StringBuilder();
-        for(int i : A)
-        {
-            TrieNode base = root;
-            root.insert(i, base);
-        }
-        int maxValue = 0;
+        Pair[] arr = new Pair[n];
+        for(int i = 0; i < n; i++)
+            arr[i] = new Pair(A[i], B[i]);
+        Arrays.sort(arr);
+        int count = 0;
+        int end = 0;
         for(int i = 0; i < n; i++)
         {
-            int value = A[i];
-            TrieNode head = root;
-            int currXor = 0;
-            for(int j = 21; j >= 0; j--)
-            {
-                int val = (value >> j) & 1;
-                if(val == 0)
-                {
-                    if(head.one != null)
-                    {
-                        currXor += (1 << j);
-                        head = head.one;
-                    }
-                    else
-                        head = head.zero;
-                }
-                else
-                {
-                    if(head.zero != null){
-                        currXor += (1 << j);
-                        head = head.zero;
-                    }
-                    else
-                        head = head.one;
-                }
-
-            }
-            maxValue = Math.max(currXor, maxValue);
-        }
-
-
-        return (maxValue + "");
-    }
-}
-
-class TrieNode
-{
-    TrieNode one, zero;
-    public TrieNode()
-    {
-        zero = null;
-        one = null;
-    }
-
-    public void insert(int n, TrieNode root)
-    {
-
-        for(int i = 21; i >= 0; i--)
-        {
-            int val = (n >> i) & 1;
-            if(val == 0)
-            {
-                if(root.zero == null)
-                    root.zero = new TrieNode();
-                root = root.zero;
-            }
-            else
-            {
-                if(root.one == null)
-                    root.one = new TrieNode();
-                root = root.one;
+            if(arr[i].x >= end){
+                count++;
+                end = arr[i].y;
             }
         }
+        return (count + "");
     }
-
 }
 
 class Pair implements Comparable<Pair>{

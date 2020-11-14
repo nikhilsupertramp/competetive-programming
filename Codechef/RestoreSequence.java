@@ -1,151 +1,42 @@
 /* @nikhil_supertramp */
 
+import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
 
-public class MaximumXOR
+
+class RestoreSequence
 {
     public static void main(String[] args)throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes MaximumXOR.java
-//  java MaximumXOR
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-maximum-xor
+
+//  cd competetive-programming/src/Codechef
+//  javac -d ../../classes RestoreSequence.java
+//  java RestoreSequence
 
 class Solver {
-    void solve() throws Exception
-    {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
-        {
-            int n = hp.nextInt();
-
-            Integer[] A = new Integer[n];
-
-            for(int i = 0; i < n; i++)A[i] = hp.nextInt();
-
-
-            String op = (optimizedSolver(A));
-
-            //String bf = (bruteForceSolver(A, B, k));
-
-            hp.println(op);
-
-
-        }
-        hp.flush();
-    }
-
     final Helper hp;
     final int MAXN = 1000_006;
     final long MOD = (long) 1e9 + 7;
 
     Solver() {
-        hp = new Helper(MOD, MAXN);
+        hp = new Helper(MOD, MAXN);s
         hp.initIO(System.in, System.out);
-        //hp.initIO("../tests/SampleInput.txt", "../tests/SampleOutput.txt");
     }
 
-    String optimizedSolver(Integer[] A)throws Exception
+    void solve() throws Exception
     {
-        TrieNode root = new TrieNode();
-        int n = A.length;
-        StringBuilder sb = new StringBuilder();
-        for(int i : A)
+        for(int tc = hp.nextInt(); tc > 0; tc--)
         {
-            TrieNode base = root;
-            root.insert(i, base);
+
         }
-        int maxValue = 0;
-        for(int i = 0; i < n; i++)
-        {
-            int value = A[i];
-            TrieNode head = root;
-            int currXor = 0;
-            for(int j = 21; j >= 0; j--)
-            {
-                int val = (value >> j) & 1;
-                if(val == 0)
-                {
-                    if(head.one != null)
-                    {
-                        currXor += (1 << j);
-                        head = head.one;
-                    }
-                    else
-                        head = head.zero;
-                }
-                else
-                {
-                    if(head.zero != null){
-                        currXor += (1 << j);
-                        head = head.zero;
-                    }
-                    else
-                        head = head.one;
-                }
-
-            }
-            maxValue = Math.max(currXor, maxValue);
-        }
-
-
-        return (maxValue + "");
-    }
-}
-
-class TrieNode
-{
-    TrieNode one, zero;
-    public TrieNode()
-    {
-        zero = null;
-        one = null;
+        hp.flush();
     }
 
-    public void insert(int n, TrieNode root)
-    {
-
-        for(int i = 21; i >= 0; i--)
-        {
-            int val = (n >> i) & 1;
-            if(val == 0)
-            {
-                if(root.zero == null)
-                    root.zero = new TrieNode();
-                root = root.zero;
-            }
-            else
-            {
-                if(root.one == null)
-                    root.one = new TrieNode();
-                root = root.one;
-            }
-        }
-    }
-
-}
-
-class Pair implements Comparable<Pair>{
-    int x;
-    int y;//long z;
-
-    public Pair(int x, int y)
-    {
-        this.x = x;
-        this.y = y;
-        //this.z = z;
-    }
-    @Override
-    public int compareTo(Pair p)
-    {
-        if(p.y == y)
-        return x - p.x;
-        return y - p.y;
-    }
 }
 
 class Helper {
@@ -400,3 +291,7 @@ class Helper {
         bw.flush();
     }
 }
+
+
+/*
+5 3 5 3 5

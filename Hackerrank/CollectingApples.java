@@ -1,43 +1,53 @@
 /* @nikhil_supertramp */
 
+import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
+import java.util.ArrayList;
 
-public class MaximumXOR
-{
-    public static void main(String[] args)throws Exception
-    {
+public class CollectingApples{
+
+    public static void main(String[] args)throws Exception{
+
         new Solver().solve();
+
     }
 }
+
 //  cd competetive-programming/src/Hackerrank
-//  javac -d ../../classes MaximumXOR.java
-//  java MaximumXOR
-//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-maximum-xor
+//  javac -d ../../classes CollectingApples.java
+//  java CollectingApples
+//  https://www.hackerrank.com/contests/smart-interviews/challenges/si-collect-apples
 
 class Solver {
-    void solve() throws Exception
-    {
-        for(int tc = hp.nextInt(); tc > 0; tc--)
-        {
+
+    //ArrayList<String> li;
+    void solve() throws Exception {
+
+        int tcs = hp.nextInt();
+        for(int tc = 0; tc < tcs; tc++) {
+
             int n = hp.nextInt();
+            int m = hp.nextInt();
+            int[][] arr = new int[n][m];
+            for(int i = 0; i < n; i++)
+                arr[i] = hp.getIntArray(m);
 
-            Integer[] A = new Integer[n];
+            int ans[][] = new int[n + 1][m + 1];
 
-            for(int i = 0; i < n; i++)A[i] = hp.nextInt();
-
-
-            String op = (optimizedSolver(A));
-
-            //String bf = (bruteForceSolver(A, B, k));
-
-            hp.println(op);
-
+            for(int i = 0; i < n; i++) {
+                for(int j = 0; j < m; j++) {
+                    ans[i + 1][j + 1] = arr[i][j] + Math.max(ans[i + 1][j], ans[i][j + 1]);
+                }
+            }
+            hp.println(ans[n][m]);
 
         }
         hp.flush();
+
     }
+
 
     final Helper hp;
     final int MAXN = 1000_006;
@@ -46,87 +56,7 @@ class Solver {
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
-        //hp.initIO("../tests/SampleInput.txt", "../tests/SampleOutput.txt");
     }
-
-    String optimizedSolver(Integer[] A)throws Exception
-    {
-        TrieNode root = new TrieNode();
-        int n = A.length;
-        StringBuilder sb = new StringBuilder();
-        for(int i : A)
-        {
-            TrieNode base = root;
-            root.insert(i, base);
-        }
-        int maxValue = 0;
-        for(int i = 0; i < n; i++)
-        {
-            int value = A[i];
-            TrieNode head = root;
-            int currXor = 0;
-            for(int j = 21; j >= 0; j--)
-            {
-                int val = (value >> j) & 1;
-                if(val == 0)
-                {
-                    if(head.one != null)
-                    {
-                        currXor += (1 << j);
-                        head = head.one;
-                    }
-                    else
-                        head = head.zero;
-                }
-                else
-                {
-                    if(head.zero != null){
-                        currXor += (1 << j);
-                        head = head.zero;
-                    }
-                    else
-                        head = head.one;
-                }
-
-            }
-            maxValue = Math.max(currXor, maxValue);
-        }
-
-
-        return (maxValue + "");
-    }
-}
-
-class TrieNode
-{
-    TrieNode one, zero;
-    public TrieNode()
-    {
-        zero = null;
-        one = null;
-    }
-
-    public void insert(int n, TrieNode root)
-    {
-
-        for(int i = 21; i >= 0; i--)
-        {
-            int val = (n >> i) & 1;
-            if(val == 0)
-            {
-                if(root.zero == null)
-                    root.zero = new TrieNode();
-                root = root.zero;
-            }
-            else
-            {
-                if(root.one == null)
-                    root.one = new TrieNode();
-                root = root.one;
-            }
-        }
-    }
-
 }
 
 class Pair implements Comparable<Pair>{

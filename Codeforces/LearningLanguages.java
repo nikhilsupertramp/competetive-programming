@@ -1,21 +1,20 @@
 /* @nikhil_supertramp */
-
 import java.awt.*;
 import java.io.*;
 import java.math.*;
 import java.util.*;
 
-public class SubsequenceHate
+
+public class LearningLanguages
 {
-    public static void main(String[] args)throws Exception
+    public static void main(String[] args) throws Exception
     {
         new Solver().solve();
     }
 }
-//  cd competetive-programming/src/Codeforces
-//  javac -d ../../classes SubsequenceHate.java
-//  java SubsequenceHate
-//  https://codeforces.com/problemset/problem/1363/B
+//  javac -d ../../classes LearningLanguages.java
+//  java LearningLanguages
+//  https://codeforces.com/problemset/problem/277/A
 
 class Solver {
     final Helper hp;
@@ -26,29 +25,9 @@ class Solver {
 
         hp.flush();
     }
-
     Solver() {
         hp = new Helper(MOD, MAXN);
         hp.initIO(System.in, System.out);
-    }
-}
-
-class Pair implements Comparable<Pair>{
-    int x;
-    int y;//long z;
-
-    public Pair(int x, int y)
-    {
-        this.x = x;
-        this.y = y;
-        //this.z = z;
-    }
-    @Override
-    public int compareTo(Pair p)
-    {
-        if(p.y == y)
-        return x - p.x;
-        return p.y - y;
     }
 }
 
@@ -302,5 +281,19 @@ class Helper {
 
     public void flush() throws Exception {
         bw.flush();
+    }
+}
+
+class Pair implements Comparable<Pair>{
+    int x, y;
+    public Pair(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+    @Override
+    public int compareTo(Pair p)
+    {
+        return x - p.x;
     }
 }

@@ -28,20 +28,18 @@ class Solver {
             int[] arr = new int[n + 1];
             int[] size = new int[n + 1];
             int q = hp.nextInt();
-            for(int i = 0; i <= n; i++){
-                arr[i] = i;
-                size[i] = 1;
-            }
+            DisjointSet ds = new DisjointSet(n);
+
             for(int i = 0; i < q; i++)
             {
                 char ch = hp.next().charAt(0);
                 if(ch == 'Q')
-                    hp.println(size[hp.nextInt()]);
+                    hp.println(ds.getSize(hp.nextInt()));
                 if(ch == 'M')
                 {
                     int a = hp.nextInt();
                     int b = hp.nextInt();
-                    arr[a] = b;
+                    ds.merge(a, b);
 
                 }
             }
@@ -56,12 +54,54 @@ class Solver {
     class DisjointSet
     {
         int parent[];
+        int[] size;
         public DisjointSet(int n)
         {
-            parent = new parent[n + 1];
-            for(int i = 0; i <= n; i++)
+            parent = new int[n + 1];
+            size = new int[n + 1];
+            for(int i = 0; i <= n; i++){
                 parent[i] = i;
-            
+                size[i] = 1;
+            }
+        }
+
+        int findParent(int a)
+        {
+            if(a == parent[a])
+                return a;
+            return findParent(parent[a]);
+        }
+
+        int getSize(int a)
+        {
+            //System.out.println("getting size of " + a);
+            int par = findParent(a);
+            //System.out.println("parent of " + a + " is " + par);
+
+            return size[parent[par]];
+        }
+
+        void merge(int a, int b)
+        {
+            //System.out.println("merging a and b)" + a + " " + b);
+            a = findParent(a);
+            b = findParent(b);
+            if(a == b)return;
+            if(size[a] > size[b])
+            {
+                parent[b] = a;
+                size[a] += size[b];
+            }
+            else
+            {
+                parent[a] = b;
+                size[b] += size[a];
+            }
+            //System.out.println("parent of " + b + " is " + parent[b]);
+            //System.out.println("size of " + b + " is " + size[parent[b]]);
+            //System.out.println("parent of " + a + " is " + parent[a]);
+            //System.out.println("size of " + a + " is " + size[parent[b]]);
+
         }
     }
 
